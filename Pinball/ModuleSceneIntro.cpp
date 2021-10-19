@@ -152,7 +152,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	// ray -----------------
+	// ray ---------------
 	if(ray_on == true)
 	{
 		fVector destination(mouse.x-ray.x, mouse.y-ray.y);
