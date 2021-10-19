@@ -41,10 +41,8 @@ bool ModuleAudio::Init()
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		LOG("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-		ret = false;
+		ret = true;
 	}
-
-	Mix_VolumeMusic(64);
 
 	return ret;
 }
@@ -74,7 +72,7 @@ bool ModuleAudio::CleanUp()
 }
 
 // Play a music file
-bool ModuleAudio::PlayMusic(const char* path, float fade_time, int loop)
+bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 {
 	if(IsEnabled() == false)
 		return false;
@@ -107,7 +105,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time, int loop)
 	{
 		if(fade_time > 0.0f)
 		{
-			if(Mix_FadeInMusic(music, loop, (int) (fade_time * 1000.0f)) < 0)
+			if(Mix_FadeInMusic(music, -1, (int) (fade_time * 1000.0f)) < 0)
 			{
 				LOG("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;
@@ -115,7 +113,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time, int loop)
 		}
 		else
 		{
-			if(Mix_PlayMusic(music, loop) < 0)
+			if(Mix_PlayMusic(music, -1) < 0)
 			{
 				LOG("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;

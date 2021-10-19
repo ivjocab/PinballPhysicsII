@@ -5,8 +5,6 @@
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
-#include "ModuleFonts.h"
-
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
@@ -20,7 +18,6 @@ Application::Application()
 	textures = new ModuleTextures(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
-	fonts = new ModuleFonts(this);
 	player = new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
@@ -30,25 +27,18 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
-	AddModule(input);
 	AddModule(window);
-	AddModule(textures);
-	AddModule(audio);
-
-	// Physics
 	AddModule(physics);
-
+	AddModule(renderer);
+	AddModule(textures);
+	AddModule(input);
+	AddModule(audio);
+	
 	// Scenes
 	AddModule(scene_intro);
-
+	
 	// Player
 	AddModule(player);
-
-	//Other
-	AddModule(fonts);
-
-	// Render
-	AddModule(renderer);
 }
 
 Application::~Application()

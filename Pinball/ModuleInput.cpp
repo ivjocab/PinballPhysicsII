@@ -4,8 +4,6 @@
 
 #include "SDL\include\SDL.h"
 
-#define MAX_KEYS 300
-
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	keyboard = new KEY_STATE[MAX_KEYS];
@@ -64,18 +62,18 @@ update_status ModuleInput::PreUpdate()
 	mouse_x /= SCREEN_SIZE;
 	mouse_y /= SCREEN_SIZE;
 
-	for (int i = 0; i < MAX_MOUSE_BUTTONS; ++i)
+	for(int i = 0; i < MAX_MOUSE_BUTTONS; ++i)
 	{
-		if (buttons & SDL_BUTTON(i))
+		if(buttons & SDL_BUTTON(i))
 		{
-			if (mouse_buttons[i] == KEY_IDLE)
+			if(mouse_buttons[i] == KEY_IDLE)
 				mouse_buttons[i] = KEY_DOWN;
 			else
 				mouse_buttons[i] = KEY_REPEAT;
 		}
 		else
 		{
-			if (mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
+			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
 				mouse_buttons[i] = KEY_UP;
 			else
 				mouse_buttons[i] = KEY_IDLE;
