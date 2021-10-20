@@ -1,71 +1,9 @@
-﻿  Application.cpp
-  log.cpp
-  Main.cpp
-  ModuleAudio.cpp
-  ModuleInput.cpp
-  ModulePhysics.cpp
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(40,8): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(121,23): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(122,25): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(165,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(346,13): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(347,13): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(353,27): warning C4244: 'return': conversion from 'float32' to 'int', possible loss of data
-  ModulePlayer.cpp
-  ModuleRender.cpp
-  ModuleSceneIntro.cpp
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(158,45): warning C4244: 'argument': conversion from 'TYPE' to 'TYPE', possible loss of data
-          with
-          [
-              TYPE=int
-          ]
-          and
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(158,30): warning C4244: 'argument': conversion from 'TYPE' to 'TYPE', possible loss of data
-          with
-          [
-              TYPE=int
-          ]
-          and
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(160,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(162,70): warning C4244: 'argument': conversion from 'TYPE' to 'int', possible loss of data
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(162,47): warning C4244: 'argument': conversion from 'TYPE' to 'int', possible loss of data
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(165,138): warning C4244: 'argument': conversion from 'TYPE' to 'int', possible loss of data
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(165,96): warning C4244: 'argument': conversion from 'TYPE' to 'int', possible loss of data
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(165,57): warning C4244: 'argument': conversion from 'TYPE' to 'int', possible loss of data
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(165,34): warning C4244: 'argument': conversion from 'TYPE' to 'int', possible loss of data
-          with
-          [
-              TYPE=float
-          ]
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(173,9): warning C4101: 'y': unreferenced local variable
-C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneIntro.cpp(173,6): warning C4101: 'x': unreferenced local variable
-  ModuleTextures.cpp
-  ModuleWindow.cpp
-  Generating Code...
-  SDL Game.vcxproj -> C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\Debug\2D Physics - class 4.exe
+﻿  ModulePhysics.cpp
+E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\ModulePhysics.cpp(194,23): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\ModulePhysics.cpp(195,25): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\ModulePhysics.cpp(238,20): warning C4018: '<': no coinciden signed/unsigned
+E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\ModulePhysics.cpp(419,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\ModulePhysics.cpp(420,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\ModulePhysics.cpp(426,27): warning C4244: 'return': conversión de 'float32' a 'int'; posible pérdida de datos
+E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\ModulePhysics.cpp(457,21): warning C4018: '<': no coinciden signed/unsigned
+  SDL Game.vcxproj -> E:\UPC\ANNO2\psychic\PinballPhysicsII\Pinball\Debug\2D Physics - class 4.exe

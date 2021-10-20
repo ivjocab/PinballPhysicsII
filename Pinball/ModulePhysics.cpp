@@ -32,7 +32,7 @@ bool ModulePhysics::Start()
 	world->SetContactListener(this);
 
 	// needed to create joints like mouse joint
-	b2BodyDef bd;
+	/*b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
 	// big static circle as "ground" in the middle of the screen
@@ -51,7 +51,80 @@ bool ModulePhysics::Start()
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	big_ball->CreateFixture(&fixture);
+	big_ball->CreateFixture(&fixture);*/
+	int background_ch[138] = {
+		313, 995,
+		330, 957,
+		354, 937,
+		390, 924,
+		433, 889,
+		462, 889,
+		487, 872,
+		456, 580,
+		323, 560,
+		433, 531,
+		449, 497,
+		474, 465,
+		487, 449,
+		487, 296,
+		455, 197,
+		405, 123,
+		353, 86,
+		298, 66,
+		235, 68,
+		195, 105,
+		151, 105,
+		108, 150,
+		72, 202,
+		59, 238,
+		49, 224,
+		67, 182,
+		103, 132,
+		142, 93,
+		187, 65,
+		228, 49,
+		299, 51,
+		356, 68,
+		385, 93,
+		408, 105,
+		459, 177,
+		494, 274,
+		494, 825,
+		532, 825,
+		532, 301,
+		505, 201,
+		460, 113,
+		411, 65,
+		347, 29,
+		291, 15,
+		217, 17,
+		169, 32,
+		103, 75,
+		50, 127,
+		22, 177,
+		7, 232,
+		19, 270,
+		26, 296,
+		12, 334,
+		14, 399,
+		32, 441,
+		70, 472,
+		90, 505,
+		60, 544,
+		42, 560,
+		42, 849,
+		100, 875,
+		168, 899,
+		202, 923,
+		207, 995,
+		-1, 995,
+		-1, 0,
+		780, 0,
+		780, 995,
+		332, 995
+	};
+
+	CreateStaticChain(0, 0, background_ch, 138);
 
 	return true;
 }
@@ -368,4 +441,39 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.CreateLoop(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
 }
