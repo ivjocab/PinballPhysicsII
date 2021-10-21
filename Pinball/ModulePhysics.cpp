@@ -126,7 +126,7 @@ update_status ModulePhysics::PreUpdate()
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
 			PhysBody* pb2 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
 			if(pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2);
+			pb1->listener->OnCollision(pb1, pb2);
 		}
 	}
 
@@ -325,6 +325,9 @@ update_status ModulePhysics::PostUpdate()
 			// TODO 1: If mouse button 1 is pressed ...
 			// App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
 			// test if the current body contains mouse position
+			iPoint mouse;
+			mouse.x = App->input->GetMouseX();
+			mouse.y = App->input->GetMouseY();
 		}
 	}
 
