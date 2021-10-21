@@ -28,6 +28,11 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
+
+	PhysBody* l_kicker;
+	PhysBody* r_kicker;
+	PhysBody* l_joint;
+	PhysBody* r_joint;
 };
 
 // Module --------------------------------------
