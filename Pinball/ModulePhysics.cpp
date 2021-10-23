@@ -5,7 +5,6 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
-//#include "Box2D\Box2D\Dynamics\Joints\b2joint.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -138,25 +137,25 @@ bool ModulePhysics::Start()
 	leftJoint = CreateStaticCircle(280, 965, 3);
 	rightJoint = CreateStaticCircle(550, 965, 3);
 
-	b2RevoluteJointDef Def;
-	Def.bodyA = leftFlipper->body;
-	Def.bodyB = leftJoint->body;
-	Def.collideConnected = false;
-	Def.upperAngle = 25 * DEGTORAD;
-	Def.lowerAngle = -10 * DEGTORAD;
-	Def.enableLimit = true;
-	Def.localAnchorA.Set(PIXEL_TO_METERS(10), PIXEL_TO_METERS(8));
-	leftFixer = (b2RevoluteJoint*)world->CreateJoint(&Def);
+	b2RevoluteJointDef ljoint;
+	ljoint.bodyA = leftFlipper->body;
+	ljoint.bodyB = leftJoint->body;
+	ljoint.collideConnected = false;
+	ljoint.upperAngle = 25 * DEGTORAD;
+	ljoint.lowerAngle = -10 * DEGTORAD;
+	ljoint.enableLimit = true;
+	ljoint.localAnchorA.Set(PIXEL_TO_METERS(10), PIXEL_TO_METERS(8));
+	leftFixer = (b2RevoluteJoint*)world->CreateJoint(&ljoint);
 
-	b2RevoluteJointDef Def2;
-	Def2.bodyA = rightFlipper->body;
-	Def2.bodyB = rightJoint->body;
-	Def2.collideConnected = false;
-	Def2.upperAngle = 10 * DEGTORAD;
-	Def2.lowerAngle = -25 * DEGTORAD;
-	Def2.enableLimit = true;
-	Def2.localAnchorA.Set(PIXEL_TO_METERS(65), PIXEL_TO_METERS(9));
-	rightFixer = (b2RevoluteJoint*)world->CreateJoint(&Def2);
+	b2RevoluteJointDef rjoint;
+	rjoint.bodyA = rightFlipper->body;
+	rjoint.bodyB = rightJoint->body;
+	rjoint.collideConnected = false;
+	rjoint.upperAngle = 10 * DEGTORAD;
+	rjoint.lowerAngle = -25 * DEGTORAD;
+	rjoint.enableLimit = true;
+	rjoint.localAnchorA.Set(PIXEL_TO_METERS(65), PIXEL_TO_METERS(9));
+	rightFixer = (b2RevoluteJoint*)world->CreateJoint(&rjoint);
 
 	return true;
 }
