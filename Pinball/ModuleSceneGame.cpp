@@ -106,6 +106,10 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	idleSunAnim.PushBack({ 0, 0, 461, 229 });
 	idleSunAnim.PushBack({ 230, 0, 461, 229 });
 	idleSunAnim.PushBack({ 461, 0, 461, 229 });
+	idleSunAnim.loop = true;
+	idleSunAnim.pingpong = true;
+	idleSunAnim.mustFlip = false;
+	idleSunAnim.speed = 0.01f;
 
 	//Collision
 	collisionSunAnim.PushBack({ 0, 0, 229, 229 });
@@ -117,6 +121,9 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	collisionSunAnim.PushBack({ 0, 0, 461, 229 });
 	collisionSunAnim.PushBack({ 230, 0, 461, 229 });
 	collisionSunAnim.PushBack({ 461, 0, 461, 229 });
+	collisionSunAnim.loop = false;
+	collisionSunAnim.mustFlip = false;
+	collisionSunAnim.speed = 0.1f;
 }
 
 ModuleSceneGame::~ModuleSceneGame()
@@ -219,7 +226,7 @@ update_status ModuleSceneGame::Update()
 	}
 
 	//SUN
-	sunState = SUN_IDLE;
+	sunState = SUN_COLLISION;
 
 	if (sunState != SUN_COLLISION)
 	{
@@ -237,12 +244,10 @@ update_status ModuleSceneGame::Update()
 		break;
 	}
 
-	while (c != NULL)
-	{
-		App->renderer->Blit(sun, 0, 0, &(currentAnim->GetCurrentFrame()), 1.0f, true);
-		idleSunAnim.Update();
-		collisionSunAnim.Update();
-	}
+	App->renderer->Blit(sun, 220, 225, &(currentAnim->GetCurrentFrame()), 1.0f);
+	idleSunAnim.Update();
+	collisionSunAnim.Update();
+
 
 	c = boxes.getFirst();
 
