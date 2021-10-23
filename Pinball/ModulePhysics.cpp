@@ -12,6 +12,8 @@
 #pragma comment( lib, "Box2D/libx86/Release/Box2D.lib" )
 #endif
 
+int frameCounter = 0;
+
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	world = NULL;
@@ -21,8 +23,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 
 // Destructor
 ModulePhysics::~ModulePhysics()
-{
-}
+{}
 
 bool ModulePhysics::Start()
 {
@@ -34,25 +35,7 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-	/*
-	// big static circle as "ground" in the middle of the screen
-	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
-	int diameter = SCREEN_WIDTH / 2;
-
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* big_ball = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	big_ball->CreateFixture(&fixture);*/
-	// Pivot -391, 0
+	
 	int bg[106] = {
 		560, 999,
 		560, 956,
@@ -289,17 +272,28 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-// 
+
 update_status ModulePhysics::PostUpdate()
 {
+	//debug mode
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
 	if(!debug)
 		return UPDATE_CONTINUE;
 
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
+	//flipper controls
+	b2Vec2 flipperForce;
+	flipperForce.x = 0.0f;
+	flipperForce.y = 10.0f;
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+		leftFlipper->body->ApplyForce(flipperForce, leftFlipper->body->GetPosition(), leftFlipper->body->IsAwake());
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) 
+		leftFlipper->body->ApplyForce(flipperForce, rightFlipper->body->GetPosition(), rightFlipper->body->IsAwake());
+
+
+	// Object update/drawing iteration loop
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		for(b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
@@ -375,6 +369,7 @@ update_status ModulePhysics::PostUpdate()
 			mouse.x = App->input->GetMouseX();
 			mouse.y = App->input->GetMouseY();
 		}
+
 	}
 
 	// If a body was selected we will attach a mouse joint to it
@@ -387,6 +382,9 @@ update_status ModulePhysics::PostUpdate()
 	// target position and draw a red line between both anchor points
 
 	// TODO 4: If the player releases the mouse button, destroy the joint
+
+	//updates frame counter
+	frameCounter++;
 
 	return UPDATE_CONTINUE;
 }
@@ -403,6 +401,7 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
+//checks position
 void PhysBody::GetPosition(int& x, int &y) const
 {
 	b2Vec2 pos = body->GetPosition();
@@ -410,11 +409,13 @@ void PhysBody::GetPosition(int& x, int &y) const
 	y = METERS_TO_PIXELS(pos.y) - (height);
 }
 
+//checks rotation
 float PhysBody::GetRotation() const
 {
 	return RADTODEG * body->GetAngle();
 }
 
+//Checks if body contains pixel
 bool PhysBody::Contains(int x, int y) const
 {
 	b2Vec2 p(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -431,6 +432,7 @@ bool PhysBody::Contains(int x, int y) const
 	return false;
 }
 
+//Creates raycast
 int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
 {
 	int ret = -1;
@@ -465,6 +467,7 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	return ret;
 }
 
+//collision
 void ModulePhysics::BeginContact(b2Contact* contact)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
@@ -477,6 +480,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		physB->listener->OnCollision(physB, physA);
 }
 
+//create static chain
 PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
 {
 	b2BodyDef body;
@@ -512,6 +516,7 @@ PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
+//create flipper
 PhysBody* ModulePhysics::CreateFlipper(int x, int y, int* points, int size)
 {
 	b2BodyDef body;
@@ -545,6 +550,7 @@ PhysBody* ModulePhysics::CreateFlipper(int x, int y, int* points, int size)
 	return pbody;
 }
 
+//create ball
 PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
 {
 	b2BodyDef body;

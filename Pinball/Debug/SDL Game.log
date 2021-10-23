@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿  Application.cpp
 C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\Animation.h(55,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\Animation.h(57,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
@@ -57,3 +58,15 @@ C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(218
 C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(218,6): warning C4101: 'x': unreferenced local variable
   Generating Code...
   SDL Game.vcxproj -> C:\Users\Iván\Documents\GitHub\PinballPhysicsII\Pinball\Debug\2D Physics - class 4.exe
+=======
+﻿  ModulePhysics.cpp
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(208,23): warning C4244:  '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(209,25): warning C4244:  '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(252,20): warning C4018:  '<': no coinciden signed/unsigned
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(455,13): warning C4244:  'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(456,13): warning C4244:  'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(462,27): warning C4244:  'return': conversión de 'float32' a 'int'; posible pérdida de datos
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(495,21): warning C4018:  '<': no coinciden signed/unsigned
+C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\ModulePhysics.cpp(531,21): warning C4018:  '<': no coinciden signed/unsigned
+  SDL Game.vcxproj -> C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\Debug\2D Physics - class 4.exe
+>>>>>>> Stashed changes
