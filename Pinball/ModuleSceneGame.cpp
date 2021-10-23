@@ -15,21 +15,21 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 
 	//Ball Animations
 	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 46, 0, 50, 50 });
+	idleAnim.PushBack({ 92, 0, 50, 50 });
+	idleAnim.PushBack({ 138, 0, 50, 50 });
+	idleAnim.PushBack({ 184, 0, 50, 50 });
+	idleAnim.PushBack({ 230, 0, 50, 50 });
+	idleAnim.PushBack({ 276, 0, 50, 50 });
+	idleAnim.PushBack({ 322, 0, 50, 50 });
+	idleAnim.PushBack({ 368, 0, 50, 50 });
+	idleAnim.PushBack({ 414, 0, 50, 50 });
+	idleAnim.PushBack({ 460, 0, 50, 50 });
+	idleAnim.PushBack({ 506, 0, 50, 50 });
+	idleAnim.PushBack({ 552, 0, 50, 50 });
+	idleAnim.PushBack({ 598, 0, 50, 50 });
+	idleAnim.PushBack({ 644, 0, 50, 50 });
+	idleAnim.PushBack({ 690, 0, 50, 50 });
 	idleAnim.loop = true;
 	idleAnim.mustFlip = false;
 	idleAnim.speed = 0.1f;
@@ -144,6 +144,8 @@ update_status ModuleSceneGame::Update()
 	// All draw functions ------------------------------------------------------
 	p2List_item<PhysBody*>* c = circles.getFirst();
 
+	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
+
 	ballState = IDLE;
 
 	switch (ballState)
@@ -160,14 +162,13 @@ update_status ModuleSceneGame::Update()
 		currentAnim = &spawnAnim;
 	}
 
-	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
-
 	while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(ball, x - 14, y - 14, &(currentAnim->GetCurrentFrame()), 1.0f, true);
 		c = c->next;
+		idleAnim.Update();
 	}
 
 	c = boxes.getFirst();

@@ -346,3 +346,10 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+Pinball/.vs/2D Physics/v16/.suo
+Pinball/.vs/2D Physics/v16/Browse.VC.db
+Pinball/.vs/2D Physics/v16/ipch/AutoPCH/514a46634f317c2f/MODULESCENEGAME.ipch
+*.db
+Pinball/.vs/2D Physics/v16/.suo
+Pinball/.vs/2D Physics/v16/Browse.VC.db
+Pinball/.vs/2D Physics/v16/ipch/AutoPCH/514a46634f317c2f/MODULESCENEGAME.ipch
