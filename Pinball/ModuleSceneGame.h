@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Animation.h"
 
 class PhysBody;
 
@@ -33,4 +34,17 @@ public:
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
+
+	enum BallState
+	{
+		IDLE,
+		DEATH,
+		SPAWN
+	};
+
+	BallState ballState;
+
+private:
+	Animation* currentAnim = nullptr;
+	Animation idleAnim, collisionAnim, deathAnim, spawnAnim;
 };

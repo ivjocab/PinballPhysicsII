@@ -12,6 +12,27 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	background = ball = box = rick = NULL;
 	ray_on = false;
 	sensed = false;
+
+	//Ball Animations
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.PushBack({ 0, 0, 50, 50 });
+	idleAnim.loop = true;
+	idleAnim.mustFlip = false;
+	idleAnim.speed = 0.1f;
 }
 
 ModuleSceneGame::~ModuleSceneGame()
@@ -123,14 +144,29 @@ update_status ModuleSceneGame::Update()
 	// All draw functions ------------------------------------------------------
 	p2List_item<PhysBody*>* c = circles.getFirst();
 
+	ballState = IDLE;
+
+	switch (ballState)
+	{
+	case IDLE:
+		currentAnim = &idleAnim;
+		break;
+
+	case DEATH:
+		currentAnim = &deathAnim;
+		break;
+
+	case SPAWN:
+		currentAnim = &spawnAnim;
+	}
+
 	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
 	while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		if (c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(ball, x - 14, y - 14, &(currentAnim->GetCurrentFrame()), 1.0f, true);
 		c = c->next;
 	}
 
