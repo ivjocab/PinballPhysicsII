@@ -29,10 +29,7 @@ public:
 	b2Body* body;
 	Module* listener;
 
-	PhysBody* l_kicker;
-	PhysBody* r_kicker;
-	PhysBody* l_joint;
-	PhysBody* r_joint;
+
 };
 
 // Module --------------------------------------
@@ -51,7 +48,18 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+
 	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
+	PhysBody* CreateFlipper(int x, int y, int* points, int size);
+	PhysBody* CreateStaticCircle(int x, int y, int radius);
+
+	PhysBody* leftFlipper;
+	PhysBody* leftJoint;
+	PhysBody* rightFlipper;
+	PhysBody* rightJoint;
+
+	b2RevoluteJoint* leftFixer;
+	b2RevoluteJoint* rightFixer;
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

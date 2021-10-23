@@ -5,6 +5,7 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
+//#include "Box2D\Box2D\Dynamics\Joints\b2joint.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -32,9 +33,9 @@ bool ModulePhysics::Start()
 	world->SetContactListener(this);
 
 	// needed to create joints like mouse joint
-	/*b2BodyDef bd;
+	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
+	/*
 	// big static circle as "ground" in the middle of the screen
 	int x = SCREEN_WIDTH / 2;
 	int y = SCREEN_HEIGHT / 1.5f;
@@ -109,7 +110,53 @@ bool ModulePhysics::Start()
 		780, 999
 	};
 
+	int left_flipper[14] = {
+		0, 10,
+		2, 4,
+		10, 0,
+		115, 5,
+		118, 10,
+		114, 16,
+		5, 18
+	};
+
+	int right_flipper[14] = {
+		75, 4,
+		70, 0,
+		-40, 5,
+		-45, 10,
+		-40, 16,
+		65, 18,
+		73, 14
+	};
+
 	CreateStaticChain(0, 0, bg, 106);
+
+	leftFlipper = CreateFlipper(276, 963, left_flipper, 14);
+	rightFlipper = CreateFlipper(552, 967, right_flipper, 14);
+
+	leftJoint = CreateStaticCircle(280, 965, 3);
+	rightJoint = CreateStaticCircle(550, 965, 3);
+
+	b2RevoluteJointDef Def;
+	Def.bodyA = leftFlipper->body;
+	Def.bodyB = leftJoint->body;
+	Def.collideConnected = false;
+	Def.upperAngle = 25 * DEGTORAD;
+	Def.lowerAngle = -10 * DEGTORAD;
+	Def.enableLimit = true;
+	Def.localAnchorA.Set(PIXEL_TO_METERS(10), PIXEL_TO_METERS(8));
+	leftFixer = (b2RevoluteJoint*)world->CreateJoint(&Def);
+
+	b2RevoluteJointDef Def2;
+	Def2.bodyA = rightFlipper->body;
+	Def2.bodyB = rightJoint->body;
+	Def2.collideConnected = false;
+	Def2.upperAngle = 10 * DEGTORAD;
+	Def2.lowerAngle = -25 * DEGTORAD;
+	Def2.enableLimit = true;
+	Def2.localAnchorA.Set(PIXEL_TO_METERS(65), PIXEL_TO_METERS(9));
+	rightFixer = (b2RevoluteJoint*)world->CreateJoint(&Def2);
 
 	return true;
 }
@@ -462,6 +509,63 @@ PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateFlipper(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	box.Set(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->height = pbody->width = 0;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
 
 	return pbody;
 }
