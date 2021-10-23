@@ -25,10 +25,14 @@ public:
 	PhysBody* sensor;
 	bool sensed;
 
-	SDL_Texture* circle;
+	SDL_Texture* background;
+	SDL_Texture* ball;
 	SDL_Texture* box;
 	SDL_Texture* rick;
+	uint intro;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
+
+	Animation idleAnim, deathSpawnAnim;
 };
