@@ -9,30 +9,114 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = ball = box = rick = NULL;
+	background = ball = sun = box = NULL;
 	ray_on = false;
 	sensed = false;
 
 	//Ball Animations
-	idleAnim.PushBack({ 0, 0, 50, 50 });
-	idleAnim.PushBack({ 46, 0, 50, 50 });
-	idleAnim.PushBack({ 92, 0, 50, 50 });
-	idleAnim.PushBack({ 138, 0, 50, 50 });
-	idleAnim.PushBack({ 184, 0, 50, 50 });
-	idleAnim.PushBack({ 230, 0, 50, 50 });
-	idleAnim.PushBack({ 276, 0, 50, 50 });
-	idleAnim.PushBack({ 322, 0, 50, 50 });
-	idleAnim.PushBack({ 368, 0, 50, 50 });
-	idleAnim.PushBack({ 414, 0, 50, 50 });
-	idleAnim.PushBack({ 460, 0, 50, 50 });
-	idleAnim.PushBack({ 506, 0, 50, 50 });
-	idleAnim.PushBack({ 552, 0, 50, 50 });
-	idleAnim.PushBack({ 598, 0, 50, 50 });
-	idleAnim.PushBack({ 644, 0, 50, 50 });
-	idleAnim.PushBack({ 690, 0, 50, 50 });
-	idleAnim.loop = true;
-	idleAnim.mustFlip = false;
-	idleAnim.speed = 0.1f;
+
+	//Idle
+	idleBallAnim.PushBack({ -5, 7, 50, 50 });
+	idleBallAnim.PushBack({ 43, 7, 50, 50 });
+	idleBallAnim.PushBack({ 90, 7, 50, 50 });
+	idleBallAnim.PushBack({ 138, 7, 50, 50 });
+	idleBallAnim.PushBack({ 184, 7, 50, 50 });
+	idleBallAnim.PushBack({ 230, 7, 50, 50 });
+	idleBallAnim.PushBack({ 276, 7, 50, 50 });
+	idleBallAnim.PushBack({ 322, 7, 50, 50 });
+	idleBallAnim.PushBack({ 368, 7, 50, 50 });
+	idleBallAnim.PushBack({ 414, 7, 50, 50 });
+	idleBallAnim.PushBack({ 460, 7, 50, 50 });
+	idleBallAnim.PushBack({ 506, 7, 50, 50 });
+	idleBallAnim.PushBack({ 552, 7, 50, 50 });
+	idleBallAnim.PushBack({ 598, 7, 50, 50 });
+	idleBallAnim.PushBack({ 644, 7, 50, 50 });
+	idleBallAnim.PushBack({ 690, 7, 50, 50 });
+	idleBallAnim.loop = true;
+	idleBallAnim.mustFlip = false;
+	idleBallAnim.speed = 0.2f;
+
+	//Death
+	deathBallAnim.PushBack({ 0, 57, 50, 50 });
+	deathBallAnim.PushBack({ 46, 57, 50, 50 });
+	deathBallAnim.PushBack({ 92, 57, 50, 50 });
+	deathBallAnim.PushBack({ 138, 57, 50, 50 });
+	deathBallAnim.PushBack({ 184, 57, 50, 50 });
+	deathBallAnim.PushBack({ 230, 57, 50, 50 });
+	deathBallAnim.PushBack({ 276, 57, 50, 50 });
+	deathBallAnim.PushBack({ 322, 57, 50, 50 });
+	deathBallAnim.PushBack({ 368, 57, 50, 50 });
+	deathBallAnim.PushBack({ 414, 57, 50, 50 });
+	deathBallAnim.PushBack({ 460, 57, 50, 50 });
+	deathBallAnim.PushBack({ 506, 57, 50, 50 });
+	deathBallAnim.PushBack({ 552, 57, 50, 50 });
+	deathBallAnim.PushBack({ 598, 57, 50, 50 });
+	deathBallAnim.PushBack({ 644, 57, 50, 50 });
+	deathBallAnim.PushBack({ 694, 57, 46, 50 });
+	deathBallAnim.PushBack({ 0, 104, 50, 50 });
+	deathBallAnim.PushBack({ 46, 104, 50, 50 });
+	deathBallAnim.PushBack({ 92, 104, 50, 50 });
+	deathBallAnim.PushBack({ 138, 104, 50, 50 });
+	deathBallAnim.PushBack({ 184, 104, 50, 50 });
+	deathBallAnim.PushBack({ 230, 104, 50, 50 });
+	deathBallAnim.PushBack({ 276, 104, 50, 50 });
+	deathBallAnim.PushBack({ 322, 104, 50, 50 });
+	deathBallAnim.PushBack({ 0, 200, 50, 50 });
+	deathBallAnim.loop = false;
+	deathBallAnim.mustFlip = false;
+	deathBallAnim.speed = 0.2f;
+
+	//Spawn
+	spawnBallAnim.PushBack({ 322, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 276, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 230, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 184, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 138, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 92, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 46, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 0, 104, 50, 50 });
+	spawnBallAnim.PushBack({ 694, 57, 46, 50 });
+	spawnBallAnim.PushBack({ 644, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 598, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 552, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 506, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 460, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 414, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 368, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 322, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 276, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 230, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 184, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 138, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 92, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 44, 57, 50, 50 });
+	spawnBallAnim.PushBack({ -5, 57, 50, 50 });
+	spawnBallAnim.loop = false;
+	spawnBallAnim.mustFlip = false;
+	spawnBallAnim.speed = 0.2f;
+
+	//Sun animations
+	//Idle
+	idleSunAnim.PushBack({ 0, 0, 229, 229 });
+	idleSunAnim.PushBack({ 230, 0, 229, 229 });
+	idleSunAnim.PushBack({ 461, 0, 229, 229 });
+	idleSunAnim.PushBack({ 0, 230, 229, 229 });
+	idleSunAnim.PushBack({ 230, 230, 229, 229 });
+	idleSunAnim.PushBack({ 461, 230, 229, 229 });
+	idleSunAnim.PushBack({ 0, 0, 461, 229 });
+	idleSunAnim.PushBack({ 230, 0, 461, 229 });
+	idleSunAnim.PushBack({ 461, 0, 461, 229 });
+
+	//Collision
+	collisionSunAnim.PushBack({ 0, 0, 229, 229 });
+	collisionSunAnim.PushBack({ 230, 0, 229, 229 });
+	collisionSunAnim.PushBack({ 461, 0, 229, 229 });
+	collisionSunAnim.PushBack({ 0, 230, 229, 229 });
+	collisionSunAnim.PushBack({ 230, 230, 229, 229 });
+	collisionSunAnim.PushBack({ 461, 230, 229, 229 });
+	collisionSunAnim.PushBack({ 0, 0, 461, 229 });
+	collisionSunAnim.PushBack({ 230, 0, 461, 229 });
+	collisionSunAnim.PushBack({ 461, 0, 461, 229 });
 }
 
 ModuleSceneGame::~ModuleSceneGame()
@@ -48,8 +132,8 @@ bool ModuleSceneGame::Start()
 
 	background = App->textures->Load("pinball/background.png");
 	ball = App->textures->Load("pinball/ball.png");
+	sun = App->textures->Load("pinball/sun.png");
 	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -84,54 +168,6 @@ update_status ModuleSceneGame::Update()
 		circles.getLast()->data->listener = this;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-		boxes.getLast()->data->listener = this;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-		ricks.getLast()->data->listener = this;
-	}
-
 	// Prepare for raycast ------------------------------------------------------
 
 	iPoint mouse;
@@ -146,29 +182,66 @@ update_status ModuleSceneGame::Update()
 
 	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
-	ballState = IDLE;
+	//BALL
+
+	if (ballState != BALL_DEATH)
+	{
+		ballState = BALL_SPAWN;
+		if (spawnBallAnim.HasFinished())
+		{
+			ballState = BALL_IDLE;
+		}
+	}
 
 	switch (ballState)
 	{
-	case IDLE:
-		currentAnim = &idleAnim;
+	case BALL_IDLE:
+		currentAnim = &idleBallAnim;
 		break;
 
-	case DEATH:
-		currentAnim = &deathAnim;
+	case BALL_DEATH:
+		currentAnim = &deathBallAnim;
 		break;
 
-	case SPAWN:
-		currentAnim = &spawnAnim;
+	case BALL_SPAWN:
+		currentAnim = &spawnBallAnim;
 	}
 
 	while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball, x - 14, y - 14, &(currentAnim->GetCurrentFrame()), 1.0f, true);
+		App->renderer->Blit(ball, x - 14, y - 8, &(currentAnim->GetCurrentFrame()), 1.0f, true);
 		c = c->next;
-		idleAnim.Update();
+		idleBallAnim.Update();
+		deathBallAnim.Update();
+		spawnBallAnim.Update();
+	}
+
+	//SUN
+	sunState = SUN_IDLE;
+
+	if (sunState != SUN_COLLISION)
+	{
+		sunState = SUN_IDLE;
+	}
+
+	switch (sunState)
+	{
+	case SUN_IDLE:
+		currentAnim = &idleSunAnim;
+		break;
+
+	case SUN_COLLISION:
+		currentAnim = &collisionSunAnim;
+		break;
+	}
+
+	while (c != NULL)
+	{
+		App->renderer->Blit(sun, 0, 0, &(currentAnim->GetCurrentFrame()), 1.0f, true);
+		idleSunAnim.Update();
+		collisionSunAnim.Update();
 	}
 
 	c = boxes.getFirst();
@@ -184,16 +257,6 @@ update_status ModuleSceneGame::Update()
 			if (hit >= 0)
 				ray_hit = hit;
 		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

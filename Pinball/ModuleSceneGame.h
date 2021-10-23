@@ -21,15 +21,15 @@ public:
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
 
 	PhysBody* sensor;
 	bool sensed;
 
 	SDL_Texture* background;
 	SDL_Texture* ball;
+	SDL_Texture* sun;
 	SDL_Texture* box;
-	SDL_Texture* rick;
+
 	uint intro;
 	uint bonus_fx;
 	p2Point<int> ray;
@@ -37,14 +37,21 @@ public:
 
 	enum BallState
 	{
-		IDLE,
-		DEATH,
-		SPAWN
+		BALL_IDLE,
+		BALL_DEATH,
+		BALL_SPAWN
+	};
+
+	enum SunState
+	{
+		SUN_IDLE,
+		SUN_COLLISION
 	};
 
 	BallState ballState;
+	SunState sunState;
 
 private:
 	Animation* currentAnim = nullptr;
-	Animation idleAnim, collisionAnim, deathAnim, spawnAnim;
+	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSunAnim, collisionSunAnim;
 };
