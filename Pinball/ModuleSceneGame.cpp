@@ -16,114 +16,127 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	//Ball Animations
 
 	//Idle
-	idleBallAnim.PushBack({ -5, 7, 50, 50 });
-	idleBallAnim.PushBack({ 43, 7, 50, 50 });
-	idleBallAnim.PushBack({ 90, 7, 50, 50 });
-	idleBallAnim.PushBack({ 138, 7, 50, 50 });
-	idleBallAnim.PushBack({ 184, 7, 50, 50 });
-	idleBallAnim.PushBack({ 230, 7, 50, 50 });
-	idleBallAnim.PushBack({ 276, 7, 50, 50 });
-	idleBallAnim.PushBack({ 322, 7, 50, 50 });
-	idleBallAnim.PushBack({ 368, 7, 50, 50 });
-	idleBallAnim.PushBack({ 414, 7, 50, 50 });
-	idleBallAnim.PushBack({ 460, 7, 50, 50 });
-	idleBallAnim.PushBack({ 506, 7, 50, 50 });
-	idleBallAnim.PushBack({ 552, 7, 50, 50 });
-	idleBallAnim.PushBack({ 598, 7, 50, 50 });
-	idleBallAnim.PushBack({ 644, 7, 50, 50 });
-	idleBallAnim.PushBack({ 690, 7, 50, 50 });
+	idleBallAnim.PushBack({ 0, 0, 39, 38 });
+	idleBallAnim.PushBack({ 38, 0, 39, 38 });
+	idleBallAnim.PushBack({ 76, 0, 39, 38 });
+	idleBallAnim.PushBack({ 114, 0, 39, 38 });
+	idleBallAnim.PushBack({ 152, 0, 39, 38 });
+	idleBallAnim.PushBack({ 190, 0, 39, 38 });
+	idleBallAnim.PushBack({ 228, 0, 39, 38 });
+	idleBallAnim.PushBack({ 266, 0, 39, 38 });
+	idleBallAnim.PushBack({ 304, 0, 39, 38 });
+	idleBallAnim.PushBack({ 342, 0, 39, 38 });
+	idleBallAnim.PushBack({ 380, 0, 39, 38 });
+	idleBallAnim.PushBack({ 418, 0, 39, 38 });
+	idleBallAnim.PushBack({ 456, 0, 39, 38 });
+	idleBallAnim.PushBack({ 494, 0, 39, 38 });
+	idleBallAnim.PushBack({ 532, 0, 39, 38 });
+	idleBallAnim.PushBack({ 570, 0, 39, 38 });
 	idleBallAnim.loop = true;
 	idleBallAnim.mustFlip = false;
-	idleBallAnim.speed = 0.2f;
+	idleBallAnim.speed = 0.5f;
 
 	//Death
-	deathBallAnim.PushBack({ 0, 57, 50, 50 });
-	deathBallAnim.PushBack({ 46, 57, 50, 50 });
-	deathBallAnim.PushBack({ 92, 57, 50, 50 });
-	deathBallAnim.PushBack({ 138, 57, 50, 50 });
-	deathBallAnim.PushBack({ 184, 57, 50, 50 });
-	deathBallAnim.PushBack({ 230, 57, 50, 50 });
-	deathBallAnim.PushBack({ 276, 57, 50, 50 });
-	deathBallAnim.PushBack({ 322, 57, 50, 50 });
-	deathBallAnim.PushBack({ 368, 57, 50, 50 });
-	deathBallAnim.PushBack({ 414, 57, 50, 50 });
-	deathBallAnim.PushBack({ 460, 57, 50, 50 });
-	deathBallAnim.PushBack({ 506, 57, 50, 50 });
-	deathBallAnim.PushBack({ 552, 57, 50, 50 });
-	deathBallAnim.PushBack({ 598, 57, 50, 50 });
-	deathBallAnim.PushBack({ 644, 57, 50, 50 });
-	deathBallAnim.PushBack({ 694, 57, 46, 50 });
-	deathBallAnim.PushBack({ 0, 104, 50, 50 });
-	deathBallAnim.PushBack({ 46, 104, 50, 50 });
-	deathBallAnim.PushBack({ 92, 104, 50, 50 });
-	deathBallAnim.PushBack({ 138, 104, 50, 50 });
-	deathBallAnim.PushBack({ 184, 104, 50, 50 });
-	deathBallAnim.PushBack({ 230, 104, 50, 50 });
-	deathBallAnim.PushBack({ 276, 104, 50, 50 });
-	deathBallAnim.PushBack({ 322, 104, 50, 50 });
-	deathBallAnim.PushBack({ 0, 200, 50, 50 });
+	deathBallAnim.PushBack({ 0, 39, 39, 38 });
+	deathBallAnim.PushBack({ 38, 39, 39, 38 });
+	deathBallAnim.PushBack({ 76, 39, 39, 38 });
+	deathBallAnim.PushBack({ 114, 39, 39, 38 });
+	deathBallAnim.PushBack({ 152, 39, 39, 38 });
+	deathBallAnim.PushBack({ 190, 39, 39, 38 });
+	deathBallAnim.PushBack({ 228, 39, 39, 38 });
+	deathBallAnim.PushBack({ 266, 39, 39, 38 });
+	deathBallAnim.PushBack({ 304, 39, 39, 38 });
+	deathBallAnim.PushBack({ 342, 39, 39, 38 });
+	deathBallAnim.PushBack({ 380, 39, 39, 38 });
+	deathBallAnim.PushBack({ 418, 39, 39, 38 });
+	deathBallAnim.PushBack({ 456, 39, 39, 38 });
+	deathBallAnim.PushBack({ 494, 39, 39, 38 });
+	deathBallAnim.PushBack({ 532, 39, 39, 38 });
+	deathBallAnim.PushBack({ 570, 39, 39, 38 });
+	deathBallAnim.PushBack({ 0, 78, 39, 38 });
+	deathBallAnim.PushBack({ 38, 78, 39, 38 });
+	deathBallAnim.PushBack({ 76, 78, 39, 38 });
+	deathBallAnim.PushBack({ 114, 78, 39, 38 });
+	deathBallAnim.PushBack({ 152, 78, 39, 38 });
+	deathBallAnim.PushBack({ 190, 78, 39, 38 });
+	deathBallAnim.PushBack({ 228, 78, 39, 38 });
+	deathBallAnim.PushBack({ 266, 78, 39, 38 });
 	deathBallAnim.loop = false;
 	deathBallAnim.mustFlip = false;
 	deathBallAnim.speed = 0.2f;
 
 	//Spawn
-	spawnBallAnim.PushBack({ 322, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 276, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 230, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 184, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 138, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 92, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 46, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 0, 104, 50, 50 });
-	spawnBallAnim.PushBack({ 694, 57, 46, 50 });
-	spawnBallAnim.PushBack({ 644, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 598, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 552, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 506, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 460, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 414, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 368, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 322, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 276, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 230, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 184, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 138, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 92, 57, 50, 50 });
-	spawnBallAnim.PushBack({ 44, 57, 50, 50 });
-	spawnBallAnim.PushBack({ -5, 57, 50, 50 });
+	spawnBallAnim.PushBack({ 266, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 228, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 190, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 152, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 114, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 76, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 38, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 0, 78, 39, 38 });
+	spawnBallAnim.PushBack({ 570, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 532, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 494, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 456, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 418, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 380, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 342, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 304, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 266, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 228, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 190, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 152, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 114, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 76, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 38, 39, 39, 38 });
+	spawnBallAnim.PushBack({ 0, 39, 39, 38 });
 	spawnBallAnim.loop = false;
 	spawnBallAnim.mustFlip = false;
 	spawnBallAnim.speed = 0.2f;
 
 	//Sun animations
 	//Idle
-	idleSunAnim.PushBack({ 0, 0, 229, 229 });
-	idleSunAnim.PushBack({ 230, 0, 229, 229 });
-	idleSunAnim.PushBack({ 461, 0, 229, 229 });
-	idleSunAnim.PushBack({ 0, 230, 229, 229 });
-	idleSunAnim.PushBack({ 230, 230, 229, 229 });
-	idleSunAnim.PushBack({ 461, 230, 229, 229 });
-	idleSunAnim.PushBack({ 0, 0, 461, 229 });
-	idleSunAnim.PushBack({ 230, 0, 461, 229 });
-	idleSunAnim.PushBack({ 461, 0, 461, 229 });
+	idleSunAnim.PushBack({ 0, 0, 220, 218 });
+	idleSunAnim.PushBack({ 218, 0, 220, 218 });
+	idleSunAnim.PushBack({ 436, 0, 220, 218 });
+	idleSunAnim.PushBack({ 0, 220, 220, 218 });
+	idleSunAnim.PushBack({ 218, 220, 220, 218 });
+	idleSunAnim.PushBack({ 436, 220, 220, 218 });
+	idleSunAnim.PushBack({ 0, 440, 220, 218 });
+	idleSunAnim.PushBack({ 218, 440, 220, 218 });
+	idleSunAnim.PushBack({ 436, 440, 220, 218 });
+	idleSunAnim.PushBack({ 218, 440, 220, 218 });
+	idleSunAnim.PushBack({ 0, 440, 220, 218 });
+	idleSunAnim.PushBack({ 436, 220, 220, 218 });
+	idleSunAnim.PushBack({ 218, 220, 220, 218 });
+	idleSunAnim.PushBack({ 0, 220, 220, 218 });
+	idleSunAnim.PushBack({ 436, 0, 220, 218 });
+	idleSunAnim.PushBack({ 218, 0, 220, 218 });
 	idleSunAnim.loop = true;
-	idleSunAnim.pingpong = true;
 	idleSunAnim.mustFlip = false;
-	idleSunAnim.speed = 0.01f;
+	idleSunAnim.speed = 0.12f;
 
 	//Collision
-	collisionSunAnim.PushBack({ 0, 0, 229, 229 });
-	collisionSunAnim.PushBack({ 230, 0, 229, 229 });
-	collisionSunAnim.PushBack({ 461, 0, 229, 229 });
-	collisionSunAnim.PushBack({ 0, 230, 229, 229 });
-	collisionSunAnim.PushBack({ 230, 230, 229, 229 });
-	collisionSunAnim.PushBack({ 461, 230, 229, 229 });
-	collisionSunAnim.PushBack({ 0, 0, 461, 229 });
-	collisionSunAnim.PushBack({ 230, 0, 461, 229 });
-	collisionSunAnim.PushBack({ 461, 0, 461, 229 });
+	collisionSunAnim.PushBack({ 0, 660, 220, 218 });
+	collisionSunAnim.PushBack({ 218, 660, 220, 218 });
+	collisionSunAnim.PushBack({ 436, 660, 220, 218 });
+	collisionSunAnim.PushBack({ 0, 880, 220, 218 });
+	collisionSunAnim.PushBack({ 218, 880, 220, 218 });
+	collisionSunAnim.PushBack({ 436, 880, 220, 218 });
+	collisionSunAnim.PushBack({ 0, 1100, 220, 218 });
+	collisionSunAnim.PushBack({ 218, 1100, 220, 218 });
+	collisionSunAnim.PushBack({ 436, 1100, 220, 218 });
+	collisionSunAnim.PushBack({ 218, 1100, 220, 218 });
+	collisionSunAnim.PushBack({ 0, 1100, 220, 218 });
+	collisionSunAnim.PushBack({ 436, 880, 220, 218 });
+	collisionSunAnim.PushBack({ 218, 880, 220, 218 });
+	collisionSunAnim.PushBack({ 0, 880, 220, 218 });
+	collisionSunAnim.PushBack({ 436, 660, 220, 218 });
+	collisionSunAnim.PushBack({ 218, 660, 220, 218 });
+	collisionSunAnim.PushBack({ 0, 660, 220, 218 });
 	collisionSunAnim.loop = false;
 	collisionSunAnim.mustFlip = false;
-	collisionSunAnim.speed = 0.1f;
+	collisionSunAnim.speed = 0.28f;
 }
 
 ModuleSceneGame::~ModuleSceneGame()
@@ -218,7 +231,7 @@ update_status ModuleSceneGame::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball, x - 14, y - 8, &(currentAnim->GetCurrentFrame()), 1.0f, true);
+		App->renderer->Blit(ball, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
 		c = c->next;
 		idleBallAnim.Update();
 		deathBallAnim.Update();
@@ -226,12 +239,6 @@ update_status ModuleSceneGame::Update()
 	}
 
 	//SUN
-	sunState = SUN_COLLISION;
-
-	if (sunState != SUN_COLLISION)
-	{
-		sunState = SUN_IDLE;
-	}
 
 	switch (sunState)
 	{
@@ -244,9 +251,16 @@ update_status ModuleSceneGame::Update()
 		break;
 	}
 
-	App->renderer->Blit(sun, 220, 225, &(currentAnim->GetCurrentFrame()), 1.0f);
-	idleSunAnim.Update();
-	collisionSunAnim.Update();
+	if ((sunState == SUN_COLLISION) && (collisionSunAnim.HasFinished()))
+	{
+		collisionSunAnim.Reset();
+		idleSunAnim.Reset();
+		sunState = SUN_IDLE;
+	}
+
+	App->renderer->Blit(sun, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+	if (sunState == SUN_IDLE){ idleSunAnim.Update(); }
+	else { collisionSunAnim.Update(); }
 
 
 	c = boxes.getFirst();
@@ -289,6 +303,11 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		App->audio->PlayFx(bonus_fx);
 	}
+
+	/*if (bodyA->body->GetFixtureList()->)
+	{
+		sunState = SUN_COLLISION;
+	}*/
 
 	/*
 	if(bodyA)

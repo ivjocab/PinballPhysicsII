@@ -35,7 +35,30 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
+
+	//Create Obstacle: Sun
+
+	b2BodyDef bodySun;
+	bodySun.type = b2_staticBody;
+	bodySun.position.Set(PIXEL_TO_METERS(334), PIXEL_TO_METERS(340));
+
+	b2Body* b = world->CreateBody(&bodySun);
+
+	b2CircleShape shapeSun;
+	shapeSun.m_radius = PIXEL_TO_METERS(56);
+	b2FixtureDef fixtureSun;
+	fixtureSun.shape = &shapeSun;
+	fixtureSun.density = 1.0f;
+
+	b->CreateFixture(&fixtureSun);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 77;
 	
+	//Create map colliders
+
 	int bg[106] = {
 		560, 999,
 		560, 956,
@@ -310,16 +333,18 @@ update_status ModulePhysics::PostUpdate()
 				break;
 
 				// Draw polygons ------------------------------------------------
+				if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+				{
 				case b2Shape::e_polygon:
 				{
 					b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
 					int32 count = polygonShape->GetVertexCount();
 					b2Vec2 prev, v;
 
-					for(int32 i = 0; i < count; ++i)
+					for (int32 i = 0; i < count; ++i)
 					{
 						v = b->GetWorldPoint(polygonShape->GetVertex(i));
-						if(i > 0)
+						if (i > 0)
 							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
 
 						prev = v;
@@ -336,10 +361,10 @@ update_status ModulePhysics::PostUpdate()
 					b2ChainShape* shape = (b2ChainShape*)f->GetShape();
 					b2Vec2 prev, v;
 
-					for(int32 i = 0; i < shape->m_count; ++i)
+					for (int32 i = 0; i < shape->m_count; ++i)
 					{
 						v = b->GetWorldPoint(shape->m_vertices[i]);
-						if(i > 0)
+						if (i > 0)
 							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
 						prev = v;
 					}
@@ -360,6 +385,7 @@ update_status ModulePhysics::PostUpdate()
 					App->renderer->DrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), 100, 100, 255);
 				}
 				break;
+				}
 			}
 
 			// TODO 1: If mouse button 1 is pressed ...
