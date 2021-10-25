@@ -630,20 +630,14 @@ update_status ModuleSceneGame::Update()
 	}
 
 	//kicker input
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
 	{
-		if (kicker->mobile == false)
-		{
-				kicker->mobile->body->ApplyForce({ 0,18 }, { 0,0 }, true);
-		}
+		kicker->mobile->body->ApplyForce({ 18, 0 }, { 0, 0 }, true);
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_UP)
 	{
-		if (kicker->mobile == false)
-		{
-			kicker->mobile->body->ApplyForce({ 0,-110 }, { 0,0 }, true);
-			App->audio->PlayFx(kickerFx);
-		}
+		kicker->mobile->body->ApplyForce({ 0, -200 }, { 0,0 }, true);
+		App->audio->PlayFx(kickerFx);
 	}
 
 	//flippers' input
@@ -736,7 +730,7 @@ update_status ModuleSceneGame::Update()
 		break;
 	}
 
-	if ((sunState == SUN_COLLISION) && (sun->collisionSunAnim.HasFinished()))
+	if ((sunState == SUN_COLLISION) && (sun->collisionSunAnim.HasFinished() == true))
 	{
 		sun->collisionSunAnim.Reset();
 		sun->idleSunAnim.Reset();
@@ -770,8 +764,6 @@ update_status ModuleSceneGame::Update()
 			pachinkoState = PACHINKO_RANDOM;
 		}
 
-		random = 0;
-
 		switch (pachinkoState)
 		{
 		case PACHINKO_IDLE:
@@ -791,10 +783,14 @@ update_status ModuleSceneGame::Update()
 		if (pachinkoState == PACHINKO_RANDOM) { p->data->randomPachinkoAnim.Update(); }
 		if (pachinkoState == PACHINKO_COLLISION) { p->data->collisionPachinkoAnim.Update(); }
 
-		if (pachinkoState == PACHINKO_IDLE || p->data->randomPachinkoAnim.HasFinished() == true)
+		if (pachinkoState == PACHINKO_IDLE)
 		{
 			p->data->randomPachinkoAnim.Reset();
 			p->data->collisionPachinkoAnim.Reset();
+			pachinkoState = PACHINKO_IDLE;
+		}
+		if (pachinkoState == PACHINKO_RANDOM && p->data->randomPachinkoAnim.HasFinished() == true)
+		{
 			pachinkoState = PACHINKO_IDLE;
 		}
 

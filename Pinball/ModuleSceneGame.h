@@ -42,9 +42,9 @@ struct DCircle {
 	Animation spawnBallAnim;
 	enum State
 	{
-		Ready,
-		Alive,
-		Dead
+		IDLE,
+		DEAD,
+		SPAWN
 	};
 };
 
