@@ -55,7 +55,84 @@ bool ModuleSceneGame::Start()
 
 	//Create BALL
 	DCircle* ball = new DCircle;
-	ball->round = App->physics->CreateCircle(835, 732, 12, b2_dynamicBody);
+	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
+	//Ball Animations
+	//Idle ball animations
+	ball->idleBallAnim.PushBack({ 0, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 38, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 76, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 114, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 152, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 190, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 228, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 266, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 304, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 342, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 380, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 418, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 456, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 494, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 532, 0, 39, 38 });
+	ball->idleBallAnim.PushBack({ 570, 0, 39, 38 });
+	ball->idleBallAnim.loop = true;
+	ball->idleBallAnim.mustFlip = false;
+	ball->idleBallAnim.speed = 0.5f;
+	//Death ball animations
+	ball->deathBallAnim.PushBack({ 0, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 38, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 76, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 114, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 152, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 190, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 228, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 266, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 304, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 342, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 380, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 418, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 456, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 494, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 532, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 570, 39, 39, 38 });
+	ball->deathBallAnim.PushBack({ 0, 78, 39, 38 });
+	ball->deathBallAnim.PushBack({ 38, 78, 39, 38 });
+	ball->deathBallAnim.PushBack({ 76, 78, 39, 38 });
+	ball->deathBallAnim.PushBack({ 114, 78, 39, 38 });
+	ball->deathBallAnim.PushBack({ 152, 78, 39, 38 });
+	ball->deathBallAnim.PushBack({ 190, 78, 39, 38 });
+	ball->deathBallAnim.PushBack({ 228, 78, 39, 38 });
+	ball->deathBallAnim.PushBack({ 266, 78, 39, 38 });
+	ball->deathBallAnim.loop = false;
+	ball->deathBallAnim.mustFlip = false;
+	ball->deathBallAnim.speed = 0.2f;
+	//Spawn ball animations
+	ball->spawnBallAnim.PushBack({ 266, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 228, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 190, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 152, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 114, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 76, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 38, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 0, 78, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 570, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 532, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 494, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 456, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 418, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 380, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 342, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 304, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 266, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 228, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 190, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 152, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 114, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 76, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 38, 39, 39, 38 });
+	ball->spawnBallAnim.PushBack({ 0, 39, 39, 38 });
+	ball->spawnBallAnim.loop = false;
+	ball->spawnBallAnim.mustFlip = false;
+	ball->spawnBallAnim.speed = 0.2f;
 
 	//Create Kicker
 	Kicker* kicker = new Kicker;
@@ -164,87 +241,6 @@ bool ModuleSceneGame::Start()
 	pachinko1->collisionPachinkoAnim.mustFlip = false;
 	pachinko1->collisionPachinkoAnim.speed = 0.4;
 
-	//ANIMATIONS
-	//Ball Animations
-	//Idle
-	idleBallAnim.PushBack({ 0, 0, 39, 38 });
-	idleBallAnim.PushBack({ 38, 0, 39, 38 });
-	idleBallAnim.PushBack({ 76, 0, 39, 38 });
-	idleBallAnim.PushBack({ 114, 0, 39, 38 });
-	idleBallAnim.PushBack({ 152, 0, 39, 38 });
-	idleBallAnim.PushBack({ 190, 0, 39, 38 });
-	idleBallAnim.PushBack({ 228, 0, 39, 38 });
-	idleBallAnim.PushBack({ 266, 0, 39, 38 });
-	idleBallAnim.PushBack({ 304, 0, 39, 38 });
-	idleBallAnim.PushBack({ 342, 0, 39, 38 });
-	idleBallAnim.PushBack({ 380, 0, 39, 38 });
-	idleBallAnim.PushBack({ 418, 0, 39, 38 });
-	idleBallAnim.PushBack({ 456, 0, 39, 38 });
-	idleBallAnim.PushBack({ 494, 0, 39, 38 });
-	idleBallAnim.PushBack({ 532, 0, 39, 38 });
-	idleBallAnim.PushBack({ 570, 0, 39, 38 });
-	idleBallAnim.loop = true;
-	idleBallAnim.mustFlip = false;
-	idleBallAnim.speed = 0.5f;
-
-	//Death
-	deathBallAnim.PushBack({ 0, 39, 39, 38 });
-	deathBallAnim.PushBack({ 38, 39, 39, 38 });
-	deathBallAnim.PushBack({ 76, 39, 39, 38 });
-	deathBallAnim.PushBack({ 114, 39, 39, 38 });
-	deathBallAnim.PushBack({ 152, 39, 39, 38 });
-	deathBallAnim.PushBack({ 190, 39, 39, 38 });
-	deathBallAnim.PushBack({ 228, 39, 39, 38 });
-	deathBallAnim.PushBack({ 266, 39, 39, 38 });
-	deathBallAnim.PushBack({ 304, 39, 39, 38 });
-	deathBallAnim.PushBack({ 342, 39, 39, 38 });
-	deathBallAnim.PushBack({ 380, 39, 39, 38 });
-	deathBallAnim.PushBack({ 418, 39, 39, 38 });
-	deathBallAnim.PushBack({ 456, 39, 39, 38 });
-	deathBallAnim.PushBack({ 494, 39, 39, 38 });
-	deathBallAnim.PushBack({ 532, 39, 39, 38 });
-	deathBallAnim.PushBack({ 570, 39, 39, 38 });
-	deathBallAnim.PushBack({ 0, 78, 39, 38 });
-	deathBallAnim.PushBack({ 38, 78, 39, 38 });
-	deathBallAnim.PushBack({ 76, 78, 39, 38 });
-	deathBallAnim.PushBack({ 114, 78, 39, 38 });
-	deathBallAnim.PushBack({ 152, 78, 39, 38 });
-	deathBallAnim.PushBack({ 190, 78, 39, 38 });
-	deathBallAnim.PushBack({ 228, 78, 39, 38 });
-	deathBallAnim.PushBack({ 266, 78, 39, 38 });
-	deathBallAnim.loop = false;
-	deathBallAnim.mustFlip = false;
-	deathBallAnim.speed = 0.2f;
-
-	//Spawn
-	spawnBallAnim.PushBack({ 266, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 228, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 190, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 152, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 114, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 76, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 38, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 0, 78, 39, 38 });
-	spawnBallAnim.PushBack({ 570, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 532, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 494, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 456, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 418, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 380, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 342, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 304, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 266, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 228, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 190, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 152, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 114, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 76, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 38, 39, 39, 38 });
-	spawnBallAnim.PushBack({ 0, 39, 39, 38 });
-	spawnBallAnim.loop = false;
-	spawnBallAnim.mustFlip = false;
-	spawnBallAnim.speed = 0.2f;
-
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -312,8 +308,13 @@ update_status ModuleSceneGame::Update()
 	//ball debug creation
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
-		circles.getLast()->data->listener = this;
+		p2List_item<DCircle*>* ball = dCircles.getFirst();
+		while (ball != NULL)
+		{
+			ball->data->round = (App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
+			dCircles.getLast()->data->round->listener = this;
+			ball = ball->next;
+		}
 	}
 
 	//flippers' input
@@ -351,132 +352,123 @@ update_status ModuleSceneGame::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
-
 	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
 	//BALL
-
-
-	if (ballState != BALL_DEATH)
+	p2List_item<DCircle*>* ball = dCircles.getFirst();
+	while (ball != NULL)
 	{
-		ballState = BALL_SPAWN;
-		if (spawnBallAnim.HasFinished())
+
+		if (ballState != BALL_DEATH)
 		{
-			ballState = BALL_IDLE;
+			ballState = BALL_SPAWN;
+			if (ball->data->spawnBallAnim.HasFinished())
+			{
+				ballState = BALL_IDLE;
+			}
 		}
-	}
 
-	switch (ballState)
-	{
-	case BALL_IDLE:
-		currentAnim = &idleBallAnim;
-		break;
+		if (ballState != BALL_DEATH)
+		{
+			ballState = BALL_SPAWN;
+			if (ball->data->spawnBallAnim.HasFinished())
+			{
+				ballState = BALL_IDLE;
+			}
+		}
 
-	case BALL_DEATH:
-		currentAnim = &deathBallAnim;
-		break;
+		switch (ballState)
+		{
+		case BALL_IDLE:
+			currentAnim = &ball->data->idleBallAnim;
+			break;
 
-	case BALL_SPAWN:
-		currentAnim = &spawnBallAnim;
-	}
+		case BALL_DEATH:
+			currentAnim = &ball->data->deathBallAnim;
+			break;
 
-	while (c != NULL)
-	{
+		case BALL_SPAWN:
+			currentAnim = &ball->data->spawnBallAnim;
+			break;
+		}
+
 		int x, y;
-		c->data->GetPosition(x, y);
+		ball->data->round->GetPosition(x, y);
 		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
-		c = c->next;
-		idleBallAnim.Update();
-		deathBallAnim.Update();
-		spawnBallAnim.Update();
-	}
+		ball = ball->next;
+		ball->data->idleBallAnim.Update();
+		ball->data->deathBallAnim.Update();
+		ball->data->spawnBallAnim.Update();
 
-	//SUN
-
-	switch (sunState)
-	{
-	case SUN_IDLE:
-		currentAnim = &idleSunAnim;
-		break;
-
-	case SUN_COLLISION:
-		currentAnim = &collisionSunAnim;
-		break;
-	}
-
-	if (sunState == SUN_IDLE) { idleSunAnim.Update(); }
-	else { collisionSunAnim.Update(); }
-
-	if ((sunState == SUN_COLLISION) && (collisionSunAnim.HasFinished()))
-	{
-		collisionSunAnim.Reset();
-		idleSunAnim.Reset();
-		sunState = SUN_IDLE;
-	}
-
-	App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
-
-	//BOX
-
-	c = boxes.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if (ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if (hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	//PACHINKO
-	int random = 0;
-	srand(time(NULL));
-	random = rand() % 40;
-
-	if (random >= 35)
-	{
-		pachinkoState = PACHINKO_RANDOM;
+		ball = ball->next;
 	}
 	
-	random = 0;
 
-	switch (pachinkoState)
+	//SUN
+	p2List_item<SCircle*>* obstacleCircle = sCircles.getFirst();
+	while (obstacleCircle != NULL)
 	{
-	case PACHINKO_IDLE:
-		currentAnim = &randomPachinkoAnim;
-		break;
+		switch (sunState)
+		{
+		case SUN_IDLE:
+			currentAnim = &sCircles.getFirst()->data->idleSunAnim;
+			break;
+		case SUN_COLLISION:
+			currentAnim = &sCircles.getFirst()->data->collisionSunAnim;
+			break;
+		}
 
-	case PACHINKO_RANDOM:
-		currentAnim = &randomPachinkoAnim;
-		break;
+		if ((sunState == SUN_COLLISION) && (sCircles.getFirst()->data->collisionSunAnim.HasFinished()))
+		{
+			sCircles.getFirst()->data->collisionSunAnim.Reset();
+			sCircles.getFirst()->data->idleSunAnim.Reset();
+			sunState = SUN_IDLE;
+		}
 
-	case PACHINKO_COLLISION:
-		currentAnim = &collisionPachinkoAnim;
-		break;
+		App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+
+		//PACHINKO
+		int random = 0;
+		srand(time(NULL));
+		random = rand() % 40;
+
+		if (random >= 35)
+		{
+			pachinkoState = PACHINKO_RANDOM;
+		}
+
+		random = 0;
+
+		switch (pachinkoState)
+		{
+		case PACHINKO_IDLE:
+			currentAnim = &sCircles.getFirst()->data->randomPachinkoAnim;
+			break;
+
+		case PACHINKO_RANDOM:
+			currentAnim = &sCircles.getFirst()->data->randomPachinkoAnim;
+			break;
+
+		case PACHINKO_COLLISION:
+			currentAnim = &sCircles.getFirst()->data->collisionPachinkoAnim;
+			break;
+		}
+
+		if (pachinkoState == PACHINKO_IDLE) { sCircles.getFirst()->data->idlePachinkoAnim.Update(); }
+		if (pachinkoState == PACHINKO_RANDOM) { sCircles.getFirst()->data->randomPachinkoAnim.Update(); }
+		if (pachinkoState == PACHINKO_COLLISION) { sCircles.getFirst()->data->collisionPachinkoAnim.Update(); }
+
+		if (pachinkoState == PACHINKO_IDLE || sCircles.getFirst()->data->randomPachinkoAnim.HasFinished() == true)
+		{
+			sCircles.getFirst()->data->randomPachinkoAnim.Reset();
+			sCircles.getFirst()->data->collisionPachinkoAnim.Reset();
+			pachinkoState = PACHINKO_IDLE;
+		}
+
+		App->renderer->Blit(pachinkoTexture, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
+
+		obstacleCircle = obstacleCircle->next;
 	}
-
-	if (pachinkoState == PACHINKO_IDLE) { idlePachinkoAnim.Update(); }
-	if (pachinkoState == PACHINKO_RANDOM) { randomPachinkoAnim.Update(); }
-	if (pachinkoState == PACHINKO_COLLISION) { collisionPachinkoAnim.Update(); }
-
-	if (pachinkoState == PACHINKO_IDLE || randomPachinkoAnim.HasFinished() == true)
-	{
-		randomPachinkoAnim.Reset();
-		collisionPachinkoAnim.Reset();
-		pachinkoState = PACHINKO_IDLE;
-	}
-
-	App->renderer->Blit(pachinkoTexture, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
-
-
-
 
 	// ray ---------------
 	if (ray_on == true)

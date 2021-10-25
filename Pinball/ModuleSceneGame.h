@@ -22,9 +22,6 @@ struct Kicker
 
 struct SCircle {
 	PhysBody* round;
-	Animation idleBallAnim;
-	Animation deathBallAnim;
-	Animation spawnBallAnim;
 	Animation idleSunAnim;
 	Animation collisionSunAnim;
 	Animation idlePachinkoAnim;
@@ -80,7 +77,8 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
-	p2List<PhysBody*> circles;
+	p2List<DCircle*> dCircles;
+	p2List<SCircle*> sCircles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> backgrounds;
 
