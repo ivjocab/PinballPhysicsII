@@ -48,11 +48,12 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.bullet = true;
 
 	b2Body* b = world->CreateBody(&body);
 
@@ -72,10 +73,10 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -97,10 +98,10 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_staticBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -124,10 +125,11 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
+
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_staticBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -152,10 +154,43 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
-	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
+	b->SetUserData(pbody);
 
 	return pbody;
+}
+
+b2RevoluteJoint* ModulePhysics::CreateRevoluteJoint(PhysBody* A, b2Vec2 anchorA, PhysBody* B, b2Vec2 anchorB, float angle, bool collideConnected, bool enableLimit)
+{
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = A->body;
+	revoluteJointDef.bodyB = B->body;
+	revoluteJointDef.collideConnected = collideConnected;
+	revoluteJointDef.localAnchorA.Set(anchorA.x, anchorA.y);
+	revoluteJointDef.localAnchorB.Set(anchorB.x, anchorB.y);
+	revoluteJointDef.referenceAngle = 0;
+	revoluteJointDef.enableLimit = enableLimit;
+	revoluteJointDef.lowerAngle = -DEG_TO_RAD(angle);
+	revoluteJointDef.upperAngle = DEG_TO_RAD(angle);
+
+	return (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
+}
+
+b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(PhysBody* A, b2Vec2 anchorA, PhysBody* B, b2Vec2 anchorB, b2Vec2 axys, float maxHeight, bool collideConnected, bool enableLimit)
+{
+	b2PrismaticJointDef prismaticJointDef;
+	prismaticJointDef.bodyA = A->body;
+	prismaticJointDef.bodyB = B->body;
+	prismaticJointDef.collideConnected = collideConnected;
+	prismaticJointDef.localAxisA.Set(axys.x, axys.y);
+	prismaticJointDef.localAnchorA.Set(anchorA.x, anchorA.y);
+	prismaticJointDef.localAnchorB.Set(anchorB.x, anchorB.y);
+	prismaticJointDef.referenceAngle = 0;
+	prismaticJointDef.enableLimit = enableLimit;
+	prismaticJointDef.lowerTranslation = -0.01;
+	prismaticJointDef.upperTranslation = maxHeight;
+
+	return (b2PrismaticJoint*)world->CreateJoint(&prismaticJointDef);
 }
 
 // 
@@ -195,13 +230,13 @@ update_status ModulePhysics::PostUpdate()
 				{
 					v = b->GetWorldPoint(polygonShape->GetVertex(i));
 					if (i > 0)
-						App->renderer->DrawLine(METERS_TO_PIXELS(prev.x) / 2, METERS_TO_PIXELS(prev.y) / 2, METERS_TO_PIXELS(v.x) / 2, METERS_TO_PIXELS(v.y) / 2, 255, 100, 100);
+						App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
 
 					prev = v;
 				}
 
 				v = b->GetWorldPoint(polygonShape->GetVertex(0));
-				App->renderer->DrawLine(METERS_TO_PIXELS(prev.x) / 2, METERS_TO_PIXELS(prev.y) / 2, METERS_TO_PIXELS(v.x) / 2, METERS_TO_PIXELS(v.y) / 2, 255, 100, 100);
+				App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
 			}
 			break;
 
@@ -215,12 +250,12 @@ update_status ModulePhysics::PostUpdate()
 				{
 					v = b->GetWorldPoint(shape->m_vertices[i]);
 					if (i > 0)
-						App->renderer->DrawLine(METERS_TO_PIXELS(prev.x) / 2, METERS_TO_PIXELS(prev.y) / 2, METERS_TO_PIXELS(v.x) / 2, METERS_TO_PIXELS(v.y) / 2, 100, 255, 100);
+						App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
 					prev = v;
 				}
 
 				v = b->GetWorldPoint(shape->m_vertices[0]);
-				App->renderer->DrawLine(METERS_TO_PIXELS(prev.x) / 2, METERS_TO_PIXELS(prev.y) / 2, METERS_TO_PIXELS(v.x) / 2, METERS_TO_PIXELS(v.y) / 2, 100, 255, 100);
+				App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
 			}
 			break;
 
@@ -237,7 +272,28 @@ update_status ModulePhysics::PostUpdate()
 			break;
 			}
 
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			{
+				p = { PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()) };
+				if (f->GetShape()->TestPoint(b->GetTransform(), p) == true)
+				{
+					mouseBody = b;
 
+					b2Vec2 mousePosition;
+					mousePosition.x = p.x;
+					mousePosition.y = p.y;
+
+					b2MouseJointDef def;
+					def.bodyA = ground;
+					def.bodyB = mouseBody;
+					def.target = mousePosition;
+					def.dampingRatio = 0.5f;
+					def.frequencyHz = 2.0f;
+					def.maxForce = 100.0f * mouseBody->GetMass();
+
+					mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+				}
+			}
 		}
 	}
 

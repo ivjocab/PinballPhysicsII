@@ -10,65 +10,89 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = ball = pachinko = sun = box = NULL;
+	background = ball = pachinko = sunTexture = box = NULL;
 	ray_on = false;
 	sensed = false;
+}
 
-	//Create Obstacle: Sun
+ModuleSceneGame::~ModuleSceneGame()
+{}
 
-	b2BodyDef bodySun;
-	bodySun.type = b2_staticBody;
-	bodySun.position.Set(PIXEL_TO_METERS(334), PIXEL_TO_METERS(340));
+// Load assets
+bool ModuleSceneGame::Start()
+{
+	LOG("Loading Game assets & variables needed");
 
-	b2Body* b = App->physics->world->CreateBody(&bodySun);
+	b2Vec2 veca = { -0.44, 0 };
+	b2Vec2 vecb = { 0, 0 };
 
-	b2CircleShape shapeSun;
-	shapeSun.m_radius = PIXEL_TO_METERS(56);
-	b2FixtureDef fixtureSun;
-	fixtureSun.shape = &shapeSun;
-	fixtureSun.density = 1.0f;
+	//CREATING BODIES AND OBSTACLES
+	//BACKGROUND chains
+	backgrounds.add(App->physics->CreateChain(0, 0, bg, 106, b2_staticBody));
 
-	b->CreateFixture(&fixtureSun);
+	//Create SUN obstacle
+	Circle* sun = new Circle;
+	sun->round = App->physics->CreateCircle(334, 340, 56, b2_staticBody);
+	//Idle sun animations
+	sun->idleSunAnim.PushBack({ 0, 0, 220, 218 });
+	sun->idleSunAnim.PushBack({ 218, 0, 220, 218 });
+	sun->idleSunAnim.PushBack({ 436, 0, 220, 218 });
+	sun->idleSunAnim.PushBack({ 0, 220, 220, 218 });
+	sun->idleSunAnim.PushBack({ 218, 220, 220, 218 });
+	sun->idleSunAnim.PushBack({ 436, 220, 220, 218 });
+	sun->idleSunAnim.PushBack({ 0, 440, 220, 218 });
+	sun->idleSunAnim.PushBack({ 218, 440, 220, 218 });
+	sun->idleSunAnim.PushBack({ 436, 440, 220, 218 });
+	sun->idleSunAnim.PushBack({ 218, 440, 220, 218 });
+	sun->idleSunAnim.PushBack({ 0, 440, 220, 218 });
+	sun->idleSunAnim.PushBack({ 436, 220, 220, 218 });
+	sun->idleSunAnim.PushBack({ 218, 220, 220, 218 });
+	sun->idleSunAnim.PushBack({ 0, 220, 220, 218 });
+	sun->idleSunAnim.PushBack({ 436, 0, 220, 218 });
+	sun->idleSunAnim.PushBack({ 218, 0, 220, 218 });
+	sun->idleSunAnim.loop = true;
+	sun->idleSunAnim.mustFlip = false;
+	sun->idleSunAnim.speed = 0.12f;
+	//Collision sun animations
+	sun->collisionSunAnim.PushBack({ 0, 660, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 218, 660, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 436, 660, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 0, 880, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 218, 880, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 436, 880, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 0, 1100, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 218, 1100, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 436, 1100, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 218, 1100, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 0, 1100, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 436, 880, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 218, 880, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 0, 880, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 436, 660, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 218, 660, 220, 218 });
+	sun->collisionSunAnim.PushBack({ 0, 660, 220, 218 });
+	sun->collisionSunAnim.loop = false;
+	sun->collisionSunAnim.mustFlip = false;
+	sun->collisionSunAnim.speed = 0.28f;
 
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = 77;
+	// Flippers --------------------------------------------------------------
+	Flipper* f1 = new Flipper;
+	f1->Circle = App->physics->CreateCircle(300, 965, 4, b2_staticBody);
+	f1->Rect = App->physics->CreateRectangle(310 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
+	f1->rightSide = false;
+	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 35.0f);
+	flippers.add(f1);
 
-	//Flippers
-	point_right = App->physics->CreateCircle(149, 376, 2);
-	point_right->body->SetType(b2_staticBody);
+	Flipper* f2 = new Flipper;
+	f2->Circle = App->physics->CreateCircle(500, 965, 4, b2_staticBody);
+	f2->Rect = App->physics->CreateRectangle(510 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
+	f2->rightSide = true;
+	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 35.0f);
+	flippers.add(f2);
 
+	veca = { 0.44,0 };
 
-	revoluteJointDef_right.bodyA = right->body;
-	revoluteJointDef_right.bodyB = point_right->body;
-	revoluteJointDef_right.referenceAngle = 0 * DEGTORAD;
-	revoluteJointDef_right.enableLimit = true;
-	revoluteJointDef_right.lowerAngle = -30 * DEGTORAD;
-	revoluteJointDef_right.upperAngle = 30 * DEGTORAD;
-	revoluteJointDef_right.localAnchorA.Set(PIXEL_TO_METERS(13), 0);
-	revoluteJointDef_right.localAnchorB.Set(0, 0);
-	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef_right);
-	////LEFT
-	left = App->physics->CreateRectangle(89, 376, 26, 7);
-
-
-	point_left = App->physics->CreateCircle(87, 376, 2);
-	point_left->body->SetType(b2_staticBody);
-
-
-
-	revoluteJointDef_left.bodyA = left->body;
-	revoluteJointDef_left.bodyB = point_left->body;
-	revoluteJointDef_left.referenceAngle = 0 * DEGTORAD;
-	revoluteJointDef_left.enableLimit = true;
-	revoluteJointDef_left.lowerAngle = -30 * DEGTORAD;
-	revoluteJointDef_left.upperAngle = 30 * DEGTORAD;
-	revoluteJointDef_left.localAnchorA.Set(PIXEL_TO_METERS(-13), 0);
-	revoluteJointDef_left.localAnchorB.Set(0, 0);
-	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef_left);
-
-
+	//ANIMATIONS
 	//Ball Animations
 	//Idle
 	idleBallAnim.PushBack({ 0, 0, 39, 38 });
@@ -223,22 +247,13 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	randomPachinkoAnim.loop = false;
 	randomPachinkoAnim.mustFlip = false;
 	randomPachinkoAnim.speed = 0.4;
-}
-
-ModuleSceneGame::~ModuleSceneGame()
-{}
-
-// Load assets
-bool ModuleSceneGame::Start()
-{
-	LOG("Loading Intro assets");
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	background = App->textures->Load("pinball/background.png");
 	ball = App->textures->Load("pinball/ball.png");
-	sun = App->textures->Load("pinball/sun.png");
+	sunTexture = App->textures->Load("pinball/sun.png");
 	pachinko = App->textures->Load("pinball/pachinko.png");
 	box = App->textures->Load("pinball/crate.png");
 	intro = App->audio->LoadFx("pinball/intro.wav");
@@ -273,6 +288,31 @@ update_status ModuleSceneGame::Update()
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
 		circles.getLast()->data->listener = this;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		p2List_item<Flipper*>* f = flippers.getFirst();
+		while (f != NULL)
+		{
+			if (f->data->rightSide == false)
+			{
+				f->data->Rect->body->ApplyForce({ -3,0 }, { 0,0 }, true);
+			}
+			f = f->next;
+		}
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		p2List_item<Flipper*>* f = flippers.getFirst();
+		while (f != NULL)
+		{
+			if (f->data->rightSide == true)
+			{
+				f->data->Rect->body->ApplyForce({ 3,0 }, { 0,0 }, true);
+			}
+			f = f->next;
+		}
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -350,7 +390,7 @@ update_status ModuleSceneGame::Update()
 		sunState = SUN_IDLE;
 	}
 
-	App->renderer->Blit(sun, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+	App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
 
 	//BOX
 
