@@ -20,10 +20,16 @@ struct Kicker
 	b2PrismaticJoint* kickerJoint;
 };
 
-struct SCircle {
+struct SunCircle 
+{
 	PhysBody* round;
 	Animation idleSunAnim;
 	Animation collisionSunAnim;
+};
+
+struct PachinkoCircle
+{
+	PhysBody* round;
 	Animation idlePachinkoAnim;
 	Animation randomPachinkoAnim;
 	Animation collisionPachinkoAnim;
@@ -77,8 +83,9 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
-	p2List<DCircle*> dCircles;
-	p2List<SCircle*> sCircles;
+	DCircle* ball;
+	SunCircle* sun;
+	p2List<PachinkoCircle*> pachinkos;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> backgrounds;
 
@@ -98,9 +105,8 @@ public:
 	b2RevoluteJointDef revoluteJointDef_left;
 
 	p2List<Flipper*> flippers;
-	p2List<Kicker*> kickers;
 	SDL_Rect rectSect = { 48, 250, 100, 25 };
-	Kicker kicker;
+	Kicker* kicker;
 	SDL_Rect kickerSect = { 302, 706, 22, 96 };
 	SDL_Rect kickerSectBonus = { 1002, 706, 22, 96 };
 

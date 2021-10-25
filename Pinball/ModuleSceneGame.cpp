@@ -41,8 +41,8 @@ bool ModuleSceneGame::Start()
 	f1->rightSide = false;
 	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 15.0f);
 	flippers.add(f1);
-	//Right Flipper
 
+	//Right Flipper
 	veca = { 0.44,0 };
 
 	Flipper* f2 = new Flipper;
@@ -51,11 +51,18 @@ bool ModuleSceneGame::Start()
 	f2->rightSide = true;
 	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 15.0f);
 	flippers.add(f2);
+
+	//Create Kicker
+	kicker = new Kicker;
+	kicker->mobile = App->physics->CreateRectangle(742, 950, 40, 20, b2_kinematicBody);
+	kicker->pivot = App->physics->CreateRectangle(742, 970, 20, 20, b2_staticBody);
+	kicker->kickerJoint = App->physics->CreatePrismaticJoint(kicker->mobile, { 0, 3 }, kicker->pivot, { 0, 1 }, { 0, 1 }, 20.0f, true, true);
 	
 
 	//Create BALL
-	DCircle* ball = new DCircle;
+	ball = new DCircle;
 	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
+
 	//Ball Animations
 	//Idle ball animations
 	ball->idleBallAnim.PushBack({ 0, 0, 39, 38 });
@@ -134,14 +141,8 @@ bool ModuleSceneGame::Start()
 	ball->spawnBallAnim.mustFlip = false;
 	ball->spawnBallAnim.speed = 0.2f;
 
-	//Create Kicker
-	Kicker* kicker = new Kicker;
-	kicker->mobile = App->physics->CreateRectangle(742, 950, 40, 20, b2_kinematicBody);
-	kicker->pivot = App->physics->CreateRectangle(742, 970, 20, 20, b2_staticBody);
-	kicker->kickerJoint = App->physics->CreatePrismaticJoint(kicker->mobile, { 0, 3 }, kicker->pivot, { 0, 1 }, { 0, 1 }, 20.0f, true, true);
-
 	//Create SUN obstacle
-	SCircle* sun = new SCircle;
+	sun = new SunCircle;
 	sun->round = App->physics->CreateCircle(334, 340, 56, b2_staticBody);
 	//Idle sun animations
 	sun->idleSunAnim.PushBack({ 0, 0, 220, 218 });
@@ -185,8 +186,8 @@ bool ModuleSceneGame::Start()
 	sun->collisionSunAnim.mustFlip = false;
 	sun->collisionSunAnim.speed = 0.28f;
 
-	//Create PACHINKO obstacle
-	SCircle* pachinko1 = new SCircle;
+	//Create PACHINKO1 obstacle
+	PachinkoCircle* pachinko1 = new PachinkoCircle;
 	pachinko1->round = App->physics->CreateCircle(180, 682, 15, b2_staticBody);
 	//Pachinko idle animation
 	pachinko1->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
@@ -240,6 +241,356 @@ bool ModuleSceneGame::Start()
 	pachinko1->collisionPachinkoAnim.pingpong = true;
 	pachinko1->collisionPachinkoAnim.mustFlip = false;
 	pachinko1->collisionPachinkoAnim.speed = 0.4;
+	//Save pachinkos to linked list
+	pachinkos.add(pachinko1);
+
+	//Create PACHINKO2 obstacle
+	PachinkoCircle* pachinko2 = new PachinkoCircle;
+	pachinko2->round = App->physics->CreateCircle(180, 774, 15, b2_staticBody);
+	//Pachinko idle animation
+	pachinko2->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	pachinko2->idlePachinkoAnim.loop = false;
+	pachinko2->idlePachinkoAnim.mustFlip = false;
+	pachinko2->idlePachinkoAnim.speed = 0.01;
+	//Pachinko random animation
+	pachinko2->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko2->randomPachinkoAnim.loop = false;
+	pachinko2->randomPachinkoAnim.mustFlip = false;
+	pachinko2->randomPachinkoAnim.speed = 0.4;
+	//Pachinko collision animation
+	pachinko2->collisionPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko2->collisionPachinkoAnim.loop = false;
+	pachinko2->collisionPachinkoAnim.pingpong = true;
+	pachinko2->collisionPachinkoAnim.mustFlip = false;
+	pachinko2->collisionPachinkoAnim.speed = 0.4;
+	//Save pachinkos to linked list
+	pachinkos.add(pachinko2);
+
+	//Create PACHINKO3 obstacle
+	PachinkoCircle* pachinko3 = new PachinkoCircle;
+	pachinko3->round = App->physics->CreateCircle(180, 866, 15, b2_staticBody);
+	//Pachinko idle animation
+	pachinko3->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	pachinko3->idlePachinkoAnim.loop = false;
+	pachinko3->idlePachinkoAnim.mustFlip = false;
+	pachinko3->idlePachinkoAnim.speed = 0.01;
+	//Pachinko random animation
+	pachinko3->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko3->randomPachinkoAnim.loop = false;
+	pachinko3->randomPachinkoAnim.mustFlip = false;
+	pachinko3->randomPachinkoAnim.speed = 0.4;
+	//Pachinko collision animation
+	pachinko3->collisionPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko3->collisionPachinkoAnim.loop = false;
+	pachinko3->collisionPachinkoAnim.pingpong = true;
+	pachinko3->collisionPachinkoAnim.mustFlip = false;
+	pachinko3->collisionPachinkoAnim.speed = 0.4;
+	//Save pachinkos to linked list
+	pachinkos.add(pachinko3);
+
+	//Create PACHINKO4 obstacle
+	PachinkoCircle* pachinko4 = new PachinkoCircle;
+	pachinko4->round = App->physics->CreateCircle(226, 728, 15, b2_staticBody);
+	//Pachinko idle animation
+	pachinko4->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	pachinko4->idlePachinkoAnim.loop = false;
+	pachinko4->idlePachinkoAnim.mustFlip = false;
+	pachinko4->idlePachinkoAnim.speed = 0.01;
+	//Pachinko random animation
+	pachinko4->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko4->randomPachinkoAnim.loop = false;
+	pachinko4->randomPachinkoAnim.mustFlip = false;
+	pachinko4->randomPachinkoAnim.speed = 0.4;
+	//Pachinko collision animation
+	pachinko4->collisionPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko4->collisionPachinkoAnim.loop = false;
+	pachinko4->collisionPachinkoAnim.pingpong = true;
+	pachinko4->collisionPachinkoAnim.mustFlip = false;
+	pachinko4->collisionPachinkoAnim.speed = 0.4;
+	//Save pachinkos to linked list
+	pachinkos.add(pachinko4);
+
+	//Create PACHINKO5 obstacle
+	PachinkoCircle* pachinko5 = new PachinkoCircle;
+	pachinko5->round = App->physics->CreateCircle(134, 728, 15, b2_staticBody);
+	//Pachinko idle animation
+	pachinko5->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	pachinko5->idlePachinkoAnim.loop = false;
+	pachinko5->idlePachinkoAnim.mustFlip = false;
+	pachinko5->idlePachinkoAnim.speed = 0.01;
+	//Pachinko random animation
+	pachinko5->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko5->randomPachinkoAnim.loop = false;
+	pachinko5->randomPachinkoAnim.mustFlip = false;
+	pachinko5->randomPachinkoAnim.speed = 0.4;
+	//Pachinko collision animation
+	pachinko5->collisionPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko5->collisionPachinkoAnim.loop = false;
+	pachinko5->collisionPachinkoAnim.pingpong = true;
+	pachinko5->collisionPachinkoAnim.mustFlip = false;
+	pachinko5->collisionPachinkoAnim.speed = 0.4;
+	//Save pachinkos to linked list
+	pachinkos.add(pachinko5);
+
+	//Create PACHINKO6 obstacle
+	PachinkoCircle* pachinko6 = new PachinkoCircle;
+	pachinko6->round = App->physics->CreateCircle(134, 820, 15, b2_staticBody);
+	//Pachinko idle animation
+	pachinko6->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	pachinko6->idlePachinkoAnim.loop = false;
+	pachinko6->idlePachinkoAnim.mustFlip = false;
+	pachinko6->idlePachinkoAnim.speed = 0.01;
+	//Pachinko random animation
+	pachinko6->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko6->randomPachinkoAnim.loop = false;
+	pachinko6->randomPachinkoAnim.mustFlip = false;
+	pachinko6->randomPachinkoAnim.speed = 0.4;
+	//Pachinko collision animation
+	pachinko6->collisionPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko6->collisionPachinkoAnim.loop = false;
+	pachinko6->collisionPachinkoAnim.pingpong = true;
+	pachinko6->collisionPachinkoAnim.mustFlip = false;
+	pachinko6->collisionPachinkoAnim.speed = 0.4;
+	//Save pachinkos to linked list
+	pachinkos.add(pachinko6);
+
+	//Create PACHINKO5 obstacle
+	PachinkoCircle* pachinko7 = new PachinkoCircle;
+	pachinko7->round = App->physics->CreateCircle(226, 820, 15, b2_staticBody);
+	//Pachinko idle animation
+	pachinko7->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	pachinko7->idlePachinkoAnim.loop = false;
+	pachinko7->idlePachinkoAnim.mustFlip = false;
+	pachinko7->idlePachinkoAnim.speed = 0.01;
+	//Pachinko random animation
+	pachinko7->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko7->randomPachinkoAnim.loop = false;
+	pachinko7->randomPachinkoAnim.mustFlip = false;
+	pachinko7->randomPachinkoAnim.speed = 0.4;
+	//Pachinko collision animation
+	pachinko7->collisionPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko7->collisionPachinkoAnim.loop = false;
+	pachinko7->collisionPachinkoAnim.pingpong = true;
+	pachinko7->collisionPachinkoAnim.mustFlip = false;
+	pachinko7->collisionPachinkoAnim.speed = 0.4;
+	//Save pachinkos to linked list
+	pachinkos.add(pachinko7);
 
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
@@ -281,39 +632,17 @@ update_status ModuleSceneGame::Update()
 	//kicker input
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		p2List_item<Kicker*>* k = kickers.getFirst();
-		while (k != NULL)
+		if (kicker->mobile == false)
 		{
-			if (k->data->mobile == false)
-			{
-				kicker.mobile->body->ApplyForce({ 0,18 }, { 0,0 }, true);
-			}
-			k = k->next;
+				kicker->mobile->body->ApplyForce({ 0,18 }, { 0,0 }, true);
 		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
-		p2List_item<Kicker*>* k = kickers.getFirst();
-		while (k != NULL)
+		if (kicker->mobile == false)
 		{
-			if (k->data->mobile == false)
-			{
-				kicker.mobile->body->ApplyForce({ 0,-110 }, { 0,0 }, true);
-				App->audio->PlayFx(kickerFx);
-			}
-			k = k->next;
-		}
-	}
-
-	//ball debug creation
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		p2List_item<DCircle*>* ball = dCircles.getFirst();
-		while (ball != NULL)
-		{
-			ball->data->round = (App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
-			dCircles.getLast()->data->round->listener = this;
-			ball = ball->next;
+			kicker->mobile->body->ApplyForce({ 0,-110 }, { 0,0 }, true);
+			App->audio->PlayFx(kickerFx);
 		}
 	}
 
@@ -355,79 +684,83 @@ update_status ModuleSceneGame::Update()
 	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
 	//BALL
-	p2List_item<DCircle*>* ball = dCircles.getFirst();
-	while (ball != NULL)
+	if (ballState != BALL_DEATH)
 	{
-
-		if (ballState != BALL_DEATH)
+		ballState = BALL_SPAWN;
+		if (ball->spawnBallAnim.HasFinished())
 		{
-			ballState = BALL_SPAWN;
-			if (ball->data->spawnBallAnim.HasFinished())
-			{
-				ballState = BALL_IDLE;
-			}
+			ballState = BALL_IDLE;
 		}
-
-		if (ballState != BALL_DEATH)
-		{
-			ballState = BALL_SPAWN;
-			if (ball->data->spawnBallAnim.HasFinished())
-			{
-				ballState = BALL_IDLE;
-			}
-		}
-
-		switch (ballState)
-		{
-		case BALL_IDLE:
-			currentAnim = &ball->data->idleBallAnim;
-			break;
-
-		case BALL_DEATH:
-			currentAnim = &ball->data->deathBallAnim;
-			break;
-
-		case BALL_SPAWN:
-			currentAnim = &ball->data->spawnBallAnim;
-			break;
-		}
-
-		int x, y;
-		ball->data->round->GetPosition(x, y);
-		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
-		ball = ball->next;
-		ball->data->idleBallAnim.Update();
-		ball->data->deathBallAnim.Update();
-		ball->data->spawnBallAnim.Update();
-
-		ball = ball->next;
 	}
+
+	if (ballState != BALL_DEATH)
+	{
+		ballState = BALL_SPAWN;
+		if (ball->spawnBallAnim.HasFinished())
+		{
+			ballState = BALL_IDLE;
+		}
+	}
+
+	switch (ballState)
+	{
+	case BALL_IDLE:
+		currentAnim = &ball->idleBallAnim;
+		break;
+
+	case BALL_DEATH:
+		currentAnim = &ball->deathBallAnim;
+		break;
+
+	case BALL_SPAWN:
+		currentAnim = &ball->spawnBallAnim;
+		break;
+	}
+
+	int x, y;
+	ball->round->GetPosition(x, y);
+	App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
+	ball->idleBallAnim.Update();
+	ball->deathBallAnim.Update();
+	ball->spawnBallAnim.Update();
 	
 
 	//SUN
-	p2List_item<SCircle*>* obstacleCircle = sCircles.getFirst();
-	while (obstacleCircle != NULL)
+	switch (sunState)
 	{
-		switch (sunState)
-		{
-		case SUN_IDLE:
-			currentAnim = &sCircles.getFirst()->data->idleSunAnim;
-			break;
-		case SUN_COLLISION:
-			currentAnim = &sCircles.getFirst()->data->collisionSunAnim;
-			break;
-		}
+	case SUN_IDLE:
+		currentAnim = &sun->idleSunAnim;
+		break;
+	case SUN_COLLISION:
+		currentAnim = &sun->collisionSunAnim;
+		break;
+	}
 
-		if ((sunState == SUN_COLLISION) && (sCircles.getFirst()->data->collisionSunAnim.HasFinished()))
-		{
-			sCircles.getFirst()->data->collisionSunAnim.Reset();
-			sCircles.getFirst()->data->idleSunAnim.Reset();
-			sunState = SUN_IDLE;
-		}
+	if ((sunState == SUN_COLLISION) && (sun->collisionSunAnim.HasFinished()))
+	{
+		sun->collisionSunAnim.Reset();
+		sun->idleSunAnim.Reset();
+		sunState = SUN_IDLE;
+	}
 
-		App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+	if (currentAnim == &sun->idleSunAnim)
+	{
+		sun->idleSunAnim.Update();
+	}
+	if (currentAnim == &sun->collisionSunAnim)
+	{
+		sun->collisionSunAnim.Update();
+	}
 
-		//PACHINKO
+	App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+
+	//PACHINKO
+	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
+	while (p != NULL)
+	{
+		int x = 166;
+		int y = 668;
+
 		int random = 0;
 		srand(time(NULL));
 		random = rand() % 40;
@@ -442,33 +775,44 @@ update_status ModuleSceneGame::Update()
 		switch (pachinkoState)
 		{
 		case PACHINKO_IDLE:
-			currentAnim = &sCircles.getFirst()->data->randomPachinkoAnim;
+			currentAnim = &p->data->randomPachinkoAnim;
 			break;
 
 		case PACHINKO_RANDOM:
-			currentAnim = &sCircles.getFirst()->data->randomPachinkoAnim;
+			currentAnim = &p->data->randomPachinkoAnim;
 			break;
 
 		case PACHINKO_COLLISION:
-			currentAnim = &sCircles.getFirst()->data->collisionPachinkoAnim;
+			currentAnim = &p->data->collisionPachinkoAnim;
 			break;
 		}
 
-		if (pachinkoState == PACHINKO_IDLE) { sCircles.getFirst()->data->idlePachinkoAnim.Update(); }
-		if (pachinkoState == PACHINKO_RANDOM) { sCircles.getFirst()->data->randomPachinkoAnim.Update(); }
-		if (pachinkoState == PACHINKO_COLLISION) { sCircles.getFirst()->data->collisionPachinkoAnim.Update(); }
+		if (pachinkoState == PACHINKO_IDLE) { p->data->idlePachinkoAnim.Update(); }
+		if (pachinkoState == PACHINKO_RANDOM) { p->data->randomPachinkoAnim.Update(); }
+		if (pachinkoState == PACHINKO_COLLISION) { p->data->collisionPachinkoAnim.Update(); }
 
-		if (pachinkoState == PACHINKO_IDLE || sCircles.getFirst()->data->randomPachinkoAnim.HasFinished() == true)
+		if (pachinkoState == PACHINKO_IDLE || p->data->randomPachinkoAnim.HasFinished() == true)
 		{
-			sCircles.getFirst()->data->randomPachinkoAnim.Reset();
-			sCircles.getFirst()->data->collisionPachinkoAnim.Reset();
+			p->data->randomPachinkoAnim.Reset();
+			p->data->collisionPachinkoAnim.Reset();
 			pachinkoState = PACHINKO_IDLE;
 		}
 
-		App->renderer->Blit(pachinkoTexture, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
+		for (int i = 0; i < 7; i++)
+		{
+			if (i == 0) { App->renderer->Blit(pachinkoTexture, x, y, &(currentAnim->GetCurrentFrame()), 1.0f); }
+			if (i == 1) { App->renderer->Blit(pachinkoTexture, x, y + 92, &(currentAnim->GetCurrentFrame()), 1.0f); }
+			if (i == 2) { App->renderer->Blit(pachinkoTexture, x, y + 184, &(currentAnim->GetCurrentFrame()), 1.0f); }
+			if (i == 3) { App->renderer->Blit(pachinkoTexture, x + 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
+			if (i == 4) { App->renderer->Blit(pachinkoTexture, x - 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
+			if (i == 5) { App->renderer->Blit(pachinkoTexture, x - 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
+			if (i == 6) { App->renderer->Blit(pachinkoTexture, x + 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
+		}
 
-		obstacleCircle = obstacleCircle->next;
+		p = p->next;
 	}
+
+
 
 	// ray ---------------
 	if (ray_on == true)
