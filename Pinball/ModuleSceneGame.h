@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "ModulePhysics.h"
 #include "Animation.h"
 
 class PhysBody;
@@ -30,6 +31,12 @@ public:
 	SDL_Texture* sun;
 	SDL_Texture* box;
 	SDL_Texture* pachinko;
+	PhysBody* right;
+	PhysBody* point_right;
+	PhysBody* left;
+	PhysBody* point_left;
+	b2RevoluteJointDef revoluteJointDef_right;
+	b2RevoluteJointDef revoluteJointDef_left;
 
 	uint intro;
 	uint bonus_fx;

@@ -14,6 +14,61 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	ray_on = false;
 	sensed = false;
 
+	//Create Obstacle: Sun
+
+	b2BodyDef bodySun;
+	bodySun.type = b2_staticBody;
+	bodySun.position.Set(PIXEL_TO_METERS(334), PIXEL_TO_METERS(340));
+
+	b2Body* b = App->physics->world->CreateBody(&bodySun);
+
+	b2CircleShape shapeSun;
+	shapeSun.m_radius = PIXEL_TO_METERS(56);
+	b2FixtureDef fixtureSun;
+	fixtureSun.shape = &shapeSun;
+	fixtureSun.density = 1.0f;
+
+	b->CreateFixture(&fixtureSun);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 77;
+
+	//Flippers
+	point_right = App->physics->CreateCircle(149, 376, 2);
+	point_right->body->SetType(b2_staticBody);
+
+
+	revoluteJointDef_right.bodyA = right->body;
+	revoluteJointDef_right.bodyB = point_right->body;
+	revoluteJointDef_right.referenceAngle = 0 * DEGTORAD;
+	revoluteJointDef_right.enableLimit = true;
+	revoluteJointDef_right.lowerAngle = -30 * DEGTORAD;
+	revoluteJointDef_right.upperAngle = 30 * DEGTORAD;
+	revoluteJointDef_right.localAnchorA.Set(PIXEL_TO_METERS(13), 0);
+	revoluteJointDef_right.localAnchorB.Set(0, 0);
+	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef_right);
+	////LEFT
+	left = App->physics->CreateRectangle(89, 376, 26, 7);
+
+
+	point_left = App->physics->CreateCircle(87, 376, 2);
+	point_left->body->SetType(b2_staticBody);
+
+
+
+	revoluteJointDef_left.bodyA = left->body;
+	revoluteJointDef_left.bodyB = point_left->body;
+	revoluteJointDef_left.referenceAngle = 0 * DEGTORAD;
+	revoluteJointDef_left.enableLimit = true;
+	revoluteJointDef_left.lowerAngle = -30 * DEGTORAD;
+	revoluteJointDef_left.upperAngle = 30 * DEGTORAD;
+	revoluteJointDef_left.localAnchorA.Set(PIXEL_TO_METERS(-13), 0);
+	revoluteJointDef_left.localAnchorB.Set(0, 0);
+	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&revoluteJointDef_left);
+
+
 	//Ball Animations
 	//Idle
 	idleBallAnim.PushBack({ 0, 0, 39, 38 });

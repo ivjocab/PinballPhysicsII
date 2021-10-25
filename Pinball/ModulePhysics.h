@@ -19,7 +19,7 @@ public:
 	PhysBody() : listener(NULL), body(NULL)
 	{}
 
-	void GetPosition(int& x, int &y) const;
+	void GetPosition(int& x, int& y) const;
 	float GetRotation() const;
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
@@ -28,8 +28,6 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
-
-
 };
 
 // Module --------------------------------------
@@ -49,25 +47,16 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 
-	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
-	PhysBody* CreateFlipper(int x, int y, int* points, int size);
-	PhysBody* CreateStaticCircle(int x, int y, int radius);
-
-	PhysBody* leftFlipper;
-	PhysBody* leftJoint;
-	PhysBody* rightFlipper;
-	PhysBody* rightJoint;
-
-	b2RevoluteJoint* leftFixer;
-	b2RevoluteJoint* rightFixer;
-
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+	b2World* world;
 
+	bool test = true;
+	bool test2 = false;
 private:
 
-	bool debug;
-	b2World* world;
+	bool debug = false;
+
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 };
