@@ -318,7 +318,6 @@ update_status ModuleSceneGame::Update()
 	//BALL
 
 
-
 	if (ballState != BALL_DEATH)
 	{
 		ballState = BALL_SPAWN;

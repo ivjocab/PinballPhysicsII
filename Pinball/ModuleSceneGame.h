@@ -36,6 +36,12 @@ struct DCircle {
 	Animation idleBallAnim;
 	Animation deathBallAnim;
 	Animation spawnBallAnim;
+	enum State
+	{
+		Ready,
+		Alive,
+		Dead
+	};
 };
 
 class PhysBody;
