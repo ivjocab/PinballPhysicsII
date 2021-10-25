@@ -33,20 +33,22 @@ bool ModuleSceneGame::Start()
 	// Flippers --------------------------------------------------------------
 	//Left Flipper
 	Flipper* f1 = new Flipper;
-	f1->Circle = App->physics->CreateCircle(300, 965, 4, b2_staticBody);
-	f1->Rect = App->physics->CreateRectangle(310 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
+	f1->Circle = App->physics->CreateCircle(300, 970, 4, b2_staticBody);
+	f1->Rect = App->physics->CreateRectangle(280 + rectSect.w / 2, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
 	f1->rightSide = false;
-	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 35.0f);
+	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 15.0f);
 	flippers.add(f1);
 	//Right Flipper
-	Flipper* f2 = new Flipper;
-	f2->Circle = App->physics->CreateCircle(500, 965, 4, b2_staticBody);
-	f2->Rect = App->physics->CreateRectangle(510 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
-	f2->rightSide = true;
-	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 35.0f);
-	flippers.add(f2);
 
 	veca = { 0.44,0 };
+
+	Flipper* f2 = new Flipper;
+	f2->Circle = App->physics->CreateCircle(530, 970, 4, b2_staticBody);
+	f2->Rect = App->physics->CreateRectangle(510 - rectSect.w / 2, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
+	f2->rightSide = true;
+	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 15.0f);
+	flippers.add(f2);
+	
 
 	//Create BALL
 	DCircle* ball = new DCircle;
