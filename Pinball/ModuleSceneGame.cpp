@@ -29,6 +29,9 @@ bool ModuleSceneGame::Start()
 	//CREATING BODIES AND OBSTACLES
 	//BACKGROUND chains
 	backgrounds.add(App->physics->CreateChain(0, 0, bg, 106, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, pachinko1, 28, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, pachinko2, 68, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, cloud, 120, b2_staticBody));
 
 	// Flippers --------------------------------------------------------------
 	//Left Flipper
