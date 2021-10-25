@@ -285,12 +285,28 @@ update_status ModuleSceneGame::Update()
 	//kicker input
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		kicker.mobile->body->ApplyForce({ 0,18 }, { 0,0 }, true);
+		p2List_item<Kicker*>* k = kickers.getFirst();
+		while (k != NULL)
+		{
+			if (k->data->mobile == false)
+			{
+				kicker.mobile->body->ApplyForce({ 0,18 }, { 0,0 }, true);
+			}
+			k = k->next;
+		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
-		kicker.mobile->body->ApplyForce({ 0,-110 }, { 0,0 }, true);
-		App->audio->PlayFx(kickerFx);
+		p2List_item<Kicker*>* k = kickers.getFirst();
+		while (k != NULL)
+		{
+			if (k->data->mobile == false)
+			{
+				kicker.mobile->body->ApplyForce({ 0,-110 }, { 0,0 }, true);
+				App->audio->PlayFx(kickerFx);
+			}
+			k = k->next;
+		}
 	}
 
 	//ball debug creation

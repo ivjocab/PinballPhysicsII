@@ -100,6 +100,7 @@ public:
 	b2RevoluteJointDef revoluteJointDef_left;
 
 	p2List<Flipper*> flippers;
+	p2List<Kicker*> kickers;
 	SDL_Rect rectSect = { 48, 250, 100, 25 };
 	Kicker kicker;
 	SDL_Rect kickerSect = { 302, 706, 22, 96 };
