@@ -1,12 +1,2 @@
-<<<<<<< Updated upstream
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v142:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0
 Debug|Win32|C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\|
-=======
-<<<<<<< HEAD
-PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.29.30133:TargetPlatformVersion=10.0.19041.0:
-Debug|Win32|C:\Users\J\Documents\GitHub\PinballPhysicsII\Pinball\|
-=======
-#TargetFrameworkVersion=v4.0:PlatformToolSet=v142:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0
-Debug|Win32|C:\Users\tolo otto\Documents\GitHub\PinballPhysicsII\Pinball\|
->>>>>>> 795442a7c0ddc231f5bad04b59e815a80fdc0b58
->>>>>>> Stashed changes
