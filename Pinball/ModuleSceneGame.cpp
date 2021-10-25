@@ -54,6 +54,12 @@ bool ModuleSceneGame::Start()
 	DCircle* ball = new DCircle;
 	ball->round = App->physics->CreateCircle(835, 732, 12, b2_dynamicBody);
 
+	//Create Kicker
+	Kicker* kicker = new Kicker;
+	kicker->mobile = App->physics->CreateRectangle(742, 950, 40, 20, b2_kinematicBody);
+	kicker->pivot = App->physics->CreateRectangle(742, 970, 20, 20, b2_staticBody);
+	kicker->kickerJoint = App->physics->CreatePrismaticJoint(kicker->mobile, { 0, 3 }, kicker->pivot, { 0, 1 }, { 0, 1 }, 20.0f, true, true);
+
 	//Create SUN obstacle
 	SCircle* sun = new SCircle;
 	sun->round = App->physics->CreateCircle(334, 340, 56, b2_staticBody);
@@ -265,6 +271,7 @@ bool ModuleSceneGame::CleanUp()
 // Update: draw background
 update_status ModuleSceneGame::Update()
 {
+	//ray debug
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
@@ -272,12 +279,25 @@ update_status ModuleSceneGame::Update()
 		ray.y = App->input->GetMouseY();
 	}
 
+	//kicker input
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		kicker.mobile->body->ApplyForce({ 0,18 }, { 0,0 }, true);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	{
+		kicker.mobile->body->ApplyForce({ 0,-110 }, { 0,0 }, true);
+		App->audio->PlayFx(kickerFx);
+	}
+
+	//ball debug creation
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
 		circles.getLast()->data->listener = this;
 	}
 
+	//flippers' input
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		p2List_item<Flipper*>* f = flippers.getFirst();
@@ -304,7 +324,6 @@ update_status ModuleSceneGame::Update()
 	}
 
 	// Prepare for raycast ------------------------------------------------------
-
 	iPoint mouse;
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();

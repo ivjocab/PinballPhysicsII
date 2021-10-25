@@ -17,6 +17,7 @@ struct Kicker
 {
 	PhysBody* pivot;
 	PhysBody* mobile;
+	b2PrismaticJoint* kickerJoint;
 };
 
 struct SCircle {
@@ -42,6 +43,27 @@ struct DCircle {
 		Alive,
 		Dead
 	};
+};
+
+struct recSensor {
+	enum sensorValue
+	{
+		NONE = -1,
+		DEATH,
+		CARD,
+		EGG,
+		TP,
+		PAC_MAN,
+		HUNDREDS,
+		THOUSAND,
+		POINT_BUTTON,
+		SAFETY_BUTTON,
+		NUMBER_BUTTON
+	};
+	PhysBody* sensor;
+	sensorValue value;
+	bool isActive;
+	int sensorTimer = 0;
 };
 
 class PhysBody;
