@@ -10,7 +10,7 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = ball = pachinko = sunTexture = box = NULL;
+	background = ballTexture = pachinkoTexture = sunTexture = box = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -30,8 +30,30 @@ bool ModuleSceneGame::Start()
 	//BACKGROUND chains
 	backgrounds.add(App->physics->CreateChain(0, 0, bg, 106, b2_staticBody));
 
+	// Flippers --------------------------------------------------------------
+	//Left Flipper
+	Flipper* f1 = new Flipper;
+	f1->Circle = App->physics->CreateCircle(300, 965, 4, b2_staticBody);
+	f1->Rect = App->physics->CreateRectangle(310 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
+	f1->rightSide = false;
+	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 35.0f);
+	flippers.add(f1);
+	//Right Flipper
+	Flipper* f2 = new Flipper;
+	f2->Circle = App->physics->CreateCircle(500, 965, 4, b2_staticBody);
+	f2->Rect = App->physics->CreateRectangle(510 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
+	f2->rightSide = true;
+	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 35.0f);
+	flippers.add(f2);
+
+	veca = { 0.44,0 };
+
+	//Create BALL
+	DCircle* ball = new DCircle;
+	ball->round = App->physics->CreateCircle(835, 732, 12, b2_dynamicBody);
+
 	//Create SUN obstacle
-	Circle* sun = new Circle;
+	SCircle* sun = new SCircle;
 	sun->round = App->physics->CreateCircle(334, 340, 56, b2_staticBody);
 	//Idle sun animations
 	sun->idleSunAnim.PushBack({ 0, 0, 220, 218 });
@@ -75,22 +97,61 @@ bool ModuleSceneGame::Start()
 	sun->collisionSunAnim.mustFlip = false;
 	sun->collisionSunAnim.speed = 0.28f;
 
-	// Flippers --------------------------------------------------------------
-	Flipper* f1 = new Flipper;
-	f1->Circle = App->physics->CreateCircle(300, 965, 4, b2_staticBody);
-	f1->Rect = App->physics->CreateRectangle(310 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
-	f1->rightSide = false;
-	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 35.0f);
-	flippers.add(f1);
-
-	Flipper* f2 = new Flipper;
-	f2->Circle = App->physics->CreateCircle(500, 965, 4, b2_staticBody);
-	f2->Rect = App->physics->CreateRectangle(510 + rectSect.w / 3, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 10, b2_dynamicBody);
-	f2->rightSide = true;
-	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 35.0f);
-	flippers.add(f2);
-
-	veca = { 0.44,0 };
+	//Create PACHINKO obstacle
+	SCircle* pachinko1 = new SCircle;
+	pachinko1->round = App->physics->CreateCircle(180, 682, 15, b2_staticBody);
+	//Pachinko idle animation
+	pachinko1->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	pachinko1->idlePachinkoAnim.loop = false;
+	pachinko1->idlePachinkoAnim.mustFlip = false;
+	pachinko1->idlePachinkoAnim.speed = 0.01;
+	//Pachinko random animation
+	pachinko1->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko1->randomPachinkoAnim.loop = false;
+	pachinko1->randomPachinkoAnim.mustFlip = false;
+	pachinko1->randomPachinkoAnim.speed = 0.4;
+	//Pachinko collision animation
+	pachinko1->collisionPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.PushBack({ 540, 0, 30, 30 });
+	pachinko1->collisionPachinkoAnim.loop = false;
+	pachinko1->collisionPachinkoAnim.pingpong = true;
+	pachinko1->collisionPachinkoAnim.mustFlip = false;
+	pachinko1->collisionPachinkoAnim.speed = 0.4;
 
 	//ANIMATIONS
 	//Ball Animations
@@ -173,88 +234,13 @@ bool ModuleSceneGame::Start()
 	spawnBallAnim.mustFlip = false;
 	spawnBallAnim.speed = 0.2f;
 
-	//Sun animations
-	//Idle
-	idleSunAnim.PushBack({ 0, 0, 220, 218 });
-	idleSunAnim.PushBack({ 218, 0, 220, 218 });
-	idleSunAnim.PushBack({ 436, 0, 220, 218 });
-	idleSunAnim.PushBack({ 0, 220, 220, 218 });
-	idleSunAnim.PushBack({ 218, 220, 220, 218 });
-	idleSunAnim.PushBack({ 436, 220, 220, 218 });
-	idleSunAnim.PushBack({ 0, 440, 220, 218 });
-	idleSunAnim.PushBack({ 218, 440, 220, 218 });
-	idleSunAnim.PushBack({ 436, 440, 220, 218 });
-	idleSunAnim.PushBack({ 218, 440, 220, 218 });
-	idleSunAnim.PushBack({ 0, 440, 220, 218 });
-	idleSunAnim.PushBack({ 436, 220, 220, 218 });
-	idleSunAnim.PushBack({ 218, 220, 220, 218 });
-	idleSunAnim.PushBack({ 0, 220, 220, 218 });
-	idleSunAnim.PushBack({ 436, 0, 220, 218 });
-	idleSunAnim.PushBack({ 218, 0, 220, 218 });
-	idleSunAnim.loop = true;
-	idleSunAnim.mustFlip = false;
-	idleSunAnim.speed = 0.12f;
-
-	//Collision
-	collisionSunAnim.PushBack({ 0, 660, 220, 218 });
-	collisionSunAnim.PushBack({ 218, 660, 220, 218 });
-	collisionSunAnim.PushBack({ 436, 660, 220, 218 });
-	collisionSunAnim.PushBack({ 0, 880, 220, 218 });
-	collisionSunAnim.PushBack({ 218, 880, 220, 218 });
-	collisionSunAnim.PushBack({ 436, 880, 220, 218 });
-	collisionSunAnim.PushBack({ 0, 1100, 220, 218 });
-	collisionSunAnim.PushBack({ 218, 1100, 220, 218 });
-	collisionSunAnim.PushBack({ 436, 1100, 220, 218 });
-	collisionSunAnim.PushBack({ 218, 1100, 220, 218 });
-	collisionSunAnim.PushBack({ 0, 1100, 220, 218 });
-	collisionSunAnim.PushBack({ 436, 880, 220, 218 });
-	collisionSunAnim.PushBack({ 218, 880, 220, 218 });
-	collisionSunAnim.PushBack({ 0, 880, 220, 218 });
-	collisionSunAnim.PushBack({ 436, 660, 220, 218 });
-	collisionSunAnim.PushBack({ 218, 660, 220, 218 });
-	collisionSunAnim.PushBack({ 0, 660, 220, 218 });
-	collisionSunAnim.loop = false;
-	collisionSunAnim.mustFlip = false;
-	collisionSunAnim.speed = 0.28f;
-
-	//Pachinko animations
-	//Idle
-	idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
-	idlePachinkoAnim.loop = false;
-	idlePachinkoAnim.mustFlip = false;
-	idlePachinkoAnim.speed = 0.01;
-
-	//Random
-	randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
-	randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
-	randomPachinkoAnim.loop = false;
-	randomPachinkoAnim.mustFlip = false;
-	randomPachinkoAnim.speed = 0.4;
 	bool ret = true;
-
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	background = App->textures->Load("pinball/background.png");
-	ball = App->textures->Load("pinball/ball.png");
+	ballTexture = App->textures->Load("pinball/ball.png");
 	sunTexture = App->textures->Load("pinball/sun.png");
-	pachinko = App->textures->Load("pinball/pachinko.png");
+	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
 	box = App->textures->Load("pinball/crate.png");
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
@@ -360,7 +346,7 @@ update_status ModuleSceneGame::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
+		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
 		c = c->next;
 		idleBallAnim.Update();
 		deathBallAnim.Update();
@@ -448,7 +434,7 @@ update_status ModuleSceneGame::Update()
 		pachinkoState = PACHINKO_IDLE;
 	}
 
-	App->renderer->Blit(pachinko, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
+	App->renderer->Blit(pachinkoTexture, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
 
 
 

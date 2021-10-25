@@ -19,10 +19,23 @@ struct Kicker
 	PhysBody* mobile;
 };
 
-struct Circle {
+struct SCircle {
 	PhysBody* round;
+	Animation idleBallAnim;
+	Animation deathBallAnim;
+	Animation spawnBallAnim;
 	Animation idleSunAnim;
 	Animation collisionSunAnim;
+	Animation idlePachinkoAnim;
+	Animation randomPachinkoAnim;
+	Animation collisionPachinkoAnim;
+};
+
+struct DCircle {
+	PhysBody* round;
+	Animation idleBallAnim;
+	Animation deathBallAnim;
+	Animation spawnBallAnim;
 };
 
 class PhysBody;
@@ -47,10 +60,10 @@ public:
 	bool sensed;
 
 	SDL_Texture* background;
-	SDL_Texture* ball;
+	SDL_Texture* ballTexture;
 	SDL_Texture* sunTexture;
 	SDL_Texture* box;
-	SDL_Texture* pachinko;
+	SDL_Texture* pachinkoTexture;
 	PhysBody* right;
 	PhysBody* point_right;
 	PhysBody* left;
