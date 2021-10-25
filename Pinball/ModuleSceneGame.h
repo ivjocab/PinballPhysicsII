@@ -29,6 +29,7 @@ public:
 	SDL_Texture* ball;
 	SDL_Texture* sun;
 	SDL_Texture* box;
+	SDL_Texture* pachinko;
 
 	uint intro;
 	uint bonus_fx;
@@ -48,10 +49,19 @@ public:
 		SUN_COLLISION
 	};
 
+	enum PachinkoState
+	{
+		PACHINKO_IDLE,
+		PACHINKO_RANDOM,
+		PACHINKO_COLLISION
+	};
+
 	BallState ballState;
 	SunState sunState;
+	PachinkoState pachinkoState;
 
 private:
 	Animation* currentAnim = nullptr;
-	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSunAnim, collisionSunAnim;
+	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSunAnim, collisionSunAnim, 
+			  idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim;
 };

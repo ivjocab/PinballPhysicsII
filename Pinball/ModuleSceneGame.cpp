@@ -6,15 +6,15 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "time.h"
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = ball = sun = box = NULL;
+	background = ball = pachinko = sun = box = NULL;
 	ray_on = false;
 	sensed = false;
 
 	//Ball Animations
-
 	//Idle
 	idleBallAnim.PushBack({ 0, 0, 39, 38 });
 	idleBallAnim.PushBack({ 38, 0, 39, 38 });
@@ -137,6 +137,37 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	collisionSunAnim.loop = false;
 	collisionSunAnim.mustFlip = false;
 	collisionSunAnim.speed = 0.28f;
+
+	//Pachinko animations
+	//Idle
+	idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	idlePachinkoAnim.loop = false;
+	idlePachinkoAnim.mustFlip = false;
+	idlePachinkoAnim.speed = 0.01;
+
+	//Random
+	randomPachinkoAnim.PushBack({ 0, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 30, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 60, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 90, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 120, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 150, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 180, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 210, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 240, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 270, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 300, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 330, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 360, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 390, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 420, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 450, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 480, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 510, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 540, 0, 29, 30 });
+	randomPachinkoAnim.loop = false;
+	randomPachinkoAnim.mustFlip = false;
+	randomPachinkoAnim.speed = 0.24;
 }
 
 ModuleSceneGame::~ModuleSceneGame()
@@ -153,6 +184,7 @@ bool ModuleSceneGame::Start()
 	background = App->textures->Load("pinball/background.png");
 	ball = App->textures->Load("pinball/ball.png");
 	sun = App->textures->Load("pinball/sun.png");
+	pachinko = App->textures->Load("pinball/pachinko.png");
 	box = App->textures->Load("pinball/crate.png");
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
@@ -203,6 +235,8 @@ update_status ModuleSceneGame::Update()
 	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
 	//BALL
+
+
 
 	if (ballState != BALL_DEATH)
 	{
@@ -262,6 +296,7 @@ update_status ModuleSceneGame::Update()
 	if (sunState == SUN_IDLE){ idleSunAnim.Update(); }
 	else { collisionSunAnim.Update(); }
 
+	//BOX
 
 	c = boxes.getFirst();
 
@@ -278,6 +313,48 @@ update_status ModuleSceneGame::Update()
 		}
 		c = c->next;
 	}
+
+	//PACHINKO
+
+		
+	int random = 0;
+	srand(time(NULL));
+	random = rand() % 40;
+
+	if (random >= 34)
+	{
+		pachinkoState = PACHINKO_RANDOM;
+	}
+	else if (currentAnim == &randomPachinkoAnim || currentAnim == &collisionPachinkoAnim &&
+		randomPachinkoAnim.HasFinished() == true && collisionPachinkoAnim.HasFinished() == true)
+	{
+		randomPachinkoAnim.Reset();
+		collisionPachinkoAnim.Reset();
+		pachinkoState = PACHINKO_IDLE;
+	}
+	
+	random = 0;
+
+	switch (pachinkoState)
+	{
+	case PACHINKO_IDLE:
+		currentAnim = &idlePachinkoAnim;
+		break;
+
+	case PACHINKO_RANDOM:
+		currentAnim = &randomPachinkoAnim;
+
+	case PACHINKO_COLLISION:
+		currentAnim = &collisionPachinkoAnim;
+		break;
+	}
+
+	App->renderer->Blit(pachinko, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
+	if (pachinkoState == PACHINKO_IDLE) { idlePachinkoAnim.Update(); }
+	else if (pachinkoState == PACHINKO_RANDOM) { randomPachinkoAnim.Update(); }
+	else if (pachinkoState == PACHINKO_COLLISION){ collisionPachinkoAnim.Update(); }
+
+
 
 	// ray ---------------
 	if (ray_on == true)
