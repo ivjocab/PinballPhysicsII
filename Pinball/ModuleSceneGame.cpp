@@ -146,28 +146,28 @@ ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(
 	idlePachinkoAnim.speed = 0.01;
 
 	//Random
-	randomPachinkoAnim.PushBack({ 0, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 30, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 60, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 90, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 120, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 150, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 180, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 210, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 240, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 270, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 300, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 330, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 360, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 390, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 420, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 450, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 480, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 510, 0, 29, 30 });
-	randomPachinkoAnim.PushBack({ 540, 0, 29, 30 });
+	randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 60, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 90, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 120, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 150, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 180, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 210, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 240, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 270, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 300, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 330, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 360, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 390, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 420, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 450, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 480, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 510, 0, 30, 30 });
+	randomPachinkoAnim.PushBack({ 540, 0, 30, 30 });
 	randomPachinkoAnim.loop = false;
 	randomPachinkoAnim.mustFlip = false;
-	randomPachinkoAnim.speed = 0.24;
+	randomPachinkoAnim.speed = 0.4;
 }
 
 ModuleSceneGame::~ModuleSceneGame()
@@ -285,6 +285,9 @@ update_status ModuleSceneGame::Update()
 		break;
 	}
 
+	if (sunState == SUN_IDLE) { idleSunAnim.Update(); }
+	else { collisionSunAnim.Update(); }
+
 	if ((sunState == SUN_COLLISION) && (collisionSunAnim.HasFinished()))
 	{
 		collisionSunAnim.Reset();
@@ -293,8 +296,6 @@ update_status ModuleSceneGame::Update()
 	}
 
 	App->renderer->Blit(sun, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
-	if (sunState == SUN_IDLE){ idleSunAnim.Update(); }
-	else { collisionSunAnim.Update(); }
 
 	//BOX
 
@@ -315,22 +316,13 @@ update_status ModuleSceneGame::Update()
 	}
 
 	//PACHINKO
-
-		
 	int random = 0;
 	srand(time(NULL));
 	random = rand() % 40;
 
-	if (random >= 34)
+	if (random >= 35)
 	{
 		pachinkoState = PACHINKO_RANDOM;
-	}
-	else if (currentAnim == &randomPachinkoAnim || currentAnim == &collisionPachinkoAnim &&
-		randomPachinkoAnim.HasFinished() == true && collisionPachinkoAnim.HasFinished() == true)
-	{
-		randomPachinkoAnim.Reset();
-		collisionPachinkoAnim.Reset();
-		pachinkoState = PACHINKO_IDLE;
 	}
 	
 	random = 0;
@@ -338,21 +330,31 @@ update_status ModuleSceneGame::Update()
 	switch (pachinkoState)
 	{
 	case PACHINKO_IDLE:
-		currentAnim = &idlePachinkoAnim;
+		currentAnim = &randomPachinkoAnim;
 		break;
 
 	case PACHINKO_RANDOM:
 		currentAnim = &randomPachinkoAnim;
+		break;
 
 	case PACHINKO_COLLISION:
 		currentAnim = &collisionPachinkoAnim;
 		break;
 	}
 
-	App->renderer->Blit(pachinko, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
 	if (pachinkoState == PACHINKO_IDLE) { idlePachinkoAnim.Update(); }
-	else if (pachinkoState == PACHINKO_RANDOM) { randomPachinkoAnim.Update(); }
-	else if (pachinkoState == PACHINKO_COLLISION){ collisionPachinkoAnim.Update(); }
+	if (pachinkoState == PACHINKO_RANDOM) { randomPachinkoAnim.Update(); }
+	if (pachinkoState == PACHINKO_COLLISION) { collisionPachinkoAnim.Update(); }
+
+	if (pachinkoState == PACHINKO_IDLE || randomPachinkoAnim.HasFinished() == true)
+	{
+		randomPachinkoAnim.Reset();
+		collisionPachinkoAnim.Reset();
+		pachinkoState = PACHINKO_IDLE;
+	}
+
+	App->renderer->Blit(pachinko, 166, 668, &(currentAnim->GetCurrentFrame()), 1.0f);
+
 
 
 
@@ -379,6 +381,7 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0 || bodyA->body->GetType() == 2 && bodyB->body->GetType() == 2)
 	{
 		App->audio->PlayFx(bonus_fx);
+		sunState = SUN_COLLISION;
 	}
 
 	/*if (bodyA->body->GetFixtureList()->)

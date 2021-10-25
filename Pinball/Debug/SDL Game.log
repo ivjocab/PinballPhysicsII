@@ -2,9 +2,9 @@
 C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\Animation.h(55,19): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
 C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\Animation.h(57,30): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(146,31): warning C4305: '=': truncamiento de 'double' a 'float'
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(170,33): warning C4305: '=': truncamiento de 'double' a 'float'
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(321,12): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(362,48): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(170,32): warning C4305: '=': truncamiento de 'double' a 'float'
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(320,12): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(364,48): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
           with
           [
               TYPE=int
@@ -13,7 +13,7 @@ C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(3
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(362,31): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(364,31): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
           with
           [
               TYPE=int
@@ -22,37 +22,37 @@ C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(3
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(364,18): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(366,70): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(366,18): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(368,70): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(366,47): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(368,47): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(369,138): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(371,138): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(369,96): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(371,96): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(369,57): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(371,57): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(369,34): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(371,34): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
           with
           [
               TYPE=float
           ]
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(377,9): warning C4101: 'y': variable local sin referencia
-C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(377,6): warning C4101: 'x': variable local sin referencia
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(379,9): warning C4101: 'y': variable local sin referencia
+C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\ModuleSceneGame.cpp(379,6): warning C4101: 'x': variable local sin referencia
   SDL Game.vcxproj -> C:\Users\ivancc2\Documents\GitHub\PinballPhysicsII\Pinball\Debug\2D Physics - class 4.exe
