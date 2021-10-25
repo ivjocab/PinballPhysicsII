@@ -46,6 +46,7 @@ struct DCircle {
 		DEAD,
 		SPAWN
 	};
+	float power;
 };
 
 struct recSensor {

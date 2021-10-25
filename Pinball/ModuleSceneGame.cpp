@@ -630,13 +630,13 @@ update_status ModuleSceneGame::Update()
 	}
 
 	//kicker input
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		kicker->mobile->body->ApplyForce({ 18, 0 }, { 0, 0 }, true);
+		if (ball->power < 100.0f) { ball->power += 0.01f; }
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_UP)
+	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
-		kicker->mobile->body->ApplyForce({ 0, -200 }, { 0,0 }, true);
+		ball->round->body->ApplyForce({ 0, -ball->power}, { 0, 0 }, true);
 		App->audio->PlayFx(kickerFx);
 	}
 
