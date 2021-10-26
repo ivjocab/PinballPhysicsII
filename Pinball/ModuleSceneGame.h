@@ -316,4 +316,9 @@ public:
 	BallState ballState;
 	SunState sunState;
 	PachinkoState pachinkoState;
+
+private:
+	Animation* currentAnim = nullptr;
+	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSunAnim, collisionSunAnim, 
+			  idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim;
 };
