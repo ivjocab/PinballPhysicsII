@@ -70,6 +70,15 @@ struct recSensor {
 	int sensorTimer = 0;
 };
 
+//rottenshit
+struct circlerot 
+{
+	PhysBody* circlerot;
+	PhysBody* centercircle;
+};
+
+//rottenshit
+
 class PhysBody;
 
 class ModuleSceneGame : public Module
@@ -90,6 +99,8 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> backgrounds;
 
+
+
 	PhysBody* sensor;
 	bool sensed;
 
@@ -104,6 +115,10 @@ public:
 	PhysBody* point_left;
 	b2RevoluteJointDef revoluteJointDef_right;
 	b2RevoluteJointDef revoluteJointDef_left;
+
+	//rottenshit
+	circlerot* a;
+	//rottenshit
 
 	p2List<Flipper*> flippers;
 	SDL_Rect rectSect = { 48, 250, 100, 25 };

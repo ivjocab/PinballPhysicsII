@@ -58,6 +58,20 @@ bool ModuleSceneGame::Start()
 	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 20.0f);
 	flippers.add(f2);
 
+	//rottenshit
+	veca = { 1.5,0 };
+
+	a = new circlerot;
+	a->circlerot = App->physics->CreateCircle(500, 500, 10, b2_dynamicBody);
+	a->centercircle = App->physics->CreateCircle(600, 600, 5, b2_staticBody);
+	App->physics->CreateRevoluteJoint(a->circlerot, veca,a->centercircle,vecb, 180,true,false);
+	a->circlerot->body->SetGravityScale(0);
+	//a->circlerot->body->SetAngularDamping(0);
+	//rottenshit
+	a->circlerot->body->SetAngularVelocity(100);
+	//rottenshit
+	//rottenshit
+
 	//Create Kicker
 	kicker = new Kicker;
 	kicker->mobile = App->physics->CreateRectangle(742, 950, 40, 20, b2_kinematicBody);
@@ -812,6 +826,8 @@ update_status ModuleSceneGame::Update()
 		}
 
 		p = p->next;
+
+		
 	}
 
 
@@ -828,6 +844,9 @@ update_status ModuleSceneGame::Update()
 		if (normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+
+
+	
 
 	return UPDATE_CONTINUE;
 }
