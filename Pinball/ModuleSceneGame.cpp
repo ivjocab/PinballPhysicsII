@@ -23,7 +23,7 @@ bool ModuleSceneGame::Start()
 {
 	LOG("Loading Game assets & variables needed");
 
-	b2Vec2 veca = { -0.44, 0 };
+	b2Vec2 veca = { -0.80, 0 };
 	b2Vec2 vecb = { 0, 0 };
 
 	//CREATING BODIES AND OBSTACLES
@@ -32,24 +32,30 @@ bool ModuleSceneGame::Start()
 	backgrounds.add(App->physics->CreateChain(0, 0, pachinko1, 28, b2_staticBody));
 	backgrounds.add(App->physics->CreateChain(0, 0, pachinko2, 68, b2_staticBody));
 	backgrounds.add(App->physics->CreateChain(0, 0, cloud, 120, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, bouncer, 18, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, rpartition, 30, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, lpartition, 34, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, rhombus2, 8, b2_staticBody));
+	backgrounds.add(App->physics->CreateChain(0, 0, rhombus3, 8, b2_staticBody));
 
 	// Flippers --------------------------------------------------------------
 	//Left Flipper
 	Flipper* f1 = new Flipper;
-	f1->Circle = App->physics->CreateCircle(300, 970, 4, b2_staticBody);
-	f1->Rect = App->physics->CreateRectangle(280 + rectSect.w / 2, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
+	f1->Circle = App->physics->CreateCircle(285, 965, 4, b2_staticBody);
+	f1->Rect = App->physics->CreateRectangle(265 + rectSect.w / 2, 945 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
 	f1->rightSide = false;
-	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 15.0f);
+	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 20.0f);
 	flippers.add(f1);
 
 	//Right Flipper
-	veca = { 0.44,0 };
+	veca = { 0.80,0 };
 
 	Flipper* f2 = new Flipper;
-	f2->Circle = App->physics->CreateCircle(530, 970, 4, b2_staticBody);
-	f2->Rect = App->physics->CreateRectangle(510 - rectSect.w / 2, 950 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
+	f2->Circle = App->physics->CreateCircle(545, 965, 4, b2_staticBody);
+	f2->Rect = App->physics->CreateRectangle(525 - rectSect.w / 2, 945 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
 	f2->rightSide = true;
-	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 15.0f);
+	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 20.0f);
 	flippers.add(f2);
 
 	//Create Kicker
@@ -648,7 +654,7 @@ update_status ModuleSceneGame::Update()
 		{
 			if (f->data->rightSide == false)
 			{
-				f->data->Rect->body->ApplyForce({ -3,0 }, { 0,0 }, true);
+				f->data->Rect->body->ApplyForce({ -5,0 }, { 0,0 }, true);
 			}
 			f = f->next;
 		}
@@ -660,7 +666,7 @@ update_status ModuleSceneGame::Update()
 		{
 			if (f->data->rightSide == true)
 			{
-				f->data->Rect->body->ApplyForce({ 3,0 }, { 0,0 }, true);
+				f->data->Rect->body->ApplyForce({ 5,0 }, { 0,0 }, true);
 			}
 			f = f->next;
 		}
