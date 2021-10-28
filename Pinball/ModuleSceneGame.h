@@ -100,10 +100,17 @@ public:
 	p2List<PhysBody*> backgrounds;
 
 
+	enum class gameState {
+		START,
+		GAME
+	};
+
+	gameState GameState;
 
 	PhysBody* sensor;
 	bool sensed;
 
+	SDL_Texture* StartScreen;
 	SDL_Texture* background;
 	SDL_Texture* ballTexture;
 	SDL_Texture* sunTexture;

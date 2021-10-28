@@ -10,7 +10,7 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = ballTexture = pachinkoTexture = sunTexture = box = NULL;
+	background = ballTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -622,10 +622,11 @@ bool ModuleSceneGame::Start()
 	box = App->textures->Load("pinball/crate.png");
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	StartScreen = App->textures->Load("backgroundStart.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
-	//App->audio->PlayFx(intro, 1);
+	App->audio->PlayFx(intro, 1);
 
 	return ret;
 }
@@ -641,212 +642,222 @@ bool ModuleSceneGame::CleanUp()
 // Update: draw background
 update_status ModuleSceneGame::Update()
 {
-	//ray debug
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
-	}
 
-	//kicker input
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	switch (GameState)
 	{
-		if (ball->power < 100.0f) { ball->power += 0.01f; }
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
-	{
-		ball->round->body->ApplyForce({ 0, -ball->power}, { 0, 0 }, true);
-		App->audio->PlayFx(kickerFx);
-	}
+	case gameState::START:
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) { GameState = gameState::GAME; }
+		App->renderer->Blit(StartScreen, 0, 0, NULL, 0.0f, 0);
 
-	//flippers' input
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		p2List_item<Flipper*>* f = flippers.getFirst();
-		while (f != NULL)
+		break;
+	case gameState::GAME:
+		//ray debug
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
-			if (f->data->rightSide == false)
+			ray_on = !ray_on;
+			ray.x = App->input->GetMouseX();
+			ray.y = App->input->GetMouseY();
+		}
+
+		//kicker input
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			if (ball->power < 100.0f) { ball->power += 0.01f; }
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+		{
+			ball->round->body->ApplyForce({ 0, -ball->power }, { 0, 0 }, true);
+			App->audio->PlayFx(kickerFx);
+		}
+
+		//flippers' input
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		{
+			p2List_item<Flipper*>* f = flippers.getFirst();
+			while (f != NULL)
 			{
-				f->data->Rect->body->ApplyForce({ -5,0 }, { 0,0 }, true);
+				if (f->data->rightSide == false)
+				{
+					f->data->Rect->body->ApplyForce({ -5,0 }, { 0,0 }, true);
+				}
+				f = f->next;
 			}
-			f = f->next;
 		}
-	}
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		p2List_item<Flipper*>* f = flippers.getFirst();
-		while (f != NULL)
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		{
-			if (f->data->rightSide == true)
+			p2List_item<Flipper*>* f = flippers.getFirst();
+			while (f != NULL)
 			{
-				f->data->Rect->body->ApplyForce({ 5,0 }, { 0,0 }, true);
+				if (f->data->rightSide == true)
+				{
+					f->data->Rect->body->ApplyForce({ 5,0 }, { 0,0 }, true);
+				}
+				f = f->next;
 			}
-			f = f->next;
 		}
-	}
 
-	// Prepare for raycast ------------------------------------------------------
-	iPoint mouse;
-	mouse.x = App->input->GetMouseX();
-	mouse.y = App->input->GetMouseY();
-	int ray_hit = ray.DistanceTo(mouse);
+		// Prepare for raycast ------------------------------------------------------
+		iPoint mouse;
+		mouse.x = App->input->GetMouseX();
+		mouse.y = App->input->GetMouseY();
+		int ray_hit = ray.DistanceTo(mouse);
 
-	fVector normal(0.0f, 0.0f);
+		fVector normal(0.0f, 0.0f);
 
-	// All draw functions ------------------------------------------------------
-	App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
+		// All draw functions ------------------------------------------------------
+		App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
-	//BALL
-	if (ballState != BALL_DEATH)
-	{
-		ballState = BALL_SPAWN;
-		if (ball->spawnBallAnim.HasFinished())
+		//BALL
+		if (ballState != BALL_DEATH)
 		{
-			ballState = BALL_IDLE;
+			ballState = BALL_SPAWN;
+			if (ball->spawnBallAnim.HasFinished())
+			{
+				ballState = BALL_IDLE;
+			}
 		}
-	}
 
-	if (ballState != BALL_DEATH)
-	{
-		ballState = BALL_SPAWN;
-		if (ball->spawnBallAnim.HasFinished())
+		if (ballState != BALL_DEATH)
 		{
-			ballState = BALL_IDLE;
+			ballState = BALL_SPAWN;
+			if (ball->spawnBallAnim.HasFinished())
+			{
+				ballState = BALL_IDLE;
+			}
 		}
+
+		switch (ballState)
+		{
+		case BALL_IDLE:
+			currentAnim = &ball->idleBallAnim;
+			break;
+
+		case BALL_DEATH:
+			currentAnim = &ball->deathBallAnim;
+			break;
+
+		case BALL_SPAWN:
+			currentAnim = &ball->spawnBallAnim;
+			break;
+		}
+
+		int x, y;
+		ball->round->GetPosition(x, y);
+		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
+		ball->idleBallAnim.Update();
+		ball->deathBallAnim.Update();
+		ball->spawnBallAnim.Update();
+
+
+		//SUN
+		switch (sunState)
+		{
+		case SUN_IDLE:
+			currentAnim = &sun->idleSunAnim;
+			break;
+		case SUN_COLLISION:
+			currentAnim = &sun->collisionSunAnim;
+			break;
+		}
+
+		if ((sunState == SUN_COLLISION) && (sun->collisionSunAnim.HasFinished() == true))
+		{
+			sun->collisionSunAnim.Reset();
+			sun->idleSunAnim.Reset();
+			sunState = SUN_IDLE;
+		}
+
+		if (currentAnim == &sun->idleSunAnim)
+		{
+			sun->idleSunAnim.Update();
+		}
+		if (currentAnim == &sun->collisionSunAnim)
+		{
+			sun->collisionSunAnim.Update();
+		}
+
+		App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+
+		//PACHINKO
+		p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
+		while (p != NULL)
+		{
+			int x = 166;
+			int y = 668;
+
+			int random = 0;
+			srand(time(NULL));
+			random = rand() % 40;
+
+			if (random >= 35)
+			{
+				pachinkoState = PACHINKO_RANDOM;
+			}
+
+			switch (pachinkoState)
+			{
+			case PACHINKO_IDLE:
+				currentAnim = &p->data->randomPachinkoAnim;
+				break;
+
+			case PACHINKO_RANDOM:
+				currentAnim = &p->data->randomPachinkoAnim;
+				break;
+
+			case PACHINKO_COLLISION:
+				currentAnim = &p->data->collisionPachinkoAnim;
+				break;
+			}
+
+			if (pachinkoState == PACHINKO_IDLE) { p->data->idlePachinkoAnim.Update(); }
+			if (pachinkoState == PACHINKO_RANDOM) { p->data->randomPachinkoAnim.Update(); }
+			if (pachinkoState == PACHINKO_COLLISION) { p->data->collisionPachinkoAnim.Update(); }
+
+			if (pachinkoState == PACHINKO_IDLE)
+			{
+				p->data->randomPachinkoAnim.Reset();
+				p->data->collisionPachinkoAnim.Reset();
+				pachinkoState = PACHINKO_IDLE;
+			}
+			if (pachinkoState == PACHINKO_RANDOM && p->data->randomPachinkoAnim.HasFinished() == true)
+			{
+				pachinkoState = PACHINKO_IDLE;
+			}
+
+			for (int i = 0; i < 7; i++)
+			{
+				if (i == 0) { App->renderer->Blit(pachinkoTexture, x, y, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 1) { App->renderer->Blit(pachinkoTexture, x, y + 92, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 2) { App->renderer->Blit(pachinkoTexture, x, y + 184, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 3) { App->renderer->Blit(pachinkoTexture, x + 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 4) { App->renderer->Blit(pachinkoTexture, x - 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 5) { App->renderer->Blit(pachinkoTexture, x - 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 6) { App->renderer->Blit(pachinkoTexture, x + 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
+			}
+
+			p = p->next;
+
+
+		}
+
+
+
+		// ray ---------------
+		if (ray_on == true)
+		{
+			fVector destination(mouse.x - ray.x, mouse.y - ray.y);
+			destination.Normalize();
+			destination *= ray_hit;
+
+			App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
+
+			if (normal.x != 0.0f)
+				App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
+		}
+		break;
 	}
-
-	switch (ballState)
-	{
-	case BALL_IDLE:
-		currentAnim = &ball->idleBallAnim;
-		break;
-
-	case BALL_DEATH:
-		currentAnim = &ball->deathBallAnim;
-		break;
-
-	case BALL_SPAWN:
-		currentAnim = &ball->spawnBallAnim;
-		break;
-	}
-
-	int x, y;
-	ball->round->GetPosition(x, y);
-	App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
-	ball->idleBallAnim.Update();
-	ball->deathBallAnim.Update();
-	ball->spawnBallAnim.Update();
 	
 
-	//SUN
-	switch (sunState)
-	{
-	case SUN_IDLE:
-		currentAnim = &sun->idleSunAnim;
-		break;
-	case SUN_COLLISION:
-		currentAnim = &sun->collisionSunAnim;
-		break;
-	}
-
-	if ((sunState == SUN_COLLISION) && (sun->collisionSunAnim.HasFinished() == true))
-	{
-		sun->collisionSunAnim.Reset();
-		sun->idleSunAnim.Reset();
-		sunState = SUN_IDLE;
-	}
-
-	if (currentAnim == &sun->idleSunAnim)
-	{
-		sun->idleSunAnim.Update();
-	}
-	if (currentAnim == &sun->collisionSunAnim)
-	{
-		sun->collisionSunAnim.Update();
-	}
-
-	App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
-
-	//PACHINKO
-	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
-	while (p != NULL)
-	{
-		int x = 166;
-		int y = 668;
-
-		int random = 0;
-		srand(time(NULL));
-		random = rand() % 40;
-
-		if (random >= 35)
-		{
-			pachinkoState = PACHINKO_RANDOM;
-		}
-
-		switch (pachinkoState)
-		{
-		case PACHINKO_IDLE:
-			currentAnim = &p->data->randomPachinkoAnim;
-			break;
-
-		case PACHINKO_RANDOM:
-			currentAnim = &p->data->randomPachinkoAnim;
-			break;
-
-		case PACHINKO_COLLISION:
-			currentAnim = &p->data->collisionPachinkoAnim;
-			break;
-		}
-
-		if (pachinkoState == PACHINKO_IDLE) { p->data->idlePachinkoAnim.Update(); }
-		if (pachinkoState == PACHINKO_RANDOM) { p->data->randomPachinkoAnim.Update(); }
-		if (pachinkoState == PACHINKO_COLLISION) { p->data->collisionPachinkoAnim.Update(); }
-
-		if (pachinkoState == PACHINKO_IDLE)
-		{
-			p->data->randomPachinkoAnim.Reset();
-			p->data->collisionPachinkoAnim.Reset();
-			pachinkoState = PACHINKO_IDLE;
-		}
-		if (pachinkoState == PACHINKO_RANDOM && p->data->randomPachinkoAnim.HasFinished() == true)
-		{
-			pachinkoState = PACHINKO_IDLE;
-		}
-
-		for (int i = 0; i < 7; i++)
-		{
-			if (i == 0) { App->renderer->Blit(pachinkoTexture, x, y, &(currentAnim->GetCurrentFrame()), 1.0f); }
-			if (i == 1) { App->renderer->Blit(pachinkoTexture, x, y + 92, &(currentAnim->GetCurrentFrame()), 1.0f); }
-			if (i == 2) { App->renderer->Blit(pachinkoTexture, x, y + 184, &(currentAnim->GetCurrentFrame()), 1.0f); }
-			if (i == 3) { App->renderer->Blit(pachinkoTexture, x + 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
-			if (i == 4) { App->renderer->Blit(pachinkoTexture, x - 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
-			if (i == 5) { App->renderer->Blit(pachinkoTexture, x - 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
-			if (i == 6) { App->renderer->Blit(pachinkoTexture, x + 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
-		}
-
-		p = p->next;
-
-		
-	}
-
-
-
-	// ray ---------------
-	if (ray_on == true)
-	{
-		fVector destination(mouse.x - ray.x, mouse.y - ray.y);
-		destination.Normalize();
-		destination *= ray_hit;
-
-		App->renderer->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
-
-		if (normal.x != 0.0f)
-			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
-	}
-
-
-	
 
 	return UPDATE_CONTINUE;
 }
