@@ -73,10 +73,10 @@ bool ModuleSceneGame::Start()
 	//rottenshit
 
 	//Create Kicker
-	kicker = new Kicker;
+	/*kicker = new Kicker;
 	kicker->mobile = App->physics->CreateRectangle(742, 950, 40, 20, b2_kinematicBody);
 	kicker->pivot = App->physics->CreateRectangle(742, 970, 20, 20, b2_staticBody);
-	kicker->kickerJoint = App->physics->CreatePrismaticJoint(kicker->mobile, { 0, 3 }, kicker->pivot, { 0, 1 }, { 0, 1 }, 20.0f, true, true);
+	kicker->kickerJoint = App->physics->CreatePrismaticJoint(kicker->mobile, { 0, 3 }, kicker->pivot, { 0, 1 }, { 0, 1 }, 20.0f, true, true);*/
 	
 
 	//Create BALL
@@ -651,6 +651,7 @@ update_status ModuleSceneGame::Update()
 
 		break;
 	case gameState::GAME:
+
 		//ray debug
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
@@ -660,15 +661,8 @@ update_status ModuleSceneGame::Update()
 		}
 
 		//kicker input
-		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		{
-			if (ball->power < 100.0f) { ball->power += 0.01f; }
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
-		{
-			ball->round->body->ApplyForce({ 0, -ball->power }, { 0, 0 }, true);
-			App->audio->PlayFx(kickerFx);
-		}
+		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) App->physics->kickerJoint->SetMotorSpeed(100.0f);
+		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_UP) App->physics->kickerJoint->SetMotorSpeed(-100.0f);
 
 		//flippers' input
 		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)

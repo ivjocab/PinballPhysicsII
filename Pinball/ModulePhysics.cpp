@@ -31,9 +31,51 @@ bool ModulePhysics::Start()
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
 
-	// needed to create joints like mouse joint
-	b2BodyDef bd;
-	ground = world->CreateBody(&bd);
+	// kicker ---------------------------------------------------------
+	// kicker mobile
+
+	b2BodyDef mobile;
+	mobile.type = b2_dynamicBody;
+	mobile.position.Set(PIXEL_TO_METERS(392), PIXEL_TO_METERS(765));
+
+	kickerMobile = world->CreateBody(&mobile);
+	b2PolygonShape box6;
+	box6.SetAsBox(PIXEL_TO_METERS(24) * 0.5f, PIXEL_TO_METERS(10) * 0.5f);
+
+	b2FixtureDef fixture6;
+	fixture6.shape = &box6;
+	fixture6.density = 1.0f;
+
+	kickerMobile->CreateFixture(&fixture6);
+
+	// kicker pivot
+
+	b2BodyDef pivot;
+	pivot.type = b2_staticBody;
+	pivot.position.Set(PIXEL_TO_METERS(395), PIXEL_TO_METERS(800));
+
+	kickerPivot = world->CreateBody(&pivot);
+	b2PolygonShape box7;
+	box7.SetAsBox(PIXEL_TO_METERS(10) * 0.5f, PIXEL_TO_METERS(10) * 0.5f);
+
+	b2FixtureDef fixture7;
+	fixture7.shape = &box7;
+	fixture7.density = 1.0f;
+
+	kickerPivot->CreateFixture(&fixture7);
+
+	// kicker joint
+
+	b2PrismaticJointDef joint;
+	b2Vec2 worldAxis(0.0f, -1.0f);
+	joint.Initialize(kickerPivot, kickerMobile, kickerPivot->GetWorldCenter(), worldAxis);
+	joint.lowerTranslation = 0.1f;
+	joint.upperTranslation = 1.0f;
+	joint.enableLimit = true;
+	joint.maxMotorForce = 30.0f;
+	joint.motorSpeed = 0.0f;
+	joint.enableMotor = true;
+	kickerJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&joint);
 
 
 	return true;

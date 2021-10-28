@@ -65,7 +65,13 @@ public:
 
 	bool debug;
 	b2MouseJoint* mouse_joint;
+
+	b2PrismaticJoint* kickerJoint;
+	b2Body* kickerMobile;
+	b2Body* kickerPivot;
+
 private:
+
 
 	b2World* world;
 	b2Body* ground;
