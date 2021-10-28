@@ -622,7 +622,7 @@ bool ModuleSceneGame::Start()
 	box = App->textures->Load("pinball/crate.png");
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	StartScreen = App->textures->Load("backgroundStart.png");
+	StartScreen = App->textures->Load("pinball/backgroundStart.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
