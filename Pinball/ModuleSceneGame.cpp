@@ -62,13 +62,23 @@ bool ModuleSceneGame::Start()
 	veca = { 1.5,0 };
 
 	a = new circlerot;
-	a->circlerot = App->physics->CreateCircle(500, 500, 10, b2_dynamicBody);
+	a2 = new circlerot;
+	a->circlerot = App->physics->CreateCircle(500, 500, 10, b2_kinematicBody);
+	a2->circlerot = App->physics->CreateCircle(500, 700, 10, b2_kinematicBody);
 	a->centercircle = App->physics->CreateCircle(600, 600, 5, b2_staticBody);
-	App->physics->CreateRevoluteJoint(a->circlerot, veca,a->centercircle,vecb, 180,true,false);
+	a2->centercircle = a->centercircle;
+	App->physics->CreateRevoluteJoint(a->circlerot, veca,a->centercircle,vecb, 180,true, false);
+	App->physics->CreateRevoluteJoint(a2->circlerot, veca, a2->centercircle, vecb, 180, true, false);
 	a->circlerot->body->SetGravityScale(0);
+	a2->circlerot->body->SetGravityScale(0);
 	//a->circlerot->body->SetAngularDamping(0);
 	//rottenshit
-	a->circlerot->body->SetAngularVelocity(100);
+	a->circlerot->body->SetAngularVelocity(60 * DEGTORAD);
+	a2->circlerot->body->SetAngularVelocity(60 * DEGTORAD);
+	//a->circlerot->body->
+
+	//a->circlerot->body->IsFixedRotation();
+	//a2->circlerot->body->IsFixedRotation();
 	//rottenshit
 	//rottenshit
 
@@ -77,7 +87,6 @@ bool ModuleSceneGame::Start()
 	kicker->mobile = App->physics->CreateRectangle(742, 950, 40, 20, b2_kinematicBody);
 	kicker->pivot = App->physics->CreateRectangle(742, 970, 20, 20, b2_staticBody);
 	kicker->kickerJoint = App->physics->CreatePrismaticJoint(kicker->mobile, { 0, 3 }, kicker->pivot, { 0, 1 }, { 0, 1 }, 20.0f, true, true);*/
-	
 
 	//Create BALL
 	ball = new DCircle;
@@ -661,8 +670,8 @@ update_status ModuleSceneGame::Update()
 		}
 
 		//kicker input
-		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN) App->physics->kickerJoint->SetMotorSpeed(100.0f);
-		if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_UP) App->physics->kickerJoint->SetMotorSpeed(-100.0f);
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN) App->physics->kickerJoint->SetMotorSpeed(100.0f);
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP) App->physics->kickerJoint->SetMotorSpeed(-100.0f);
 
 		//flippers' input
 		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -864,6 +873,12 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		App->audio->PlayFx(bonus_fx);
 		sunState = SUN_COLLISION;
+	}
+
+	if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0 || bodyA->body->GetType() == 2 && bodyB->body->GetType() == 2)
+	{
+		ball->DEAD;
+		ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
 	}
 
 	/*if (bodyA->body->GetFixtureList()->)

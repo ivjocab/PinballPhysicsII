@@ -125,6 +125,7 @@ public:
 
 	//rottenshit
 	circlerot* a;
+	circlerot* a2;
 	//rottenshit
 
 	p2List<Flipper*> flippers;

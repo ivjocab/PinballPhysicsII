@@ -36,7 +36,7 @@ bool ModulePhysics::Start()
 
 	b2BodyDef mobile;
 	mobile.type = b2_dynamicBody;
-	mobile.position.Set(PIXEL_TO_METERS(392), PIXEL_TO_METERS(765));
+	mobile.position.Set(PIXEL_TO_METERS(740), PIXEL_TO_METERS(900));
 
 	kickerMobile = world->CreateBody(&mobile);
 	b2PolygonShape box6;
@@ -52,7 +52,7 @@ bool ModulePhysics::Start()
 
 	b2BodyDef pivot;
 	pivot.type = b2_staticBody;
-	pivot.position.Set(PIXEL_TO_METERS(395), PIXEL_TO_METERS(800));
+	pivot.position.Set(PIXEL_TO_METERS(740), PIXEL_TO_METERS(950));
 
 	kickerPivot = world->CreateBody(&pivot);
 	b2PolygonShape box7;
@@ -72,7 +72,7 @@ bool ModulePhysics::Start()
 	joint.lowerTranslation = 0.1f;
 	joint.upperTranslation = 1.0f;
 	joint.enableLimit = true;
-	joint.maxMotorForce = 30.0f;
+	joint.maxMotorForce = 50.0f;
 	joint.motorSpeed = 0.0f;
 	joint.enableMotor = true;
 	kickerJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&joint);
