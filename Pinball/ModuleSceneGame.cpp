@@ -10,7 +10,7 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = ballTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
+	background = ballTexture = columnsTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -38,6 +38,7 @@ bool ModuleSceneGame::Start()
 	backgrounds.add(App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody));
 	backgrounds.add(App->physics->CreateChain(0, 0, rhombus2, 8, b2_staticBody));
 	backgrounds.add(App->physics->CreateChain(0, 0, rhombus3, 8, b2_staticBody));
+	backgrounds.getFirst()->data->listener = this;
 
 	// Flippers --------------------------------------------------------------
 	//Left Flipper
@@ -47,6 +48,7 @@ bool ModuleSceneGame::Start()
 	f1->rightSide = false;
 	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 20.0f);
 	flippers.add(f1);
+	f1->Rect->listener = this;
 
 	//Right Flipper
 	veca = { 0.80,0 };
@@ -57,6 +59,7 @@ bool ModuleSceneGame::Start()
 	f2->rightSide = true;
 	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 20.0f);
 	flippers.add(f2);
+	f2->Rect->listener = this;
 
 	//rottenshit
 	veca = { 1.5,0 };
@@ -91,6 +94,8 @@ bool ModuleSceneGame::Start()
 	//Create BALL
 	ball = new DCircle;
 	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
+	ball->round->type = PhysBody::Type::ballCollider;
+	ball->round->listener = this;
 
 	//Ball Animations
 	//Idle ball animations
@@ -170,9 +175,36 @@ bool ModuleSceneGame::Start()
 	ball->spawnBallAnim.mustFlip = false;
 	ball->spawnBallAnim.speed = 0.2f;
 
+	//Create COLUMNS obstacle
+	columns = new Columns;
+	//Idle columns animations
+	columns->idleColumnAnim.PushBack({ 0, 0, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 283, 0, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 566, 0, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 0, 283, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 283, 283, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 566, 283, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 0, 566, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 283, 566, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 566, 566, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 0, 852, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 566, 566, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 283, 566, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 0, 566, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 566, 283, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 283, 283, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 0, 283, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 566, 0, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 283, 0, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 283, 283 });
+	columns->idleColumnAnim.loop = true;
+	columns->idleColumnAnim.mustFlip = false;
+	columns->idleColumnAnim.speed = 0.1f;
+
 	//Create SUN obstacle
 	sun = new SunCircle;
 	sun->round = App->physics->CreateCircle(334, 340, 56, b2_staticBody);
+	sun->round->listener = this;
 	//Idle sun animations
 	sun->idleSunAnim.PushBack({ 0, 0, 220, 218 });
 	sun->idleSunAnim.PushBack({ 218, 0, 220, 218 });
@@ -223,6 +255,7 @@ bool ModuleSceneGame::Start()
 	pachinko1->idlePachinkoAnim.loop = false;
 	pachinko1->idlePachinkoAnim.mustFlip = false;
 	pachinko1->idlePachinkoAnim.speed = 0.01;
+	pachinko1->round->listener = this;
 	//Pachinko random animation
 	pachinko1->randomPachinkoAnim.PushBack({ 0, 0, 30, 30 });
 	pachinko1->randomPachinkoAnim.PushBack({ 30, 0, 30, 30 });
@@ -276,6 +309,7 @@ bool ModuleSceneGame::Start()
 	//Create PACHINKO2 obstacle
 	PachinkoCircle* pachinko2 = new PachinkoCircle;
 	pachinko2->round = App->physics->CreateCircle(180, 774, 15, b2_staticBody);
+	pachinko2->round->listener = this;
 	//Pachinko idle animation
 	pachinko2->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
 	pachinko2->idlePachinkoAnim.loop = false;
@@ -334,6 +368,7 @@ bool ModuleSceneGame::Start()
 	//Create PACHINKO3 obstacle
 	PachinkoCircle* pachinko3 = new PachinkoCircle;
 	pachinko3->round = App->physics->CreateCircle(180, 866, 15, b2_staticBody);
+	pachinko3->round->listener = this;
 	//Pachinko idle animation
 	pachinko3->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
 	pachinko3->idlePachinkoAnim.loop = false;
@@ -392,6 +427,7 @@ bool ModuleSceneGame::Start()
 	//Create PACHINKO4 obstacle
 	PachinkoCircle* pachinko4 = new PachinkoCircle;
 	pachinko4->round = App->physics->CreateCircle(226, 728, 15, b2_staticBody);
+	pachinko4->round->listener = this;
 	//Pachinko idle animation
 	pachinko4->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
 	pachinko4->idlePachinkoAnim.loop = false;
@@ -450,6 +486,7 @@ bool ModuleSceneGame::Start()
 	//Create PACHINKO5 obstacle
 	PachinkoCircle* pachinko5 = new PachinkoCircle;
 	pachinko5->round = App->physics->CreateCircle(134, 728, 15, b2_staticBody);
+	pachinko5->round->listener = this;
 	//Pachinko idle animation
 	pachinko5->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
 	pachinko5->idlePachinkoAnim.loop = false;
@@ -508,6 +545,7 @@ bool ModuleSceneGame::Start()
 	//Create PACHINKO6 obstacle
 	PachinkoCircle* pachinko6 = new PachinkoCircle;
 	pachinko6->round = App->physics->CreateCircle(134, 820, 15, b2_staticBody);
+	pachinko6->round->listener = this;
 	//Pachinko idle animation
 	pachinko6->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
 	pachinko6->idlePachinkoAnim.loop = false;
@@ -566,6 +604,7 @@ bool ModuleSceneGame::Start()
 	//Create PACHINKO5 obstacle
 	PachinkoCircle* pachinko7 = new PachinkoCircle;
 	pachinko7->round = App->physics->CreateCircle(226, 820, 15, b2_staticBody);
+	pachinko7->round->listener = this;
 	//Pachinko idle animation
 	pachinko7->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
 	pachinko7->idlePachinkoAnim.loop = false;
@@ -626,6 +665,7 @@ bool ModuleSceneGame::Start()
 
 	background = App->textures->Load("pinball/background.png");
 	ballTexture = App->textures->Load("pinball/ball.png");
+	columnsTexture = App->textures->Load("pinball/columns.png");
 	sunTexture = App->textures->Load("pinball/sun.png");
 	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
 	box = App->textures->Load("pinball/crate.png");
@@ -710,6 +750,12 @@ update_status ModuleSceneGame::Update()
 		// All draw functions ------------------------------------------------------
 		App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
+		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		{
+			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
+			circles.getLast()->data->listener = this;
+		}
+
 		//BALL
 		if (ballState != BALL_DEATH)
 		{
@@ -751,6 +797,10 @@ update_status ModuleSceneGame::Update()
 		ball->deathBallAnim.Update();
 		ball->spawnBallAnim.Update();
 
+		//COLUMNS
+		currentAnim = &columns->idleColumnAnim;
+		App->renderer->Blit(columnsTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+		columns->idleColumnAnim.Update();
 
 		//SUN
 		switch (sunState)
@@ -869,16 +919,14 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0 || bodyA->body->GetType() == 2 && bodyB->body->GetType() == 2)
+	if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
 	{
-		App->audio->PlayFx(bonus_fx);
 		sunState = SUN_COLLISION;
 	}
 
-	if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0 || bodyA->body->GetType() == 2 && bodyB->body->GetType() == 2)
+	if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0)
 	{
-		ball->DEAD;
-		ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
+		App->audio->PlayFx(bonus_fx);
 	}
 
 	/*if (bodyA->body->GetFixtureList()->)

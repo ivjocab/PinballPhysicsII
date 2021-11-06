@@ -33,6 +33,17 @@ struct PachinkoCircle
 	Animation idlePachinkoAnim;
 	Animation randomPachinkoAnim;
 	Animation collisionPachinkoAnim;
+	enum Type
+	{
+		pachinko1Collision,
+		pachinko2Collision
+	};
+};
+
+struct Columns
+{
+	PhysBody col;
+	Animation idleColumnAnim;
 };
 
 struct DCircle {
@@ -95,9 +106,12 @@ public:
 public:
 	DCircle* ball;
 	SunCircle* sun;
+	Columns* columns;
 	p2List<PachinkoCircle*> pachinkos;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> backgrounds;
+
+	p2List<PhysBody*> circles;
 
 
 	enum class gameState {
@@ -116,6 +130,7 @@ public:
 	SDL_Texture* sunTexture;
 	SDL_Texture* box;
 	SDL_Texture* pachinkoTexture;
+	SDL_Texture* columnsTexture;
 	PhysBody* right;
 	PhysBody* point_right;
 	PhysBody* left;
@@ -414,5 +429,5 @@ public:
 private:
 	Animation* currentAnim = nullptr;
 	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSunAnim, collisionSunAnim, 
-			  idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim;
+			  idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim;
 };

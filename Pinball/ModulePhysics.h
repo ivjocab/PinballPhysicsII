@@ -34,6 +34,12 @@ public:
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 
 public:
+	enum class Type
+	{
+		ballCollider,
+		sunCollider
+	};
+	Type type;
 	int width, height;
 	b2Body* body;
 	Module* listener;
