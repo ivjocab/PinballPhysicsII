@@ -46,6 +46,22 @@ struct Columns
 	Animation idleColumnAnim;
 };
 
+struct Sheen
+{
+	PhysBody* sheen;
+	Animation idleSheenAnim;
+	Animation despawnSheenAnim;
+	Animation spawnSheenAnim;
+	Animation collisionSheenAnim;
+	enum State
+	{
+		IDLE,
+		DESPAWN,
+		SPAWN,
+		COLLISION
+	};
+};
+
 struct DCircle {
 	PhysBody* round;
 	Animation idleBallAnim;
@@ -107,6 +123,7 @@ public:
 	DCircle* ball;
 	SunCircle* sun;
 	Columns* columns;
+	Sheen* sheen;
 	p2List<PachinkoCircle*> pachinkos;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> backgrounds;
@@ -126,11 +143,13 @@ public:
 
 	SDL_Texture* StartScreen;
 	SDL_Texture* background;
+	SDL_Texture* backgroundGame;
 	SDL_Texture* ballTexture;
 	SDL_Texture* sunTexture;
 	SDL_Texture* box;
 	SDL_Texture* pachinkoTexture;
 	SDL_Texture* columnsTexture;
+	SDL_Texture* sheenTexture;
 	PhysBody* right;
 	PhysBody* point_right;
 	PhysBody* left;
@@ -409,6 +428,14 @@ public:
 		BALL_SPAWN
 	};
 
+	enum SheenState
+	{
+		SHEEN_IDLE,
+		SHEEN_DESPAWN,
+		SHEEN_SPAWN,
+		SHEEN_COLLISION
+	};
+
 	enum SunState
 	{
 		SUN_IDLE,
@@ -422,12 +449,15 @@ public:
 		PACHINKO_COLLISION
 	};
 
+	SheenState sheenState;
 	BallState ballState;
 	SunState sunState;
 	PachinkoState pachinkoState;
 
+	int counter = 0;
+
 private:
 	Animation* currentAnim = nullptr;
-	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSunAnim, collisionSunAnim, 
+	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSheenAnim, despawnSheenAnim, SpawnSheenAnim, collisionSheenAnim, idleSunAnim, collisionSunAnim,
 			  idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim;
 };

@@ -10,7 +10,7 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = ballTexture = columnsTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
+	background = backgroundGame = ballTexture = columnsTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -35,9 +35,6 @@ bool ModuleSceneGame::Start()
 	backgrounds.add(App->physics->CreateChain(0, 0, bouncer, 18, b2_staticBody));
 	backgrounds.add(App->physics->CreateChain(0, 0, rpartition, 30, b2_staticBody));
 	backgrounds.add(App->physics->CreateChain(0, 0, lpartition, 34, b2_staticBody));
-	backgrounds.add(App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody));
-	backgrounds.add(App->physics->CreateChain(0, 0, rhombus2, 8, b2_staticBody));
-	backgrounds.add(App->physics->CreateChain(0, 0, rhombus3, 8, b2_staticBody));
 	backgrounds.getFirst()->data->listener = this;
 
 	// Flippers --------------------------------------------------------------
@@ -82,7 +79,6 @@ bool ModuleSceneGame::Start()
 
 	//a->circlerot->body->IsFixedRotation();
 	//a2->circlerot->body->IsFixedRotation();
-	//rottenshit
 	//rottenshit
 
 	//Create Kicker
@@ -203,7 +199,7 @@ bool ModuleSceneGame::Start()
 
 	//Create SUN obstacle
 	sun = new SunCircle;
-	sun->round = App->physics->CreateCircle(334, 340, 56, b2_staticBody);
+	sun->round = App->physics->CreateCircle(294, 325, 56, b2_staticBody);
 	sun->round->listener = this;
 	//Idle sun animations
 	sun->idleSunAnim.PushBack({ 0, 0, 220, 218 });
@@ -246,6 +242,55 @@ bool ModuleSceneGame::Start()
 	sun->collisionSunAnim.loop = false;
 	sun->collisionSunAnim.mustFlip = false;
 	sun->collisionSunAnim.speed = 0.28f;
+
+	//SHEEN
+	//Create SHEEN obstacle
+	sheen = new Sheen;
+	sheen->sheen = App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody);
+	//Sheen idle animation
+	sheen->idleSheenAnim.PushBack({ 504, 0, 72, 72 });
+	sheen->idleSheenAnim.loop = false;
+	sheen->idleSheenAnim.mustFlip = false;
+	sheen->idleSheenAnim.speed = 0.2f;
+	//Sheen spawn animation
+	sheen->spawnSheenAnim.PushBack({ 0, 0, 72, 72 });
+	sheen->spawnSheenAnim.PushBack({ 72, 0, 72, 72 });
+	sheen->spawnSheenAnim.PushBack({ 144, 0, 72, 72 });
+	sheen->spawnSheenAnim.PushBack({ 216, 0, 72, 72 });
+	sheen->spawnSheenAnim.PushBack({ 288, 0, 72, 72 });
+	sheen->spawnSheenAnim.PushBack({ 360, 0, 72, 72 });
+	sheen->spawnSheenAnim.PushBack({ 432, 0, 72, 72 });
+	sheen->spawnSheenAnim.PushBack({ 504, 0, 72, 72 });
+	sheen->spawnSheenAnim.loop = false;
+	sheen->spawnSheenAnim.mustFlip = false;
+	sheen->spawnSheenAnim.speed = 0.2f;
+	//Sheen despawn animation
+	sheen->despawnSheenAnim.PushBack({ 504, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 432, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 360, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 288, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 216, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 144, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 72, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 0, 0, 72, 72 });
+	sheen->despawnSheenAnim.PushBack({ 0, 0, 0, 0 });
+	sheen->despawnSheenAnim.loop = false;
+	sheen->despawnSheenAnim.mustFlip = false;
+	sheen->despawnSheenAnim.speed = 0.2f;
+	//Sheen collision animation
+	sheen->collisionSheenAnim.PushBack({ 0, 72, 72, 72 });
+	sheen->collisionSheenAnim.PushBack({ 72, 72, 72, 72 });
+	sheen->collisionSheenAnim.PushBack({ 144, 72, 72, 72 });
+	sheen->collisionSheenAnim.PushBack({ 216, 72, 72, 72 });
+	sheen->collisionSheenAnim.PushBack({ 288, 72, 72, 72 });
+	sheen->collisionSheenAnim.PushBack({ 360, 72, 72, 72 });
+	sheen->collisionSheenAnim.PushBack({ 432, 72, 72, 72 });
+	sheen->collisionSheenAnim.PushBack({ 504, 72, 72, 72 });
+	sheen->collisionSheenAnim.loop = false;
+	sheen->collisionSheenAnim.mustFlip = false;
+	sheen->collisionSheenAnim.speed = 0.2f;
+	
+	sheenState = SHEEN_SPAWN;
 
 	//Create PACHINKO1 obstacle
 	PachinkoCircle* pachinko1 = new PachinkoCircle;
@@ -426,7 +471,7 @@ bool ModuleSceneGame::Start()
 
 	//Create PACHINKO4 obstacle
 	PachinkoCircle* pachinko4 = new PachinkoCircle;
-	pachinko4->round = App->physics->CreateCircle(226, 728, 15, b2_staticBody);
+	pachinko4->round = App->physics->CreateCircle(217, 728, 15, b2_staticBody);
 	pachinko4->round->listener = this;
 	//Pachinko idle animation
 	pachinko4->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
@@ -485,7 +530,7 @@ bool ModuleSceneGame::Start()
 
 	//Create PACHINKO5 obstacle
 	PachinkoCircle* pachinko5 = new PachinkoCircle;
-	pachinko5->round = App->physics->CreateCircle(134, 728, 15, b2_staticBody);
+	pachinko5->round = App->physics->CreateCircle(144, 728, 15, b2_staticBody);
 	pachinko5->round->listener = this;
 	//Pachinko idle animation
 	pachinko5->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
@@ -544,7 +589,7 @@ bool ModuleSceneGame::Start()
 
 	//Create PACHINKO6 obstacle
 	PachinkoCircle* pachinko6 = new PachinkoCircle;
-	pachinko6->round = App->physics->CreateCircle(134, 820, 15, b2_staticBody);
+	pachinko6->round = App->physics->CreateCircle(144, 820, 15, b2_staticBody);
 	pachinko6->round->listener = this;
 	//Pachinko idle animation
 	pachinko6->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
@@ -603,7 +648,7 @@ bool ModuleSceneGame::Start()
 
 	//Create PACHINKO5 obstacle
 	PachinkoCircle* pachinko7 = new PachinkoCircle;
-	pachinko7->round = App->physics->CreateCircle(226, 820, 15, b2_staticBody);
+	pachinko7->round = App->physics->CreateCircle(217, 820, 15, b2_staticBody);
 	pachinko7->round->listener = this;
 	//Pachinko idle animation
 	pachinko7->idlePachinkoAnim.PushBack({ 0, 0, 29, 30 });
@@ -666,12 +711,14 @@ bool ModuleSceneGame::Start()
 	background = App->textures->Load("pinball/background.png");
 	ballTexture = App->textures->Load("pinball/ball.png");
 	columnsTexture = App->textures->Load("pinball/columns.png");
+	sheenTexture = App->textures->Load("pinball/sheen.png");
 	sunTexture = App->textures->Load("pinball/sun.png");
 	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
 	box = App->textures->Load("pinball/crate.png");
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	StartScreen = App->textures->Load("pinball/backgroundStart.png");
+	backgroundGame = App->textures->Load("pinball/backgroundGame.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
@@ -748,6 +795,7 @@ update_status ModuleSceneGame::Update()
 		fVector normal(0.0f, 0.0f);
 
 		// All draw functions ------------------------------------------------------
+		App->renderer->Blit(backgroundGame, 0, 0, NULL, 0.0f, 0);
 		App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
 		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -799,8 +847,87 @@ update_status ModuleSceneGame::Update()
 
 		//COLUMNS
 		currentAnim = &columns->idleColumnAnim;
-		App->renderer->Blit(columnsTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+		App->renderer->Blit(columnsTexture, 380, 255, &(currentAnim->GetCurrentFrame()), 1.0f);
 		columns->idleColumnAnim.Update();
+
+		//SHEEN
+		switch (sheenState)
+		{
+		case SHEEN_IDLE:
+			sheen->spawnSheenAnim.Reset();
+			currentAnim = &sheen->idleSheenAnim;
+			break;
+		case SHEEN_COLLISION:
+			sheen->spawnSheenAnim.Reset();
+			currentAnim = &sheen->collisionSheenAnim;
+			break;
+		case SHEEN_SPAWN:
+			sheen->despawnSheenAnim.Reset();
+
+			currentAnim = &sheen->spawnSheenAnim;
+			break;
+		case SHEEN_DESPAWN:
+			sheen->spawnSheenAnim.Reset();
+			currentAnim = &sheen->despawnSheenAnim;
+			break;
+		}
+
+		if ((sheenState == SHEEN_COLLISION) && (sheen->collisionSheenAnim.HasFinished() == true))
+		{
+			sheen->collisionSheenAnim.Reset();
+			sheen->idleSheenAnim.Reset();
+			sheenState = SHEEN_IDLE;
+		}
+
+
+		counter++;
+
+		if (counter < 180)
+		{
+			if (sheenState == SHEEN_DESPAWN && sheen->despawnSheenAnim.HasFinished() == true)
+			{
+				sheenState = SHEEN_SPAWN;
+			}
+			/*else if (sheenState == SHEEN_SPAWN && sheen->spawnSheenAnim.HasFinished() == true)
+			{
+				sheenState = SHEEN_DESPAWN;
+			}*/
+			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
+			sheen->sheen = App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody);
+			App->renderer->Blit(sheenTexture, 185, 533, &(currentAnim->GetCurrentFrame()), 1.0f);
+		}
+		if (counter < 360 && counter > 180)
+		{
+			if (sheen->despawnSheenAnim.HasFinished() == true)
+			{
+				sheenState = SHEEN_SPAWN;
+			}
+			/*if (sheen->spawnSheenAnim.HasFinished() == true)
+			{
+				sheenState = SHEEN_DESPAWN;
+			}*/
+			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
+			sheen->sheen = App->physics->CreateChain(0, 0, rhombus2, 8, b2_staticBody);
+			App->renderer->Blit(sheenTexture, 297, 478, &(currentAnim->GetCurrentFrame()), 1.0f);
+		}
+		if (counter < 540 && counter > 360)
+		{
+			if (sheen->despawnSheenAnim.HasFinished() == true)
+			{
+				sheenState = SHEEN_SPAWN;
+			}
+			/*if (sheen->spawnSheenAnim.HasFinished() == true)
+			{
+				sheenState = SHEEN_DESPAWN;
+			}*/
+			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
+			sheen->sheen = App->physics->CreateChain(0, 0, rhombus3, 8, b2_staticBody);
+			App->renderer->Blit(sheenTexture, 322, 599, &(currentAnim->GetCurrentFrame()), 1.0f);
+		}
+		if (counter > 540) counter = 0;
+
+		sheen->despawnSheenAnim.Update();
+		sheen->spawnSheenAnim.Update();
 
 		//SUN
 		switch (sunState)
@@ -829,7 +956,7 @@ update_status ModuleSceneGame::Update()
 			sun->collisionSunAnim.Update();
 		}
 
-		App->renderer->Blit(sunTexture, 226, 230, &(currentAnim->GetCurrentFrame()), 1.0f);
+		App->renderer->Blit(sunTexture, 185, 215, &(currentAnim->GetCurrentFrame()), 1.0f);
 
 		//PACHINKO
 		p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
@@ -882,10 +1009,10 @@ update_status ModuleSceneGame::Update()
 				if (i == 0) { App->renderer->Blit(pachinkoTexture, x, y, &(currentAnim->GetCurrentFrame()), 1.0f); }
 				if (i == 1) { App->renderer->Blit(pachinkoTexture, x, y + 92, &(currentAnim->GetCurrentFrame()), 1.0f); }
 				if (i == 2) { App->renderer->Blit(pachinkoTexture, x, y + 184, &(currentAnim->GetCurrentFrame()), 1.0f); }
-				if (i == 3) { App->renderer->Blit(pachinkoTexture, x + 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
-				if (i == 4) { App->renderer->Blit(pachinkoTexture, x - 46, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
-				if (i == 5) { App->renderer->Blit(pachinkoTexture, x - 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
-				if (i == 6) { App->renderer->Blit(pachinkoTexture, x + 46, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 3) { App->renderer->Blit(pachinkoTexture, x + 37, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 4) { App->renderer->Blit(pachinkoTexture, x - 38, y + 46, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 5) { App->renderer->Blit(pachinkoTexture, x - 38, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
+				if (i == 6) { App->renderer->Blit(pachinkoTexture, x + 37, y + 138, &(currentAnim->GetCurrentFrame()), 1.0f); }
 			}
 
 			p = p->next;
@@ -909,8 +1036,6 @@ update_status ModuleSceneGame::Update()
 		}
 		break;
 	}
-	
-
 
 	return UPDATE_CONTINUE;
 }
@@ -928,7 +1053,10 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0)
 		{
-			App->audio->PlayFx(bonus_fx);
+			if (App->audio->PlayFx(bonus_fx) == false)
+			{
+				App->audio->PlayFx(bonus_fx);
+			}
 		}
 	}
 
