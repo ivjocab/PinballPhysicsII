@@ -919,20 +919,18 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
+	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		sunState = SUN_COLLISION;
-	}
+		if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
+		{
+			sunState = SUN_COLLISION;
+		}
 
-	if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0)
-	{
-		App->audio->PlayFx(bonus_fx);
+		if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0)
+		{
+			App->audio->PlayFx(bonus_fx);
+		}
 	}
-
-	/*if (bodyA->body->GetFixtureList()->)
-	{
-		sunState = SUN_COLLISION;
-	}*/
 
 	/*
 	if(bodyA)
