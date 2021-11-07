@@ -27,6 +27,7 @@ struct SunCircle
 	PhysBody* round;
 	Animation idleSunAnim;
 	Animation collisionSunAnim;
+	int count = 0;
 };
 
 struct StarCircle
@@ -518,5 +519,5 @@ private:
 	Animation* currentAnim = nullptr;
 	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSheenAnim, despawnSheenAnim, SpawnSheenAnim, collisionSheenAnim,
 		idleSunAnim, collisionSunAnim, idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim, uiAnim1,
-		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, kickerAnim, flipperAnim, uiBall1, uiBall2, uiBall3;
+		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, kickerAnim, flipperAnim, uiBall1, uiBall2, uiBall3, starAnim, fanAnim;
 };

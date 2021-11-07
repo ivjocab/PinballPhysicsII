@@ -413,6 +413,8 @@ bool ModuleSceneGame::Start()
 	star2 = new StarCircle;
 	star2->round = App->physics->CreateCircle(625, 575, 20, b2_staticBody);
 
+	fan = new Fan;
+
 	//SHEEN
 	//Create SHEEN obstacle
 	sheen = new Sheen;
@@ -875,6 +877,12 @@ bool ModuleSceneGame::Start()
 	pachinko7->collisionPachinkoAnim.speed = 0.4;
 	//Save pachinkos to linked list
 	pachinkos.add(pachinko7);
+	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
+	while (p != NULL)
+	{
+		p->data->round->type = PhysBody::Type::pachinkoCollider;
+		p = p->next;
+	}
 
 	//kicker anim
 	kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
@@ -900,28 +908,21 @@ bool ModuleSceneGame::Start()
 	fan->fanAnim.PushBack({ 0,0,97,97 });
 	fan->fanAnim.PushBack({ 0,0,97,97 });
 	fan->fanAnim.loop = false;
-	fan->fanAnim.mustFlip = true;
+	fan->fanAnim.mustFlip = false;
 	fan->fanAnim.speed = 0.1;
 
 	//Star anim
 	star1->starAnim.PushBack({ 96,0,41,41 });
 	star1->starAnim.PushBack({ 96,0,41,41 });
 	star1->starAnim.loop = false;
-	star1->starAnim.mustFlip = true;
+	star1->starAnim.mustFlip = false;
 	star1->starAnim.speed = 0.1;
 	
 	star2->starAnim.PushBack({ 96,0,41,41 });
 	star2->starAnim.PushBack({ 96,0,41,41 });
 	star2->starAnim.loop = false;
-	star2->starAnim.mustFlip = true;
+	star2->starAnim.mustFlip = false;
 	star2->starAnim.speed = 0.1;
-
-	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
-	while (p != NULL)
-	{
-		p->data->round->type = PhysBody::Type::pachinkoCollider;
-		p = p->next;
-	}
 
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
@@ -1004,13 +1005,6 @@ update_status ModuleSceneGame::Update()
 		}
 
 		// All draw functions ------------------------------------------------------
-
-		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-		{
-			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
-			circles.getLast()->data->listener = this;
-		}
-
 		//UI
 
 		if (ball->points < 1000)
@@ -1188,10 +1182,6 @@ update_status ModuleSceneGame::Update()
 			{
 				sheenState = SHEEN_SPAWN;
 			}
-			/*else if (sheenState == SHEEN_SPAWN && sheen->spawnSheenAnim.HasFinished() == true)
-			{
-				sheenState = SHEEN_DESPAWN;
-			}*/
 			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
 			sheen->sheen = App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody);
 			sheen->sheen->type = PhysBody::Type::sheenCollider;
@@ -1203,10 +1193,6 @@ update_status ModuleSceneGame::Update()
 			{
 				sheenState = SHEEN_SPAWN;
 			}
-			/*if (sheen->spawnSheenAnim.HasFinished() == true)
-			{
-				sheenState = SHEEN_DESPAWN;
-			}*/
 			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
 			sheen->sheen = App->physics->CreateChain(0, 0, rhombus2, 8, b2_staticBody);
 			sheen->sheen->type = PhysBody::Type::sheenCollider;
@@ -1218,10 +1204,6 @@ update_status ModuleSceneGame::Update()
 			{
 				sheenState = SHEEN_SPAWN;
 			}
-			/*if (sheen->spawnSheenAnim.HasFinished() == true)
-			{
-				sheenState = SHEEN_DESPAWN;
-			}*/
 			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
 			sheen->sheen = App->physics->CreateChain(0, 0, rhombus3, 8, b2_staticBody);
 			sheen->sheen->type = PhysBody::Type::sheenCollider;
@@ -1347,17 +1329,18 @@ update_status ModuleSceneGame::Update()
 
 		//fan
 		currentAnim = &fan->fanAnim;
-		App->renderer->Blit(props, fan->fan->body->GetPosition().x, fan->fan->body->GetPosition().y, &(currentAnim->GetCurrentFrame()), 1.0f);
+		App->renderer->Blit(props, 564, 773, &(currentAnim->GetCurrentFrame()), 1.0f);
 		fan->fanAnim.Update();
 
 		//Star anim
 		currentAnim = &star1->starAnim;
-		App->renderer->Blit(props, star1->round->body->GetPosition().x, star1->round->body->GetPosition().y, &(currentAnim->GetCurrentFrame()), 1.0f);
+		App->renderer->Blit(props, METERS_TO_PIXELS(star1->round->body->GetPosition().x) - 20, 
+					   METERS_TO_PIXELS(star1->round->body->GetPosition().y) - 20, &(currentAnim->GetCurrentFrame()), 1.0f);
 		star1->starAnim.Update();
 		
 		currentAnim = &star2->starAnim;
-		App->renderer->Blit(props, star2->round->body->GetPosition().x, star2->round->body->GetPosition().y, &(currentAnim->GetCurrentFrame()), 1.0f);
-		star2->starAnim.Update();
+		App->renderer->Blit(props, METERS_TO_PIXELS(star2->round->body->GetPosition().x) - 20,
+			METERS_TO_PIXELS(star2->round->body->GetPosition().y) - 20, &(currentAnim->GetCurrentFrame()), 1.0f);
 
 		// ray ---------------
 		if (ray_on == true)
@@ -1436,9 +1419,16 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			App->audio->PlayFx(sun_fx);
 			sunState = SUN_COLLISION;
 
-			//ball->round->body->ApplyForce({ 0, -((ball->round->body->GetLinearVelocity().y) * 10) }, ball->round->body->GetPosition(), true);
-
 			ball->points += 30;
+
+			sun->count += 1;
+
+			if (sun->count >= 10)
+			{
+				if (ball->lives < 3 && ball->lives != 0)
+					ball->lives += 1;
+				sun->count = 0;
+			}
 		}
 
 		// ball-flippers collision
