@@ -40,6 +40,9 @@ public:
 		sunCollider,
 		wallCollider,
 		sheenCollider,
+		kickerCollider,
+		flipperCollider,
+		pachinkoCollider,
 		sensorCollider
 	};
 	Type type;

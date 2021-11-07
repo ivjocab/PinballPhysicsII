@@ -178,6 +178,7 @@ public:
 	uint ball1_fx;
 	uint ball2_fx;
 	uint ball3_fx;
+	uint ballDeath_fx;
 	p2Point<int> ray;
 	bool ray_on;
 

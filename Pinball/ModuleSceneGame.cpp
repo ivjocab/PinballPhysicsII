@@ -36,6 +36,7 @@ bool ModuleSceneGame::Start()
 	backgrounds.add(App->physics->CreateChain(0, 0, rpartition, 30, b2_staticBody));
 	backgrounds.add(App->physics->CreateChain(0, 0, lpartition, 34, b2_staticBody));
 	backgrounds.getFirst()->data->listener = this;
+	backgrounds.getFirst()->data->type = PhysBody::Type::wallCollider;
 
 	// Flippers --------------------------------------------------------------
 	//Left Flipper
@@ -46,6 +47,7 @@ bool ModuleSceneGame::Start()
 	App->physics->CreateRevoluteJoint(f1->Rect, veca, f1->Circle, vecb, 20.0f);
 	flippers.add(f1);
 	f1->Rect->listener = this;
+	f1->Rect->type = PhysBody::Type::flipperCollider;
 
 	//Right Flipper
 	veca = { 0.80,0 };
@@ -57,6 +59,7 @@ bool ModuleSceneGame::Start()
 	App->physics->CreateRevoluteJoint(f2->Rect, veca, f2->Circle, vecb, 20.0f);
 	flippers.add(f2);
 	f2->Rect->listener = this;
+	f2->Rect->type = PhysBody::Type::flipperCollider;
 
 	//rottenshit
 	veca = { 1.5,0 };
@@ -96,10 +99,15 @@ bool ModuleSceneGame::Start()
 	sunTexture = App->textures->Load("pinball/sun.png");
 	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
 	box = App->textures->Load("pinball/crate.png");
-	intro = App->audio->LoadFx("pinball/game.wav");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	StartScreen = App->textures->Load("pinball/backgroundStart.png");
 	backgroundGame = App->textures->Load("pinball/backgroundGame.png");
+	//Loading music & fx
+	intro = App->audio->LoadFx("pinball/game.wav");
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	ball1_fx = App->audio->LoadFx("pinball/ball1.wav");
+	ball2_fx = App->audio->LoadFx("pinball/ball2.wav");
+	ball3_fx = App->audio->LoadFx("pinball/ball3.wav");
+	ballDeath_fx = App->audio->LoadFx("pinball/ballDeath.wav");
 
 	//UI
 	//UI Animations
@@ -117,7 +125,7 @@ bool ModuleSceneGame::Start()
 
 	//create sensor
 	recSensor = new Sensor;
-	recSensor->sensorBody = App->physics->CreateRectangle(0, 845, 400, 40, b2_staticBody);
+	recSensor->sensorBody = App->physics->CreateRectangle(0, 1020, 1600, 50, b2_staticBody);
 	recSensor->sensorBody->type = PhysBody::Type::sensorCollider;
 
 	//Ball Animations
@@ -240,6 +248,7 @@ bool ModuleSceneGame::Start()
 	sun = new SunCircle;
 	sun->round = App->physics->CreateCircle(294, 325, 56, b2_staticBody);
 	sun->round->listener = this;
+	sun->round->type = PhysBody::Type::sunCollider;
 	//Idle sun animations
 	sun->idleSunAnim.PushBack({ 0, 0, 220, 218 });
 	sun->idleSunAnim.PushBack({ 218, 0, 220, 218 });
@@ -745,22 +754,15 @@ bool ModuleSceneGame::Start()
 	//Save pachinkos to linked list
 	pachinkos.add(pachinko7);
 
+	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
+	while (p != NULL)
+	{
+		p->data->round->type = PhysBody::Type::pachinkoCollider;
+		p = p->next;
+	}
+
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-
-<<<<<<< Updated upstream
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-=======
-	background = App->textures->Load("pinball/background.png");
-	ballTexture = App->textures->Load("pinball/ball.png");
-	columnsTexture = App->textures->Load("pinball/columns.png");
-	sunTexture = App->textures->Load("pinball/sun.png");
-	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
-	box = App->textures->Load("pinball/crate.png");
-	intro = App->audio->LoadFx("pinball/intro.wav");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	StartScreen = App->textures->Load("pinball/backgroundStart.png");
->>>>>>> Stashed changes
 
 	App->audio->PlayFx(intro, 1);
 
@@ -1088,8 +1090,6 @@ update_status ModuleSceneGame::Update()
 
 		}
 
-
-
 		// ray ---------------
 		if (ray_on == true)
 		{
@@ -1114,23 +1114,26 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-		App->audio->PlayFx(bonus_fx);
 
 		if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
 		{
 			sunState = SUN_COLLISION;
 		}
 
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::wallCollider)
+		{
+			int random = 0;
+			srand(time(NULL));
+			random = rand() % 3;
+			if (random == 0) App->audio->PlayFx(ball1_fx);
+			if (random == 1) App->audio->PlayFx(ball2_fx);
+			if (random == 2) App->audio->PlayFx(ball3_fx);
+		}
+
 		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sensorCollider)
 		{
-<<<<<<< Updated upstream
-			if (App->audio->PlayFx(bonus_fx) == false)
-			{
-				App->audio->PlayFx(bonus_fx);
-			}
-=======
+			App->audio->PlayFx(ballDeath_fx);
 			ballState = BALL_DEATH;
->>>>>>> Stashed changes
 		}
 	}
 }
