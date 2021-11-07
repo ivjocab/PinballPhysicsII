@@ -39,7 +39,8 @@ public:
 		ballCollider,
 		sunCollider,
 		wallCollider,
-		sheenCollider
+		sheenCollider,
+		sensorCollider
 	};
 	Type type;
 	int width, height;
