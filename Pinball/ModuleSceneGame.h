@@ -114,6 +114,12 @@ struct UI
 	Animation uiBall3;
 };
 
+struct Fan
+{
+	PhysBody* fan;
+	Animation fanAnim;
+};
+
 class PhysBody;
 
 class ModuleSceneGame : public Module
@@ -139,6 +145,7 @@ public:
 	StarCircle* star2;
 	Columns* columns;
 	Sheen* sheen;
+	Fan* fan;
 	p2List<PachinkoCircle*> pachinkos;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> backgrounds;
@@ -171,6 +178,7 @@ public:
 	SDL_Texture* uiBall1Texture;
 	SDL_Texture* uiBall2Texture;
 	SDL_Texture* uiBall3Texture;
+	SDL_Texture* props;
 	PhysBody* right;
 	PhysBody* point_right;
 	PhysBody* left;

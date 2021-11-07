@@ -11,7 +11,7 @@
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	background = backgroundGame = backgroundDefeat = backgroundVictory = ballTexture = columnsTexture = uiTexture = pachinkoTexture = sunTexture = box =
-		         uiBall1Texture = uiBall2Texture = uiBall3Texture = StartScreen = flipperKicker = NULL;
+		         uiBall1Texture = uiBall2Texture = uiBall3Texture = StartScreen = flipperKicker = props = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -89,6 +89,7 @@ bool ModuleSceneGame::Start()
 	uiBall1Texture = App->textures->Load("pinball/ball.png");
 	uiBall2Texture = App->textures->Load("pinball/ball.png");
 	uiBall3Texture = App->textures->Load("pinball/ball.png");
+	props = App->textures->Load("pinball/props.png");
 	
 	//Loading music & fx
 	intro = App->audio->LoadFx("pinball/intro.wav");
@@ -895,6 +896,26 @@ bool ModuleSceneGame::Start()
 	f2->flipperAnim.mustFlip = true;
 	f2->flipperAnim.speed = 0.1;
 
+	//fan
+	fan->fanAnim.PushBack({ 0,0,97,97 });
+	fan->fanAnim.PushBack({ 0,0,97,97 });
+	fan->fanAnim.loop = false;
+	fan->fanAnim.mustFlip = true;
+	fan->fanAnim.speed = 0.1;
+
+	//Star anim
+	star1->starAnim.PushBack({ 96,0,41,41 });
+	star1->starAnim.PushBack({ 96,0,41,41 });
+	star1->starAnim.loop = false;
+	star1->starAnim.mustFlip = true;
+	star1->starAnim.speed = 0.1;
+	
+	star2->starAnim.PushBack({ 96,0,41,41 });
+	star2->starAnim.PushBack({ 96,0,41,41 });
+	star2->starAnim.loop = false;
+	star2->starAnim.mustFlip = true;
+	star2->starAnim.speed = 0.1;
+
 	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
 	while (p != NULL)
 	{
@@ -1323,6 +1344,20 @@ update_status ModuleSceneGame::Update()
 		currentAnim = &f2->flipperAnim;
 		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(f2->Rect->body->GetPosition().x) - 40, METERS_TO_PIXELS(f2->Rect->body->GetPosition().y) - 5, &(currentAnim->GetCurrentFrame()), 1.0f, f2->Rect->GetRotation());
 		f2->flipperAnim.Update();
+
+		//fan
+		currentAnim = &fan->fanAnim;
+		App->renderer->Blit(props, fan->fan->body->GetPosition().x, fan->fan->body->GetPosition().y, &(currentAnim->GetCurrentFrame()), 1.0f);
+		fan->fanAnim.Update();
+
+		//Star anim
+		currentAnim = &star1->starAnim;
+		App->renderer->Blit(props, star1->round->body->GetPosition().x, star1->round->body->GetPosition().y, &(currentAnim->GetCurrentFrame()), 1.0f);
+		star1->starAnim.Update();
+		
+		currentAnim = &star2->starAnim;
+		App->renderer->Blit(props, star2->round->body->GetPosition().x, star2->round->body->GetPosition().y, &(currentAnim->GetCurrentFrame()), 1.0f);
+		star2->starAnim.Update();
 
 		// ray ---------------
 		if (ray_on == true)
