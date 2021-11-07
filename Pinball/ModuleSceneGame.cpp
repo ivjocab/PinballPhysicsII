@@ -114,6 +114,12 @@ bool ModuleSceneGame::Start()
 	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
 	ball->round->type = PhysBody::Type::ballCollider;
 	ball->round->listener = this;
+
+	//create sensor
+	recSensor = new Sensor;
+	recSensor->sensorBody = App->physics->CreateRectangle(0, 845, 400, 40, b2_staticBody);
+	recSensor->sensorBody->type = PhysBody::Type::sensorCollider;
+
 	//Ball Animations
 	//Idle ball animations
 	ball->idleBallAnim.PushBack({ 0, 0, 39, 38 });
@@ -742,7 +748,19 @@ bool ModuleSceneGame::Start()
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+<<<<<<< Updated upstream
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+=======
+	background = App->textures->Load("pinball/background.png");
+	ballTexture = App->textures->Load("pinball/ball.png");
+	columnsTexture = App->textures->Load("pinball/columns.png");
+	sunTexture = App->textures->Load("pinball/sun.png");
+	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
+	box = App->textures->Load("pinball/crate.png");
+	intro = App->audio->LoadFx("pinball/intro.wav");
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	StartScreen = App->textures->Load("pinball/backgroundStart.png");
+>>>>>>> Stashed changes
 
 	App->audio->PlayFx(intro, 1);
 
@@ -1096,30 +1114,23 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
+		App->audio->PlayFx(bonus_fx);
+
 		if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
 		{
 			sunState = SUN_COLLISION;
 		}
 
-		if (bodyA->body->GetType() == 2 && bodyB->body->GetType() == 0)
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sensorCollider)
 		{
+<<<<<<< Updated upstream
 			if (App->audio->PlayFx(bonus_fx) == false)
 			{
 				App->audio->PlayFx(bonus_fx);
 			}
+=======
+			ballState = BALL_DEATH;
+>>>>>>> Stashed changes
 		}
 	}
-
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
-
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }
