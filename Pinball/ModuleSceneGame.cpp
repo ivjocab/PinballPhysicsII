@@ -10,7 +10,8 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = backgroundGame = ballTexture = columnsTexture = uiTexture = pachinkoTexture = sunTexture = box = StartScreen = flipperKicker =NULL;
+	background = backgroundGame = backgroundDefeat = backgroundVictory = ballTexture = columnsTexture = uiTexture = pachinkoTexture = sunTexture = box =
+		         uiBall1Texture = uiBall2Texture = uiBall3Texture = StartScreen = flipperKicker = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -104,7 +105,12 @@ bool ModuleSceneGame::Start()
 	box = App->textures->Load("pinball/crate.png");
 	StartScreen = App->textures->Load("pinball/backgroundStart.png");
 	backgroundGame = App->textures->Load("pinball/backgroundGame.png");
+	backgroundVictory = App->textures->Load("pinball/backgroundVictory.png");
+	backgroundDefeat = App->textures->Load("pinball/backgroundDefeat.png");
 	flipperKicker = App->textures->Load("pinball/flipperKicker.png");
+	uiBall1Texture = App->textures->Load("pinball/ball.png");
+	uiBall2Texture = App->textures->Load("pinball/ball.png");
+	uiBall3Texture = App->textures->Load("pinball/ball.png");
 	
 	//Loading music & fx
 	intro = App->audio->LoadFx("pinball/intro.wav");
@@ -125,13 +131,119 @@ bool ModuleSceneGame::Start()
 	ui->uiAnim1.loop = false;
 	ui->uiAnim1.mustFlip = false;
 	ui->uiAnim1.speed = 0.14;
+	//60p
+	ui->uiAnim2.PushBack({ 0, 74, 782, 73 });
+	ui->uiAnim2.PushBack({ 0, 147, 782, 73 });
+	ui->uiAnim2.PushBack({ 0, 220, 782, 73 });
+	ui->uiAnim2.PushBack({ 0, 293, 782, 73 });
+	ui->uiAnim2.loop = false;
+	ui->uiAnim2.mustFlip = false;
+	ui->uiAnim2.speed = 0.7;
+	//120p
+	ui->uiAnim3.PushBack({ 0, 366, 782, 73 });
+	ui->uiAnim3.PushBack({ 0, 439, 782, 73 });
+	ui->uiAnim3.PushBack({ 0, 512, 782, 73 });
+	ui->uiAnim3.PushBack({ 0, 585, 782, 73 });
+	ui->uiAnim3.PushBack({ 0, 658, 782, 73 });
+	ui->uiAnim3.loop = false;
+	ui->uiAnim3.mustFlip = false;
+	ui->uiAnim3.speed = 0.7;
+	//180p
+	ui->uiAnim4.PushBack({ 0, 731, 782, 73 });
+	ui->uiAnim4.PushBack({ 0, 804, 782, 73 });
+	ui->uiAnim4.PushBack({ 0, 877, 782, 73 });
+	ui->uiAnim4.PushBack({ 0, 950, 782, 73 });
+	ui->uiAnim4.PushBack({ 0, 1023, 782, 73 });
+	ui->uiAnim4.loop = false;
+	ui->uiAnim4.mustFlip = false;
+	ui->uiAnim4.speed = 0.7;
+	//240p
+	ui->uiAnim5.PushBack({ 0, 1096, 782, 73 });
+	ui->uiAnim5.PushBack({ 0, 1169, 782, 73 });
+	ui->uiAnim5.PushBack({ 0, 1242, 782, 73 });
+	ui->uiAnim5.PushBack({ 0, 1315, 782, 73 });
+	ui->uiAnim5.PushBack({ 0, 1388, 782, 73 });
+	ui->uiAnim5.loop = false;
+	ui->uiAnim5.mustFlip = false;
+	ui->uiAnim5.speed = 0.7;
+	//300
+	ui->uiAnim6.PushBack({ 0, 1461, 782, 73 });
+	ui->uiAnim6.PushBack({ 0, 1534, 782, 73 });
+	ui->uiAnim6.PushBack({ 0, 1607, 782, 73 });
+	ui->uiAnim6.PushBack({ 0, 1680, 782, 73 });
+	ui->uiAnim6.PushBack({ 0, 1753, 782, 73 });
+	ui->uiAnim6.loop = false;
+	ui->uiAnim6.mustFlip = false;
+	ui->uiAnim6.speed = 0.7;
+
+
+	//UI lives animation
+	ui->uiBall1.PushBack({ 0, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 38, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 76, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 114, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 152, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 190, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 228, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 266, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 304, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 342, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 380, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 418, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 456, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 494, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 532, 0, 39, 38 });
+	ui->uiBall1.PushBack({ 570, 0, 39, 38 });
+	ui->uiBall1.loop = true;
+	ui->uiBall1.mustFlip = false;
+	ui->uiBall1.speed = 0.3f;
+	//
+	ui->uiBall2.PushBack({ 0, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 38, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 76, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 114, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 152, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 190, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 228, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 266, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 304, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 342, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 380, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 418, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 456, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 494, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 532, 0, 39, 38 });
+	ui->uiBall2.PushBack({ 570, 0, 39, 38 });
+	ui->uiBall2.loop = true;
+	ui->uiBall2.mustFlip = false;
+	ui->uiBall2.speed = 0.3f;
+	//
+	ui->uiBall3.PushBack({ 0, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 38, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 76, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 114, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 152, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 190, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 228, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 266, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 304, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 342, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 380, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 418, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 456, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 494, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 532, 0, 39, 38 });
+	ui->uiBall3.PushBack({ 570, 0, 39, 38 });
+	ui->uiBall3.loop = true;
+	ui->uiBall3.mustFlip = false;
+	ui->uiBall3.speed = 0.3f;
 
 	//Create BALL
 	ball = new DCircle;
 	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
 	ball->round->type = PhysBody::Type::ballCollider;
 	ball->round->listener = this;
-	ball->lifes = 5;
+	ball->lives = 3;
 	ball->points = 0;
 
 	//create ScoreBalls
@@ -780,11 +892,11 @@ bool ModuleSceneGame::Start()
 	pachinkos.add(pachinko7);
 
 	//kicker anim
-	/*kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
+	kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
 	kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
 	kicker->kickerAnim.loop = false;
 	kicker->kickerAnim.mustFlip = false;
-	kicker->kickerAnim.speed = 0.1;*/
+	kicker->kickerAnim.speed = 0.1;
 
 	//flippers anim
 	f1->flipperAnim.PushBack({ 0, 0, 92, 13 });
@@ -809,6 +921,8 @@ bool ModuleSceneGame::Start()
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	App->audio->PlayFx(intro);
+
 	return ret;
 }
 
@@ -823,16 +937,29 @@ bool ModuleSceneGame::CleanUp()
 // Update: draw background
 update_status ModuleSceneGame::Update()
 {
+	// Prepare for raycast ------------------------------------------------------
+	iPoint mouse;
+	mouse.x = App->input->GetMouseX();
+	mouse.y = App->input->GetMouseY();
+	int ray_hit = ray.DistanceTo(mouse);
 
-	switch (GameState)
+	fVector normal(0.0f, 0.0f);
+
+	//PACHINKO
+	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
+
+	switch (gameScreen)
 	{
-	case gameState::START:
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN) { GameState = gameState::GAME; }
+	case INTRO:
 		App->renderer->Blit(StartScreen, 0, 0, NULL, 0.0f, 0);
-
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		{
+			gameScreen = GAME;
+		}
 		break;
-	case gameState::GAME:
-
+	case GAME:
+		App->renderer->Blit(backgroundGame, 0, 0, NULL, 0.0f, 0);
+		App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 		//ray debug
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
@@ -871,17 +998,7 @@ update_status ModuleSceneGame::Update()
 			}
 		}
 
-		// Prepare for raycast ------------------------------------------------------
-		iPoint mouse;
-		mouse.x = App->input->GetMouseX();
-		mouse.y = App->input->GetMouseY();
-		int ray_hit = ray.DistanceTo(mouse);
-
-		fVector normal(0.0f, 0.0f);
-
 		// All draw functions ------------------------------------------------------
-		App->renderer->Blit(backgroundGame, 0, 0, NULL, 0.0f, 0);
-		App->renderer->Blit(background, 0, 0, NULL, 0.0f, 0);
 
 		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 		{
@@ -890,32 +1007,103 @@ update_status ModuleSceneGame::Update()
 		}
 
 		//UI
+
+		if (ball->points < 1000)
+		{
+			uiState = UI1;
+		}
+
+		if (ball->points >= 1000 && ball->points < 2000)
+		{
+			uiState = UI2;
+		}
+
+		if (ball->points >= 2000 && ball->points < 3000)
+		{
+			uiState = UI3;
+		}
+
+		if (ball->points >= 3000 && ball->points < 4000)
+		{
+			uiState = UI4;
+		}
+
+		if (ball->points >= 4000 && ball->points < 5000)
+		{
+			uiState = UI5;
+		}
+
+		if (ball->points >= 5000)
+		{
+			uiState = UI6;
+		}
+
 		switch (uiState)
 		{
 		case UI1:
 			currentAnim = &ui->uiAnim1;
 			break;
 		case UI2:
-			currentAnim = &ui->uiAnim1;
+			currentAnim = &ui->uiAnim2;
 			break;
 		case UI3:
-			currentAnim = &ui->uiAnim1;
+			currentAnim = &ui->uiAnim3;
 			break;
 		case UI4:
-			currentAnim = &ui->uiAnim1;
+			currentAnim = &ui->uiAnim4;
 			break;
 		case UI5:
-			currentAnim = &ui->uiAnim1;
+			currentAnim = &ui->uiAnim5;
 			break;
 		case UI6:
-			currentAnim = &ui->uiAnim1;
-			break;
-		case UI7:
-			currentAnim = &ui->uiAnim1;
+			currentAnim = &ui->uiAnim6;
 			break;
 		}
 
 		App->renderer->Blit(uiTexture, 0, 0, &(currentAnim->GetCurrentFrame()), 0.0f, 0);
+
+		switch (uiState)
+		{
+		case UI1:
+			ui->uiAnim1.Update();
+			break;
+		case UI2:
+			ui->uiAnim2.Update();
+			break;
+		case UI3:
+			ui->uiAnim3.Update();
+			break;
+		case UI4:
+			ui->uiAnim4.Update();
+			break;
+		case UI5:
+			ui->uiAnim5.Update();
+			break;
+		case UI6:
+			ui->uiAnim6.Update();
+			break;
+		}
+
+		//Ball lives
+		if (ball->lives >= 1)
+		{
+			currentAnim = &ui->uiBall1;
+			App->renderer->Blit(uiBall1Texture, 40, 20, &(currentAnim->GetCurrentFrame()), 0.0f, 0.0f);
+		}
+		if (ball->lives >= 2)
+		{
+			currentAnim = &ui->uiBall2;
+			App->renderer->Blit(uiBall2Texture, 100, 20, &(currentAnim->GetCurrentFrame()), 0.0f, 0.0f);
+		}
+		if (ball->lives >= 3)
+		{
+			currentAnim = &ui->uiBall3;
+			App->renderer->Blit(uiBall3Texture, 160, 20, &(currentAnim->GetCurrentFrame()), 0.0f, 0.0f);
+		}
+		ui->uiBall1.Update();
+		ui->uiBall2.Update();
+		ui->uiBall3.Update();
+
 
 		//BALL STATES
 		switch (ballState)
@@ -931,7 +1119,7 @@ update_status ModuleSceneGame::Update()
 				ballState = BALL_SPAWN;
 				ball->deathBallAnim.Reset();
 				ball->round->body->SetTransform({ PIXEL_TO_METERS(742), PIXEL_TO_METERS(835) }, 0.0f);
-				ball->lifes--;
+				ball->lives--;
 			}
 			break;
 
@@ -1069,7 +1257,6 @@ update_status ModuleSceneGame::Update()
 		App->renderer->Blit(sunTexture, 185, 215, &(currentAnim->GetCurrentFrame()), 1.0f);
 
 		//PACHINKO
-		p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
 		while (p != NULL)
 		{
 			int x = 166;
@@ -1129,10 +1316,10 @@ update_status ModuleSceneGame::Update()
 		}
 
 		//kicker anim
-		/*if (kicker->kickerAnim.HasFinished())
-		{
-			kicker->kickerAnim.Reset();
-		}*/
+		currentAnim = &kicker->kickerAnim;
+		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(App->physics->kickerMobile->GetPosition().x) - 19,
+			METERS_TO_PIXELS(App->physics->kickerMobile->GetPosition().y) - 5, &(currentAnim->GetCurrentFrame()), 1.0f);
+		kicker->kickerAnim.Update();
 
 		//flipper anim
 		f1->Rect->GetRotation();
@@ -1141,7 +1328,7 @@ update_status ModuleSceneGame::Update()
 			f1->flipperAnim.Reset();
 		}
 		currentAnim = &f1->flipperAnim;
-		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(f1->Rect->body->GetPosition().x)-48, METERS_TO_PIXELS(f1->Rect->body->GetPosition().y)-5, &(currentAnim->GetCurrentFrame()), 1.0f, f1->Rect->GetRotation());
+		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(f1->Rect->body->GetPosition().x) - 48, METERS_TO_PIXELS(f1->Rect->body->GetPosition().y) - 5, &(currentAnim->GetCurrentFrame()), 1.0f, f1->Rect->GetRotation());
 		f1->flipperAnim.Update();
 
 		f2->Rect->GetRotation();
@@ -1150,7 +1337,7 @@ update_status ModuleSceneGame::Update()
 			f2->flipperAnim.Reset();
 		}
 		currentAnim = &f2->flipperAnim;
-		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(f2->Rect->body->GetPosition().x) -40 , METERS_TO_PIXELS(f2->Rect->body->GetPosition().y) - 5, &(currentAnim->GetCurrentFrame()), 1.0f, f2->Rect->GetRotation());
+		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(f2->Rect->body->GetPosition().x) - 40, METERS_TO_PIXELS(f2->Rect->body->GetPosition().y) - 5, &(currentAnim->GetCurrentFrame()), 1.0f, f2->Rect->GetRotation());
 		f2->flipperAnim.Update();
 
 		// ray ---------------
@@ -1164,6 +1351,53 @@ update_status ModuleSceneGame::Update()
 
 			if (normal.x != 0.0f)
 				App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
+		}
+
+		if (ball->lives <= 0 || App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+		{
+			gameScreen = DEFEAT;
+		}
+		if (ball->points >= 5000 && ui->uiAnim6.HasFinished() == true || App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+		{
+			gameScreen = VICTORY;
+		}
+		break;
+	case DEFEAT:
+		App->renderer->Blit(backgroundDefeat, 0, 0, NULL, 0.0f, 0);
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		{
+			//Resetting values for new game loop
+			ball->lives = 3;
+			ball->points = 0;
+			ball->round->body->SetTransform({ PIXEL_TO_METERS(742), PIXEL_TO_METERS(835) }, 0.0f);
+			ui->uiAnim1.Reset();
+			ui->uiAnim2.Reset();
+			ui->uiAnim3.Reset();
+			ui->uiAnim4.Reset();
+			ui->uiAnim5.Reset();
+			ui->uiAnim6.Reset();
+			sun->collisionSunAnim.Reset();
+
+			gameScreen = GAME;
+		}
+		break;
+	case VICTORY:
+		App->renderer->Blit(backgroundVictory, 0, 0, NULL, 0.0f, 0);
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		{
+			//Resetting values for new game loop
+			ball->lives = 3;
+			ball->points = 0;
+			ball->round->body->SetTransform({ PIXEL_TO_METERS(742), PIXEL_TO_METERS(835) }, 0.0f);
+			ui->uiAnim1.Reset();
+			ui->uiAnim2.Reset();
+			ui->uiAnim3.Reset();
+			ui->uiAnim4.Reset();
+			ui->uiAnim5.Reset();
+			ui->uiAnim6.Reset();
+			sun->collisionSunAnim.Reset();
+
+			gameScreen = GAME;
 		}
 		break;
 	}
@@ -1182,6 +1416,8 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			App->audio->PlayFx(sun_fx);
 			sunState = SUN_COLLISION;
+
+			ball->points += 30;
 		}
 
 		// ball-flippers collision
@@ -1198,7 +1434,13 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			random = rand() % 2;
 			if (random == 0) App->audio->PlayFx(sheen1_fx);
 			if (random == 1) App->audio->PlayFx(sheen2_fx);
+			
+			ball->points += 15;
 		}
+
+		// pachinko-ball collision
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::pachinkoCollider)
+			ball->points += 5;
 
 		// ball-wall collision
 		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::wallCollider)

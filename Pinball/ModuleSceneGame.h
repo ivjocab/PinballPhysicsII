@@ -81,7 +81,7 @@ struct DCircle {
 		SPAWN
 	};
 	float power;
-	int lifes;
+	int lives;
 	int points;
 };
 
@@ -103,8 +103,7 @@ struct UI
 		UI3,
 		UI4,
 		UI5,
-		UI6,
-		UI7
+		UI6
 	};
 	Animation uiAnim1;
 	Animation uiAnim2;
@@ -112,7 +111,9 @@ struct UI
 	Animation uiAnim4;
 	Animation uiAnim5;
 	Animation uiAnim6;
-	Animation uiAnim7;
+	Animation uiBall1;
+	Animation uiBall2;
+	Animation uiBall3;
 };
 
 class PhysBody;
@@ -157,6 +158,8 @@ public:
 	SDL_Texture* StartScreen;
 	SDL_Texture* background;
 	SDL_Texture* backgroundGame;
+	SDL_Texture* backgroundDefeat;
+	SDL_Texture* backgroundVictory;
 	SDL_Texture* ballTexture;
 	SDL_Texture* sunTexture;
 	SDL_Texture* box;
@@ -165,6 +168,9 @@ public:
 	SDL_Texture* sheenTexture;
 	SDL_Texture* uiTexture;
 	SDL_Texture* flipperKicker;
+	SDL_Texture* uiBall1Texture;
+	SDL_Texture* uiBall2Texture;
+	SDL_Texture* uiBall3Texture;
 	PhysBody* right;
 	PhysBody* point_right;
 	PhysBody* left;
@@ -450,6 +456,14 @@ public:
 	372, 598
 	};
 
+	enum GameScreen
+	{
+		INTRO,
+		GAME,
+		DEFEAT,
+		VICTORY
+	};
+
 	enum BallState
 	{
 		BALL_IDLE,
@@ -485,8 +499,7 @@ public:
 		UI3,
 		UI4,
 		UI5,
-		UI6,
-		UI7
+		UI6
 	};
 
 	UIState uiState;
@@ -494,6 +507,7 @@ public:
 	BallState ballState;
 	SunState sunState;
 	PachinkoState pachinkoState;
+	GameScreen gameScreen;
 
 	int counter = 0;
 
@@ -501,5 +515,5 @@ private:
 	Animation* currentAnim = nullptr;
 	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSheenAnim, despawnSheenAnim, SpawnSheenAnim, collisionSheenAnim,
 		idleSunAnim, collisionSunAnim, idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim, uiAnim1,
-		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, uiAnim7, kickerAnim, flipperAnim;
+		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, kickerAnim, flipperAnim, uiBall1, uiBall2, uiBall3;
 };

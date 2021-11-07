@@ -36,11 +36,11 @@ bool ModulePhysics::Start()
 
 	b2BodyDef mobile;
 	mobile.type = b2_dynamicBody;
-	mobile.position.Set(PIXEL_TO_METERS(740), PIXEL_TO_METERS(900));
+	mobile.position.Set(PIXEL_TO_METERS(742), PIXEL_TO_METERS(900));
 
 	kickerMobile = world->CreateBody(&mobile);
 	b2PolygonShape box6;
-	box6.SetAsBox(PIXEL_TO_METERS(24) * 0.5f, PIXEL_TO_METERS(10) * 0.5f);
+	box6.SetAsBox(PIXEL_TO_METERS(35) * 0.5f, PIXEL_TO_METERS(10) * 0.5f);
 
 	b2FixtureDef fixture6;
 	fixture6.shape = &box6;
