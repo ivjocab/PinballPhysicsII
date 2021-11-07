@@ -10,7 +10,7 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = backgroundGame = ballTexture = columnsTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
+	background = backgroundGame = ballTexture = columnsTexture = uiTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -87,12 +87,33 @@ bool ModuleSceneGame::Start()
 	kicker->pivot = App->physics->CreateRectangle(742, 970, 20, 20, b2_staticBody);
 	kicker->kickerJoint = App->physics->CreatePrismaticJoint(kicker->mobile, { 0, 3 }, kicker->pivot, { 0, 1 }, { 0, 1 }, 20.0f, true, true);*/
 
+	//Defining textures
+	background = App->textures->Load("pinball/background.png");
+	uiTexture = App->textures->Load("pinball/UI.png");
+	ballTexture = App->textures->Load("pinball/ball.png");
+	columnsTexture = App->textures->Load("pinball/columns.png");
+	sheenTexture = App->textures->Load("pinball/sheen.png");
+	sunTexture = App->textures->Load("pinball/sun.png");
+	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
+	box = App->textures->Load("pinball/crate.png");
+	intro = App->audio->LoadFx("pinball/game.wav");
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	StartScreen = App->textures->Load("pinball/backgroundStart.png");
+	backgroundGame = App->textures->Load("pinball/backgroundGame.png");
+
+	//UI
+	//UI Animations
+	ui = new UI;
+	ui->uiAnim1.PushBack({ 0, 0, 782, 73 });
+	ui->uiAnim1.loop = false;
+	ui->uiAnim1.mustFlip = false;
+	ui->uiAnim1.speed = 0.14;
+
 	//Create BALL
 	ball = new DCircle;
 	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
 	ball->round->type = PhysBody::Type::ballCollider;
 	ball->round->listener = this;
-
 	//Ball Animations
 	//Idle ball animations
 	ball->idleBallAnim.PushBack({ 0, 0, 39, 38 });
@@ -174,25 +195,37 @@ bool ModuleSceneGame::Start()
 	//Create COLUMNS obstacle
 	columns = new Columns;
 	//Idle columns animations
-	columns->idleColumnAnim.PushBack({ 0, 0, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 283, 0, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 566, 0, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 0, 283, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 283, 283, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 566, 283, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 0, 566, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 283, 566, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 566, 566, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 0, 852, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 566, 566, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 283, 566, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 0, 566, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 566, 283, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 283, 283, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 0, 283, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 566, 0, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 283, 0, 283, 283 });
-	columns->idleColumnAnim.PushBack({ 0, 0, 283, 283 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 282, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 564, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 282, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 282, 282, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 564, 282, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 564, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 282, 564, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 564, 564, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 846, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 846, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 846, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 846, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 846, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 846, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 846, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 564, 564, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 282, 564, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 564, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 564, 282, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 282, 282, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 282, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 564, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 282, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
+	columns->idleColumnAnim.PushBack({ 0, 0, 282, 282 });
 	columns->idleColumnAnim.loop = true;
 	columns->idleColumnAnim.mustFlip = false;
 	columns->idleColumnAnim.speed = 0.1f;
@@ -242,6 +275,7 @@ bool ModuleSceneGame::Start()
 	sun->collisionSunAnim.loop = false;
 	sun->collisionSunAnim.mustFlip = false;
 	sun->collisionSunAnim.speed = 0.28f;
+	sunState = SUN_IDLE;
 
 	//SHEEN
 	//Create SHEEN obstacle
@@ -708,18 +742,6 @@ bool ModuleSceneGame::Start()
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	background = App->textures->Load("pinball/background.png");
-	ballTexture = App->textures->Load("pinball/ball.png");
-	columnsTexture = App->textures->Load("pinball/columns.png");
-	sheenTexture = App->textures->Load("pinball/sheen.png");
-	sunTexture = App->textures->Load("pinball/sun.png");
-	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
-	box = App->textures->Load("pinball/crate.png");
-	intro = App->audio->LoadFx("pinball/intro.wav");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	StartScreen = App->textures->Load("pinball/backgroundStart.png");
-	backgroundGame = App->textures->Load("pinball/backgroundGame.png");
-
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
 	App->audio->PlayFx(intro, 1);
@@ -804,6 +826,34 @@ update_status ModuleSceneGame::Update()
 			circles.getLast()->data->listener = this;
 		}
 
+		//UI
+		switch (uiState)
+		{
+		case UI1:
+			currentAnim = &ui->uiAnim1;
+			break;
+		case UI2:
+			currentAnim = &ui->uiAnim1;
+			break;
+		case UI3:
+			currentAnim = &ui->uiAnim1;
+			break;
+		case UI4:
+			currentAnim = &ui->uiAnim1;
+			break;
+		case UI5:
+			currentAnim = &ui->uiAnim1;
+			break;
+		case UI6:
+			currentAnim = &ui->uiAnim1;
+			break;
+		case UI7:
+			currentAnim = &ui->uiAnim1;
+			break;
+		}
+
+		App->renderer->Blit(uiTexture, 0, 0, &(currentAnim->GetCurrentFrame()), 0.0f, 0);
+
 		//BALL
 		if (ballState != BALL_DEATH)
 		{
@@ -840,14 +890,14 @@ update_status ModuleSceneGame::Update()
 
 		int x, y;
 		ball->round->GetPosition(x, y);
-		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 1.0f, true);
+		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 0.0f, true);
 		ball->idleBallAnim.Update();
 		ball->deathBallAnim.Update();
 		ball->spawnBallAnim.Update();
 
 		//COLUMNS
 		currentAnim = &columns->idleColumnAnim;
-		App->renderer->Blit(columnsTexture, 380, 255, &(currentAnim->GetCurrentFrame()), 1.0f);
+		App->renderer->Blit(columnsTexture, 380, 254, &(currentAnim->GetCurrentFrame()), 0.0f, 0, 0, 0);
 		columns->idleColumnAnim.Update();
 
 		//SHEEN

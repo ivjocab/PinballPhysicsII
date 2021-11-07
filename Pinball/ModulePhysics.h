@@ -37,7 +37,9 @@ public:
 	enum class Type
 	{
 		ballCollider,
-		sunCollider
+		sunCollider,
+		wallCollider,
+		sheenCollider
 	};
 	Type type;
 	int width, height;

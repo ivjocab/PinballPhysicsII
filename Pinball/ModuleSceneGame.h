@@ -106,6 +106,27 @@ struct circlerot
 
 //rottenshit
 
+struct UI
+{
+	enum State
+	{
+		UI1,
+		UI2,
+		UI3,
+		UI4,
+		UI5,
+		UI6,
+		UI7
+	};
+	Animation uiAnim1;
+	Animation uiAnim2;
+	Animation uiAnim3;
+	Animation uiAnim4;
+	Animation uiAnim5;
+	Animation uiAnim6;
+	Animation uiAnim7;
+};
+
 class PhysBody;
 
 class ModuleSceneGame : public Module
@@ -121,6 +142,7 @@ public:
 
 public:
 	DCircle* ball;
+	UI* ui;
 	SunCircle* sun;
 	Columns* columns;
 	Sheen* sheen;
@@ -150,6 +172,7 @@ public:
 	SDL_Texture* pachinkoTexture;
 	SDL_Texture* columnsTexture;
 	SDL_Texture* sheenTexture;
+	SDL_Texture* uiTexture;
 	PhysBody* right;
 	PhysBody* point_right;
 	PhysBody* left;
@@ -449,6 +472,18 @@ public:
 		PACHINKO_COLLISION
 	};
 
+	enum UIState
+	{
+		UI1,
+		UI2,
+		UI3,
+		UI4,
+		UI5,
+		UI6,
+		UI7
+	};
+
+	UIState uiState;
 	SheenState sheenState;
 	BallState ballState;
 	SunState sunState;
@@ -458,6 +493,7 @@ public:
 
 private:
 	Animation* currentAnim = nullptr;
-	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSheenAnim, despawnSheenAnim, SpawnSheenAnim, collisionSheenAnim, idleSunAnim, collisionSunAnim,
-			  idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim;
+	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSheenAnim, despawnSheenAnim, SpawnSheenAnim, collisionSheenAnim,
+		idleSunAnim, collisionSunAnim, idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim, uiAnim1,
+		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, uiAnim7;
 };
