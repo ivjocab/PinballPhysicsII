@@ -29,6 +29,12 @@ struct SunCircle
 	Animation collisionSunAnim;
 };
 
+struct StarCircle
+{
+	PhysBody* round;
+	Animation starAnim;
+};
+
 struct Sensor
 {
 	PhysBody* sensorBody;
@@ -85,14 +91,6 @@ struct DCircle {
 	int points;
 };
 
-//rottenshit
-struct circlerot 
-{
-	PhysBody* circlerot;
-	PhysBody* centercircle;
-};
-
-//rottenshit
 
 struct UI
 {
@@ -137,6 +135,8 @@ public:
 	DCircle* ball;
 	UI* ui;
 	SunCircle* sun;
+	StarCircle* star1;
+	StarCircle* star2;
 	Columns* columns;
 	Sheen* sheen;
 	p2List<PachinkoCircle*> pachinkos;
@@ -177,11 +177,6 @@ public:
 	PhysBody* point_left;
 	b2RevoluteJointDef revoluteJointDef_right;
 	b2RevoluteJointDef revoluteJointDef_left;
-
-	//rottenshit
-	circlerot* a;
-	circlerot* a2;
-	//rottenshit
 
 	p2List<Flipper*> flippers;
 	Flipper* f1 = new Flipper;

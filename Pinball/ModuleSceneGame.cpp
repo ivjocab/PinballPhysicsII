@@ -65,28 +65,6 @@ bool ModuleSceneGame::Start()
 	// kicker
 	kicker = new Kicker;
 
-	//rottenshit
-	veca = { 1.5,0 };
-
-	a = new circlerot;
-	a2 = new circlerot;
-	a->circlerot = App->physics->CreateCircle(500, 500, 10, b2_kinematicBody);
-	a2->circlerot = App->physics->CreateCircle(500, 700, 10, b2_kinematicBody);
-	a->centercircle = App->physics->CreateCircle(600, 600, 5, b2_staticBody);
-	a2->centercircle = a->centercircle;
-	App->physics->CreateRevoluteJoint(a->circlerot, veca,a->centercircle,vecb, 180,true, false);
-	App->physics->CreateRevoluteJoint(a2->circlerot, veca, a2->centercircle, vecb, 180, true, false);
-	a->circlerot->body->SetGravityScale(0);
-	a2->circlerot->body->SetGravityScale(0);
-	//a->circlerot->body->SetAngularDamping(0);
-	//rottenshit
-	a->circlerot->body->SetAngularVelocity(60 * DEGTORAD);
-	a2->circlerot->body->SetAngularVelocity(60 * DEGTORAD);
-	//a->circlerot->body->
-
-	//a->circlerot->body->IsFixedRotation();
-	//a2->circlerot->body->IsFixedRotation();
-	//rottenshit
 
 	//Create Kicker
 	/*kicker = new Kicker;
@@ -427,6 +405,12 @@ bool ModuleSceneGame::Start()
 	sun->collisionSunAnim.mustFlip = false;
 	sun->collisionSunAnim.speed = 0.23f;
 	sunState = SUN_IDLE;
+
+	//StarCircles
+	star1 = new StarCircle;
+	star1->round = App->physics->CreateCircle(525, 675, 20, b2_staticBody);
+	star2 = new StarCircle;
+	star2->round = App->physics->CreateCircle(625, 575, 20, b2_staticBody);
 
 	//SHEEN
 	//Create SHEEN obstacle
@@ -1417,6 +1401,8 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			App->audio->PlayFx(sun_fx);
 			sunState = SUN_COLLISION;
 
+			//ball->round->body->ApplyForce({ 0, -((ball->round->body->GetLinearVelocity().y) * 10) }, ball->round->body->GetPosition(), true);
+
 			ball->points += 30;
 		}
 
@@ -1435,6 +1421,8 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			if (random == 0) App->audio->PlayFx(sheen1_fx);
 			if (random == 1) App->audio->PlayFx(sheen2_fx);
 			
+			//ball->round->body->ApplyForce({ 0, -((ball->round->body->GetLinearVelocity().y) * 10) }, ball->round->body->GetPosition(), true);
+
 			ball->points += 15;
 		}
 
