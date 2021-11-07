@@ -178,9 +178,13 @@ public:
 
 	p2List<Flipper*> flippers;
 	SDL_Rect rectSect = { 48, 250, 100, 25 };
+
 	Kicker* kicker;
 	SDL_Rect kickerSect = { 302, 706, 22, 96 };
 	SDL_Rect kickerSectBonus = { 1002, 706, 22, 96 };
+	b2PrismaticJoint* kickerJoint;
+	b2Body* kickerMobile;
+	b2Body* kickerPivot;
 
 	uint clickFx;
 	uint kickerFx;

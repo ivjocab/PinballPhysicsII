@@ -61,6 +61,9 @@ bool ModuleSceneGame::Start()
 	f2->Rect->listener = this;
 	f2->Rect->type = PhysBody::Type::flipperCollider;
 
+	// kicker
+	kicker = new Kicker;
+
 	//rottenshit
 	veca = { 1.5,0 };
 
@@ -793,16 +796,6 @@ bool ModuleSceneGame::Start()
 
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-
-	background = App->textures->Load("pinball/background.png");
-	ballTexture = App->textures->Load("pinball/ball.png");
-	columnsTexture = App->textures->Load("pinball/columns.png");
-	sunTexture = App->textures->Load("pinball/sun.png");
-	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
-	box = App->textures->Load("pinball/crate.png");
-	intro = App->audio->LoadFx("pinball/intro.wav");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	StartScreen = App->textures->Load("pinball/backgroundStart.png");
 
 	return ret;
 }
