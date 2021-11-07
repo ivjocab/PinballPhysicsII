@@ -10,7 +10,7 @@
 
 ModuleSceneGame::ModuleSceneGame(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	background = backgroundGame = ballTexture = columnsTexture = uiTexture = pachinkoTexture = sunTexture = box = StartScreen = NULL;
+	background = backgroundGame = ballTexture = columnsTexture = uiTexture = pachinkoTexture = sunTexture = box = StartScreen = flipperKicker =NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -101,6 +101,8 @@ bool ModuleSceneGame::Start()
 	box = App->textures->Load("pinball/crate.png");
 	StartScreen = App->textures->Load("pinball/backgroundStart.png");
 	backgroundGame = App->textures->Load("pinball/backgroundGame.png");
+	flipperKicker = App->textures->Load("pinball/flipperKicker.png");
+	
 	//Loading music & fx
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
@@ -775,6 +777,13 @@ bool ModuleSceneGame::Start()
 	//Save pachinkos to linked list
 	pachinkos.add(pachinko7);
 
+	//kicker anim
+	kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
+	kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
+	kicker->kickerAnim.loop = false;
+	kicker->kickerAnim.mustFlip = false;
+	kicker->kickerAnim.speed = 0.1;
+
 	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
 	while (p != NULL)
 	{
@@ -1112,6 +1121,12 @@ update_status ModuleSceneGame::Update()
 			}
 
 			p = p->next;
+		}
+
+		//kicker anim
+		if (kicker->kickerAnim.HasFinished())
+		{
+			kicker->kickerAnim.Reset();
 		}
 
 		// ray ---------------

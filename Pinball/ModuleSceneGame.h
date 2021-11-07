@@ -18,6 +18,7 @@ struct Kicker
 	PhysBody* pivot;
 	PhysBody* mobile;
 	b2PrismaticJoint* kickerJoint;
+	Animation kickerAnim;
 };
 
 struct SunCircle 
@@ -162,6 +163,7 @@ public:
 	SDL_Texture* columnsTexture;
 	SDL_Texture* sheenTexture;
 	SDL_Texture* uiTexture;
+	SDL_Texture* flipperKicker;
 	PhysBody* right;
 	PhysBody* point_right;
 	PhysBody* left;
@@ -492,5 +494,5 @@ private:
 	Animation* currentAnim = nullptr;
 	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSheenAnim, despawnSheenAnim, SpawnSheenAnim, collisionSheenAnim,
 		idleSunAnim, collisionSunAnim, idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim, uiAnim1,
-		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, uiAnim7;
+		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, uiAnim7, kickerAnim;
 };
