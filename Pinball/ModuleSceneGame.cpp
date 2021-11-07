@@ -40,7 +40,7 @@ bool ModuleSceneGame::Start()
 
 	// Flippers --------------------------------------------------------------
 	//Left Flipper
-	Flipper* f1 = new Flipper;
+	//Flipper* f1 = new Flipper;
 	f1->Circle = App->physics->CreateCircle(285, 965, 4, b2_staticBody);
 	f1->Rect = App->physics->CreateRectangle(265 + rectSect.w / 2, 945 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
 	f1->rightSide = false;
@@ -52,7 +52,7 @@ bool ModuleSceneGame::Start()
 	//Right Flipper
 	veca = { 0.80,0 };
 
-	Flipper* f2 = new Flipper;
+	//Flipper* f2 = new Flipper;
 	f2->Circle = App->physics->CreateCircle(545, 965, 4, b2_staticBody);
 	f2->Rect = App->physics->CreateRectangle(525 - rectSect.w / 2, 945 + rectSect.h / 2, rectSect.w, rectSect.h - 15, b2_dynamicBody);
 	f2->rightSide = true;
@@ -780,11 +780,24 @@ bool ModuleSceneGame::Start()
 	pachinkos.add(pachinko7);
 
 	//kicker anim
-	kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
+	/*kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
 	kicker->kickerAnim.PushBack({ 92, 0, 40, 20 });
 	kicker->kickerAnim.loop = false;
 	kicker->kickerAnim.mustFlip = false;
-	kicker->kickerAnim.speed = 0.1;
+	kicker->kickerAnim.speed = 0.1;*/
+
+	//flippers anim
+	f1->flipperAnim.PushBack({ 0, 0, 92, 13 });
+	f1->flipperAnim.PushBack({ 0, 0, 92, 13 });
+	f1->flipperAnim.loop = false;
+	f1->flipperAnim.mustFlip = false;
+	f1->flipperAnim.speed = 0.1;
+	
+	f2->flipperAnim.PushBack({ 0, 0, 92, 13 });
+	f2->flipperAnim.PushBack({ 0, 0, 92, 13 });
+	f2->flipperAnim.loop = false;
+	f2->flipperAnim.mustFlip = true;
+	f2->flipperAnim.speed = 0.1;
 
 	p2List_item<PachinkoCircle*>* p = pachinkos.getFirst();
 	while (p != NULL)
@@ -1116,10 +1129,29 @@ update_status ModuleSceneGame::Update()
 		}
 
 		//kicker anim
-		if (kicker->kickerAnim.HasFinished())
+		/*if (kicker->kickerAnim.HasFinished())
 		{
 			kicker->kickerAnim.Reset();
+		}*/
+
+		//flipper anim
+		f1->Rect->GetRotation();
+		if (f1->flipperAnim.HasFinished())
+		{
+			f1->flipperAnim.Reset();
 		}
+		currentAnim = &f1->flipperAnim;
+		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(f1->Rect->body->GetPosition().x)-48, METERS_TO_PIXELS(f1->Rect->body->GetPosition().y)-5, &(currentAnim->GetCurrentFrame()), 1.0f, f1->Rect->GetRotation());
+		f1->flipperAnim.Update();
+
+		f2->Rect->GetRotation();
+		if (f2->flipperAnim.HasFinished())
+		{
+			f2->flipperAnim.Reset();
+		}
+		currentAnim = &f2->flipperAnim;
+		App->renderer->Blit(flipperKicker, METERS_TO_PIXELS(f2->Rect->body->GetPosition().x) -40 , METERS_TO_PIXELS(f2->Rect->body->GetPosition().y) - 5, &(currentAnim->GetCurrentFrame()), 1.0f, f2->Rect->GetRotation());
+		f2->flipperAnim.Update();
 
 		// ray ---------------
 		if (ray_on == true)

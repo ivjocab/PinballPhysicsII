@@ -11,6 +11,7 @@ struct Flipper
 	PhysBody* Rect;
 	PhysBody* Circle;
 	bool rightSide;
+	Animation flipperAnim;
 };
 
 struct Kicker
@@ -177,6 +178,8 @@ public:
 	//rottenshit
 
 	p2List<Flipper*> flippers;
+	Flipper* f1 = new Flipper;
+	Flipper* f2 = new Flipper;
 	SDL_Rect rectSect = { 48, 250, 100, 25 };
 
 	Kicker* kicker;
@@ -498,5 +501,5 @@ private:
 	Animation* currentAnim = nullptr;
 	Animation idleBallAnim, deathBallAnim, spawnBallAnim, idleSheenAnim, despawnSheenAnim, SpawnSheenAnim, collisionSheenAnim,
 		idleSunAnim, collisionSunAnim, idlePachinkoAnim, randomPachinkoAnim, collisionPachinkoAnim, idleColumnsAnim, uiAnim1,
-		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, uiAnim7, kickerAnim;
+		uiAnim2, uiAnim3, uiAnim4, uiAnim5, uiAnim6, uiAnim7, kickerAnim, flipperAnim;
 };
