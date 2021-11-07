@@ -192,6 +192,7 @@ public:
 	uint sun_fx;
 	uint sheen1_fx;
 	uint sheen2_fx;
+	uint flippers_fx;
 	p2Point<int> ray;
 	bool ray_on;
 

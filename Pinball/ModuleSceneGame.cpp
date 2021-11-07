@@ -111,6 +111,7 @@ bool ModuleSceneGame::Start()
 	sun_fx = App->audio->LoadFx("pinball/sun.wav");
 	sheen1_fx = App->audio->LoadFx("pinball/sheen1.wav");
 	sheen2_fx = App->audio->LoadFx("pinball/sheen2.wav");
+	flippers_fx = App->audio->LoadFx("pinball/flippers.wav");
 
 	//UI
 	//UI Animations
@@ -932,7 +933,7 @@ update_status ModuleSceneGame::Update()
 
 		int x, y;
 		ball->round->GetPosition(x, y);
-		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 0.0f, true);
+		App->renderer->Blit(ballTexture, x - 7, y - 7, &(currentAnim->GetCurrentFrame()), 0.0f, 0.0f);
 		ball->idleBallAnim.Update();
 		ball->deathBallAnim.Update();
 		ball->spawnBallAnim.Update();
@@ -1144,6 +1145,13 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			sunState = SUN_COLLISION;
 		}
 
+		// ball-flippers collision
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::flipperCollider && App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		{
+			App->audio->PlayFx(flippers_fx);
+		}
+
+		//ball-sheen collision
 		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sheenCollider)
 		{
 			int random = 0;
