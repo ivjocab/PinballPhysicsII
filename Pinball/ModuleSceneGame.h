@@ -27,17 +27,17 @@ struct SunCircle
 	Animation collisionSunAnim;
 };
 
+struct Sensor
+{
+	PhysBody* sensorBody;
+};
+
 struct PachinkoCircle
 {
 	PhysBody* round;
 	Animation idlePachinkoAnim;
 	Animation randomPachinkoAnim;
 	Animation collisionPachinkoAnim;
-	enum Type
-	{
-		pachinko1Collision,
-		pachinko2Collision
-	};
 };
 
 struct Columns
@@ -74,27 +74,6 @@ struct DCircle {
 		SPAWN
 	};
 	float power;
-};
-
-struct recSensor {
-	enum sensorValue
-	{
-		NONE = -1,
-		DEATH,
-		CARD,
-		EGG,
-		TP,
-		PAC_MAN,
-		HUNDREDS,
-		THOUSAND,
-		POINT_BUTTON,
-		SAFETY_BUTTON,
-		NUMBER_BUTTON
-	};
-	PhysBody* sensor;
-	sensorValue value;
-	bool isActive;
-	int sensorTimer = 0;
 };
 
 //rottenshit
@@ -141,6 +120,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
+	Sensor* recSensor;
 	DCircle* ball;
 	UI* ui;
 	SunCircle* sun;
@@ -160,7 +140,6 @@ public:
 
 	gameState GameState;
 
-	PhysBody* sensor;
 	bool sensed;
 
 	SDL_Texture* StartScreen;

@@ -38,8 +38,12 @@ public:
 	{
 		ballCollider,
 		sunCollider,
+<<<<<<< Updated upstream
 		wallCollider,
 		sheenCollider
+=======
+		sensorCollider
+>>>>>>> Stashed changes
 	};
 	Type type;
 	int width, height;
