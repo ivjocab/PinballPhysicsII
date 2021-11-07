@@ -114,15 +114,12 @@ bool ModuleSceneGame::Start()
 	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
 	ball->round->type = PhysBody::Type::ballCollider;
 	ball->round->listener = this;
-<<<<<<< Updated upstream
-=======
 
 	//create sensor
 	recSensor = new Sensor;
 	recSensor->sensorBody = App->physics->CreateRectangle(0, 845, 400, 40, b2_staticBody);
 	recSensor->sensorBody->type = PhysBody::Type::sensorCollider;
 
->>>>>>> Stashed changes
 	//Ball Animations
 	//Idle ball animations
 	ball->idleBallAnim.PushBack({ 0, 0, 39, 38 });
