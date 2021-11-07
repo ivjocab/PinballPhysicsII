@@ -122,6 +122,21 @@ bool ModuleSceneGame::Start()
 	ball->round = App->physics->CreateCircle(742, 835, 12, b2_dynamicBody);
 	ball->round->type = PhysBody::Type::ballCollider;
 	ball->round->listener = this;
+	ball->lifes = 5;
+	ball->points = 0;
+
+	//create ScoreBalls
+	scoreBall1 = new ScoreBall;
+	scoreBall1->scorebody = App->physics->CreateCircle(400, 400, 30, b2_staticBody);
+	scoreBall1->scorebody->type = PhysBody::Type::scoreCollider1;
+
+	scoreBall2 = new ScoreBall;
+	scoreBall2->scorebody = App->physics->CreateCircle(400, 440, 30, b2_staticBody);
+	scoreBall2->scorebody->type = PhysBody::Type::scoreCollider1;
+
+	scoreBall3 = new ScoreBall;
+	scoreBall3->scorebody = App->physics->CreateCircle(400, 480, 30, b2_staticBody);
+	scoreBall3->scorebody->type = PhysBody::Type::scoreCollider3;
 
 	//create sensor
 	recSensor = new Sensor;
@@ -129,6 +144,7 @@ bool ModuleSceneGame::Start()
 	recSensor->sensorBody->type = PhysBody::Type::sensorCollider;
 
 	//Ball Animations
+	// 
 	//Idle ball animations
 	ball->idleBallAnim.PushBack({ 0, 0, 39, 38 });
 	ball->idleBallAnim.PushBack({ 38, 0, 39, 38 });
@@ -764,6 +780,19 @@ bool ModuleSceneGame::Start()
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+<<<<<<< Updated upstream
+=======
+	background = App->textures->Load("pinball/background.png");
+	ballTexture = App->textures->Load("pinball/ball.png");
+	columnsTexture = App->textures->Load("pinball/columns.png");
+	sunTexture = App->textures->Load("pinball/sun.png");
+	pachinkoTexture = App->textures->Load("pinball/pachinko.png");
+	box = App->textures->Load("pinball/crate.png");
+	intro = App->audio->LoadFx("pinball/intro.wav");
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	StartScreen = App->textures->Load("pinball/backgroundStart.png");
+
+>>>>>>> Stashed changes
 	App->audio->PlayFx(intro, 1);
 
 	return ret;
@@ -874,25 +903,7 @@ update_status ModuleSceneGame::Update()
 
 		App->renderer->Blit(uiTexture, 0, 0, &(currentAnim->GetCurrentFrame()), 0.0f, 0);
 
-		//BALL
-		if (ballState != BALL_DEATH)
-		{
-			ballState = BALL_SPAWN;
-			if (ball->spawnBallAnim.HasFinished())
-			{
-				ballState = BALL_IDLE;
-			}
-		}
-
-		if (ballState != BALL_DEATH)
-		{
-			ballState = BALL_SPAWN;
-			if (ball->spawnBallAnim.HasFinished())
-			{
-				ballState = BALL_IDLE;
-			}
-		}
-
+		//BALL STATES
 		switch (ballState)
 		{
 		case BALL_IDLE:
@@ -901,10 +912,22 @@ update_status ModuleSceneGame::Update()
 
 		case BALL_DEATH:
 			currentAnim = &ball->deathBallAnim;
+			if (ball->deathBallAnim.HasFinished())
+			{
+				ballState = BALL_SPAWN;
+				ball->deathBallAnim.Reset();
+				ball->round->body->SetTransform({ 742, 835 }, 0.0f);
+				ball->lifes--;
+			}
 			break;
 
 		case BALL_SPAWN:
 			currentAnim = &ball->spawnBallAnim;
+			if (ball->spawnBallAnim.HasFinished())
+			{
+				ballState = BALL_IDLE;
+				ball->spawnBallAnim.Reset();
+			}
 			break;
 		}
 
@@ -1114,12 +1137,17 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
+<<<<<<< Updated upstream
 
+=======
+		// ball-sun collision
+>>>>>>> Stashed changes
 		if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
 		{
 			sunState = SUN_COLLISION;
 		}
 
+<<<<<<< Updated upstream
 		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::wallCollider)
 		{
 			int random = 0;
@@ -1134,6 +1162,23 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			App->audio->PlayFx(ballDeath_fx);
 			ballState = BALL_DEATH;
+=======
+		// ball-sensor collision
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sensorCollider)
+		{
+			App->audio->PlayFx(bonus_fx);
+			ballState = BALL_DEATH;
+		}
+
+		// ball-scoreballs collision
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::scoreCollider1)
+		{
+			ball->points += 1;
+		}
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::scoreCollider3)
+		{
+			ball->points += 3;
+>>>>>>> Stashed changes
 		}
 	}
 }

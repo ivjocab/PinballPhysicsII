@@ -40,10 +40,16 @@ public:
 		sunCollider,
 		wallCollider,
 		sheenCollider,
+<<<<<<< Updated upstream
 		kickerCollider,
 		flipperCollider,
 		pachinkoCollider,
 		sensorCollider
+=======
+		sensorCollider,
+		scoreCollider1,
+		scoreCollider3
+>>>>>>> Stashed changes
 	};
 	Type type;
 	int width, height;

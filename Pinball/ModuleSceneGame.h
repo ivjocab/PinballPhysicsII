@@ -46,6 +46,11 @@ struct Columns
 	Animation idleColumnAnim;
 };
 
+struct ScoreBall {
+	PhysBody* scorebody;
+	bool isTouchable;
+};
+
 struct Sheen
 {
 	PhysBody* sheen;
@@ -74,6 +79,8 @@ struct DCircle {
 		SPAWN
 	};
 	float power;
+	int lifes;
+	int points;
 };
 
 //rottenshit
@@ -120,6 +127,9 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
+	ScoreBall* scoreBall1;
+	ScoreBall* scoreBall2;
+	ScoreBall* scoreBall3;
 	Sensor* recSensor;
 	DCircle* ball;
 	UI* ui;
