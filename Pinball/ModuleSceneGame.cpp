@@ -135,17 +135,16 @@ bool ModuleSceneGame::Start()
 	ball->points = 0;
 
 	//create ScoreBalls
-	scoreBall1 = new ScoreBall;
-	scoreBall1->scorebody = App->physics->CreateCircle(400, 400, 30, b2_staticBody);
-	scoreBall1->scorebody->type = PhysBody::Type::scoreCollider1;
+	b2BodyDef score1;
+	score1.type = b2_staticBody;
+	score1.position.Set(PIXEL_TO_METERS(400), PIXEL_TO_METERS(400));
 
-	scoreBall2 = new ScoreBall;
-	scoreBall2->scorebody = App->physics->CreateCircle(400, 440, 30, b2_staticBody);
-	scoreBall2->scorebody->type = PhysBody::Type::scoreCollider1;
+	b2PolygonShape circle1;
+	circle1.SetAsBox(PIXEL_TO_METERS(10) * 0.5f, PIXEL_TO_METERS(10) * 0.5f);
 
-	scoreBall3 = new ScoreBall;
-	scoreBall3->scorebody = App->physics->CreateCircle(400, 480, 30, b2_staticBody);
-	scoreBall3->scorebody->type = PhysBody::Type::scoreCollider3;
+	b2FixtureDef fixtureScore;
+	fixtureScore.shape = &circle1;
+	fixtureScore.isSensor = false;
 
 	//create sensor
 	recSensor = new Sensor;
