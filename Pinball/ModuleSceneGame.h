@@ -189,6 +189,9 @@ public:
 	uint ball2_fx;
 	uint ball3_fx;
 	uint ballDeath_fx;
+	uint sun_fx;
+	uint sheen1_fx;
+	uint sheen2_fx;
 	p2Point<int> ray;
 	bool ray_on;
 

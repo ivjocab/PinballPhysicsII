@@ -102,12 +102,15 @@ bool ModuleSceneGame::Start()
 	StartScreen = App->textures->Load("pinball/backgroundStart.png");
 	backgroundGame = App->textures->Load("pinball/backgroundGame.png");
 	//Loading music & fx
-	intro = App->audio->LoadFx("pinball/game.wav");
+	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	ball1_fx = App->audio->LoadFx("pinball/ball1.wav");
 	ball2_fx = App->audio->LoadFx("pinball/ball2.wav");
 	ball3_fx = App->audio->LoadFx("pinball/ball3.wav");
 	ballDeath_fx = App->audio->LoadFx("pinball/ballDeath.wav");
+	sun_fx = App->audio->LoadFx("pinball/sun.wav");
+	sheen1_fx = App->audio->LoadFx("pinball/sheen1.wav");
+	sheen2_fx = App->audio->LoadFx("pinball/sheen2.wav");
 
 	//UI
 	//UI Animations
@@ -305,13 +308,14 @@ bool ModuleSceneGame::Start()
 	sun->collisionSunAnim.PushBack({ 0, 660, 220, 218 });
 	sun->collisionSunAnim.loop = false;
 	sun->collisionSunAnim.mustFlip = false;
-	sun->collisionSunAnim.speed = 0.28f;
+	sun->collisionSunAnim.speed = 0.23f;
 	sunState = SUN_IDLE;
 
 	//SHEEN
 	//Create SHEEN obstacle
 	sheen = new Sheen;
 	sheen->sheen = App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody);
+	sheen->sheen->type = PhysBody::Type::sheenCollider;
 	//Sheen idle animation
 	sheen->idleSheenAnim.PushBack({ 504, 0, 72, 72 });
 	sheen->idleSheenAnim.loop = false;
@@ -907,18 +911,18 @@ update_status ModuleSceneGame::Update()
 
 		case BALL_DEATH:
 			currentAnim = &ball->deathBallAnim;
-			if (ball->deathBallAnim.HasFinished())
+			if (ball->deathBallAnim.HasFinished() == true)
 			{
 				ballState = BALL_SPAWN;
 				ball->deathBallAnim.Reset();
-				ball->round->body->SetTransform({ 742, 835 }, 0.0f);
+				ball->round->body->SetTransform({ PIXEL_TO_METERS(742), PIXEL_TO_METERS(835) }, 0.0f);
 				ball->lifes--;
 			}
 			break;
 
 		case BALL_SPAWN:
 			currentAnim = &ball->spawnBallAnim;
-			if (ball->spawnBallAnim.HasFinished())
+			if (ball->spawnBallAnim.HasFinished() == true)
 			{
 				ballState = BALL_IDLE;
 				ball->spawnBallAnim.Reset();
@@ -982,6 +986,7 @@ update_status ModuleSceneGame::Update()
 			}*/
 			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
 			sheen->sheen = App->physics->CreateChain(0, 0, rhombus1, 8, b2_staticBody);
+			sheen->sheen->type = PhysBody::Type::sheenCollider;
 			App->renderer->Blit(sheenTexture, 185, 533, &(currentAnim->GetCurrentFrame()), 1.0f);
 		}
 		if (counter < 360 && counter > 180)
@@ -996,6 +1001,7 @@ update_status ModuleSceneGame::Update()
 			}*/
 			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
 			sheen->sheen = App->physics->CreateChain(0, 0, rhombus2, 8, b2_staticBody);
+			sheen->sheen->type = PhysBody::Type::sheenCollider;
 			App->renderer->Blit(sheenTexture, 297, 478, &(currentAnim->GetCurrentFrame()), 1.0f);
 		}
 		if (counter < 540 && counter > 360)
@@ -1010,6 +1016,7 @@ update_status ModuleSceneGame::Update()
 			}*/
 			sheen->sheen->body->GetWorld()->DestroyBody(sheen->sheen->body);
 			sheen->sheen = App->physics->CreateChain(0, 0, rhombus3, 8, b2_staticBody);
+			sheen->sheen->type = PhysBody::Type::sheenCollider;
 			App->renderer->Blit(sheenTexture, 322, 599, &(currentAnim->GetCurrentFrame()), 1.0f);
 		}
 		if (counter > 540) counter = 0;
@@ -1104,8 +1111,6 @@ update_status ModuleSceneGame::Update()
 			}
 
 			p = p->next;
-
-
 		}
 
 		// ray ---------------
@@ -1133,9 +1138,19 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
 		// ball-sun collision
-		if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sunCollider)
 		{
+			App->audio->PlayFx(sun_fx);
 			sunState = SUN_COLLISION;
+		}
+
+		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sheenCollider)
+		{
+			int random = 0;
+			srand(time(NULL));
+			random = rand() % 2;
+			if (random == 0) App->audio->PlayFx(sheen1_fx);
+			if (random == 1) App->audio->PlayFx(sheen2_fx);
 		}
 
 		// ball-wall collision
