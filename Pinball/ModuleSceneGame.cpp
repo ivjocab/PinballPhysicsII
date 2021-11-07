@@ -780,8 +780,6 @@ bool ModuleSceneGame::Start()
 	bool ret = true;
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-<<<<<<< Updated upstream
-=======
 	background = App->textures->Load("pinball/background.png");
 	ballTexture = App->textures->Load("pinball/ball.png");
 	columnsTexture = App->textures->Load("pinball/columns.png");
@@ -791,9 +789,6 @@ bool ModuleSceneGame::Start()
 	intro = App->audio->LoadFx("pinball/intro.wav");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	StartScreen = App->textures->Load("pinball/backgroundStart.png");
-
->>>>>>> Stashed changes
-	App->audio->PlayFx(intro, 1);
 
 	return ret;
 }
@@ -1137,17 +1132,13 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA != nullptr && bodyB != nullptr)
 	{
-<<<<<<< Updated upstream
-
-=======
 		// ball-sun collision
->>>>>>> Stashed changes
 		if (bodyA->type == PhysBody::Type::ballCollider || bodyA->type == PhysBody::Type::sunCollider)
 		{
 			sunState = SUN_COLLISION;
 		}
 
-<<<<<<< Updated upstream
+		// ball-wall collision
 		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::wallCollider)
 		{
 			int random = 0;
@@ -1158,15 +1149,10 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			if (random == 2) App->audio->PlayFx(ball3_fx);
 		}
 
-		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sensorCollider)
-		{
-			App->audio->PlayFx(ballDeath_fx);
-			ballState = BALL_DEATH;
-=======
 		// ball-sensor collision
 		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::sensorCollider)
 		{
-			App->audio->PlayFx(bonus_fx);
+			App->audio->PlayFx(ballDeath_fx);
 			ballState = BALL_DEATH;
 		}
 
@@ -1178,7 +1164,6 @@ void ModuleSceneGame::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyA->type == PhysBody::Type::ballCollider && bodyB->type == PhysBody::Type::scoreCollider3)
 		{
 			ball->points += 3;
->>>>>>> Stashed changes
 		}
 	}
 }
